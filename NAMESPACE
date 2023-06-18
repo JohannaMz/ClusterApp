@@ -3,6 +3,9 @@
 export("%>%")
 export(run_app)
 import(shiny)
+import(shiny, except=c(dataTableOutput, renderDataTable))
+import(shiny, except=c(dataTableOutput, renderDataTable))
+
 import(shinyFiles)
 import(shinyWidgets)
 importFrom(DT,dataTableOutput)

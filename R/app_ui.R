@@ -2,7 +2,7 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
 #' @import shinyFiles
 #' @importFrom DT dataTableOutput
 #' @importFrom leaflet leafletOutput

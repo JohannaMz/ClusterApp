@@ -2,7 +2,8 @@
 #'
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
+#'
 #' @import shinyFiles
 #' @import shinyWidgets
 #' @importFrom dplyr filter mutate group_by arrange desc select slice rename lag
