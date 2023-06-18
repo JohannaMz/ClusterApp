@@ -1,0 +1,39 @@
+Package: ClusterApp
+Title: Cluster Analysis for analyzing GPS data
+Version: 0.0.0.9000
+Authors@R: 
+    person("Johanna", "Märtz", , "johanna@maertz.eu", role = c("cre", "aut"))
+Description: The Cluster Analysis App is a Shiny App developed for the
+    easy and straightforward analysis of GPS collared individuals to
+    identify clusters of visits.
+License: MIT + file LICENSE
+Depends: 
+    R (>= 2.10)
+Imports: 
+    bslib,
+    config (>= 0.3.1),
+    dplyr,
+    DT,
+    foreign,
+    golem (>= 0.4.0),
+    hms,
+    leaflet,
+    lubridate,
+    magrittr,
+    readr,
+    sf,
+    sftrack,
+    shiny (>= 1.7.3),
+    shinyFiles,
+    shinyWidgets,
+    stats,
+    stringr,
+    tidyr,
+    tmap,
+    utils
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.2.3
