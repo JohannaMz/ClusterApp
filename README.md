@@ -1,7 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
-\#when changes where made run devtools::build_readme() in 01_start.R
+<!--when changes where made run devtools::build_readme() in 01_start.R -->
 
 # ClusterApp
 
@@ -39,10 +38,6 @@ into the R console.
 
 ``` r
 library(ClusterApp)
-#> Warning: vorhergehender Import 'shiny::dataTableOutput' durch
-#> 'DT::dataTableOutput' während des Ladens von 'ClusterApp' ersetzt
-#> Warning: vorhergehender Import 'shiny::renderDataTable' durch
-#> 'DT::renderDataTable' während des Ladens von 'ClusterApp' ersetzt
 ClusterApp::run_app()
 #> PhantomJS not found. You can install it with webshot::install_phantomjs(). If it is installed, please make sure the phantomjs executable can be found via the PATH variable.
 ```

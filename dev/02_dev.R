@@ -19,7 +19,7 @@ attachment::att_amend_desc()
 ## Dependencies ----
 ## Amend DESCRIPTION with dependencies read from package code parsing
 ## install.packages('attachment') # if needed.
-
+usethis::use_package("shiny")
 usethis::use_package("dplyr")
 usethis::use_package("DT")
 usethis::use_package("foreign")
@@ -56,8 +56,8 @@ usethis::use_pipe()
 
 ## External resources
 ## Creates .js and .css files at inst/app/www
-# golem::add_js_file("script")
-# golem::add_js_handler("handlers")
+golem::add_js_file("script")
+golem::add_js_handler("handlers")
 # golem::add_css_file("custom")
 # golem::add_sass_file("custom")
 

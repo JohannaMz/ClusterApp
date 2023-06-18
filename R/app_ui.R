@@ -2,8 +2,8 @@
 #'
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
-#' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
-#' @import shinyFiles
+#' #' @import shinyFiles
+#' @importFrom shiny actionButton br checkboxGroupInput checkboxInput column fluidPage dateRangeInput fluidRow h5 h6 hr navlistPanel numericInput radioButtons span tabPanel tabsetPanel tagList textInput textOutput titlePanel uiOutput verbatimTextOutput
 #' @importFrom DT dataTableOutput
 #' @importFrom leaflet leafletOutput
 #' @noRd
@@ -119,7 +119,7 @@ app_ui <- function(request) {
                                                  )),
                                        value = 2),
 
-                          dateRangeInput("intensivePeriod", label = tags$span("Define the intensive period:",
+                          shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the intensive period:",
                                                                               tags$i(
                                                                                 class = "glyphicon glyphicon-info-sign",
                                                                                 style = "color:#b20019;",
@@ -238,7 +238,6 @@ app_ui <- function(request) {
 #' This function is internally used to add external
 #' resources inside the Shiny application.
 #'
-#' @import shiny
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
 golem_add_external_resources <- function() {

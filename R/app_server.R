@@ -2,8 +2,8 @@
 #'
 #' @param input,output,session Internal parameters for {shiny}.
 #'     DO NOT REMOVE.
-#' @rawNamespace import(shiny, except=c(dataTableOutput, renderDataTable))
 #'
+#' @importFrom shiny eventReactive isolate observe observeEvent reactive reactiveValues renderPrint renderText req renderUI
 #' @import shinyFiles
 #' @import shinyWidgets
 #' @importFrom dplyr filter mutate group_by arrange desc select slice rename lag
@@ -469,10 +469,10 @@ app_server <- function(input, output, session) {
   output$clusterMap <- renderLeaflet({
 
     if (length(latestfile_path()>0)) {
-      tmap_leaflet(map(), in.shiny = TRUE) %>%
+      tmap_leaflet(map()) %>%
         hideGroup(c("Events for clusters", "Cluster IDs"))
     } else {
-      tmap_leaflet(map(), in.shiny = TRUE) %>%
+      tmap_leaflet(map()) %>%
         hideGroup(c("Events for clusters", "Cluster IDs", "GPS Points", "Track"))
     }
 
