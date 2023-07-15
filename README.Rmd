@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of ClusterApp is to ...
+The goal of ClusterApp is a Shiny application to guide and streamline cluster studies based on GPS data.
 
 ## Installation
 
@@ -29,27 +29,19 @@ You can install the development version of ClusterApp from [GitHub](https://gith
 devtools::install_github("JohannaMz/ClusterApp")
 ```
 
-## Example
-
-This is a basic example which shows you how to solve a common problem:
+The app can then be started by the command:
 
 ```{r example}
 library(ClusterApp)
-## basic example code
+ClusterApp::run_app()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+## Getting help
 
-```{r cars}
-summary(cars)
+If you encounter a bug, please [submit an issue](https://github.com/JohannaMz/ClusterApp/issues). For more general questions and suggestions, contact [Johanna Märtz](johanna@maertz.eu).
+
+## Citation
+
+```r
+citation("ClusterApp")
 ```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
