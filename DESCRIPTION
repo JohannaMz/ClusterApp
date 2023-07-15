@@ -20,6 +20,7 @@ Imports:
     leaflet,
     lubridate,
     magrittr,
+    raster,
     readr,
     sf,
     sftrack,
