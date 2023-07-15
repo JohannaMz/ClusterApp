@@ -17,17 +17,18 @@
 ## /!\ Note: if you want to change the name of your app during development,
 ## either re-run this function, call golem::set_golem_name(), or don't forget
 ## to change the name in the app_sys() function in app_config.R /!\
-##
-golem::fill_desc(
-  pkg_name = "ClusterApp", # The Name of the package containing the App
-  pkg_title = "Cluster Analysis for analyzing GPS data", # The Title of the package containing the App
-  pkg_description = "The Cluster Analysis App is a Shiny App developed for the easy and straightforward analysis of GPS collared individuals to identify clusters of visits.", # The Description of the package containing the App
-  author_first_name = "Johanna", # Your First Name
-  author_last_name = "Märtz", # Your Last Name
-  author_email = "johanna@maertz.eu", # Your Email
-  repo_url = NULL, # The URL of the GitHub Repo (optional),
-  pkg_version = "0.0.0.9000" # The Version of the package containing the App
-)
+## added other authors manually in decription file so this wont work anymore.
+# golem::fill_desc(
+#   pkg_name = "ClusterApp", # The Name of the package containing the App
+#   pkg_title = "Cluster Analysis for analyzing GPS data", # The Title of the package containing the App
+#   pkg_description = "The Cluster Analysis App is a Shiny App developed for the easy and straightforward analysis of GPS collared individuals to identify clusters of visits.", # The Description of the package containing the App
+#   author_first_name = "Johanna", # Your First Name
+#   author_last_name = "Märtz", # Your Last Name
+#   author_email = "johanna@maertz.eu", # Your Email
+#   author_orcid = "0000-0001-9981-0430",
+#   repo_url = "https://github.com/JohannaMz/ClusterApp", # The URL of the GitHub Repo (optional),
+#   pkg_version = "0.0.0.9000" # The Version of the package containing the App
+# )
 
 ## Set {golem} options ----
 golem::set_golem_options()
@@ -39,7 +40,7 @@ golem::install_dev_deps()
 
 ## Create Common Files ----
 ## See ?usethis for more information
-usethis::use_mit_license(copyright_holder = "Johanna Märtz") # You can set another license here
+usethis::use_gpl3_license() # You can set another license here
 usethis::use_readme_rmd(open = FALSE)
 devtools::build_readme()
 

@@ -225,7 +225,7 @@ app_ui <- function(request) {
       ),
 
       hr(),
-      print("~~~This app is developed by Johanna Märtz. Any questions, feedback or ideas to improve it mail to johanna@maertz.eu. ~~~")
+      print("This app is developed by Johanna Maertz. Any questions, feedback or ideas to improve it mail to johanna@maertz.eu.")
 
     )
   )
