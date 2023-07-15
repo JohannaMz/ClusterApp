@@ -3,7 +3,6 @@ output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<!--when changes where made run devtools::build_readme() in 01_start.R -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -19,11 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The `ClusterApp` is a Shiny App developed for the easy and straightforward analysis of GPS collared individuals to identify clusters of visits.
-
-Our aim is to provide a streamlined method to apply cluster analyses to GPS data without the need to have prior knowledge regarding the use of geographical or statistical software. To facilitate this, we created the “ClusterAnalysis” Shiny R application (version 1.0). We expect the app to contribute to the continuity of methods regarding data collection (decrease observer biases), straightforward usage for field personnel, and reliable data management.
-
-The app was built using the `golem` framework.
+The goal of ClusterApp is to ...
 
 ## Installation
 
@@ -34,28 +29,27 @@ You can install the development version of ClusterApp from [GitHub](https://gith
 devtools::install_github("JohannaMz/ClusterApp")
 ```
 
+## Example
 
-## Run the app 
+This is a basic example which shows you how to solve a common problem:
 
-To launch the `ClusterApp`, load the library and type the following code into the R console. 
-
-
-```{r run}
+```{r example}
 library(ClusterApp)
-ClusterApp::run_app()
+## basic example code
 ```
 
-## How to use the app 
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-maybe there will be a guided tutorial with the bear and wolf data. check out the preprint [here](url)
-
-## Help 
-
-If you encounter a bug, please submit an issue on github? For general questions and feedback, contact [Johanna Märtz](johanna@maertz.eu).
-
-##Citation 
-
-```{r citation}
-citation("ClusterApp")
+```{r cars}
+summary(cars)
 ```
 
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
