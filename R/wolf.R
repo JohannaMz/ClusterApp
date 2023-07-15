@@ -15,6 +15,6 @@
 #'   \item{Height}{Height of position.}
 #'
 #' }
-#' @source
+#' @source Camilla Wikenros
 #'
 "wolf"

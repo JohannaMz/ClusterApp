@@ -21,6 +21,8 @@ app_ui <- function(request) {
       # Application title
       titlePanel("Cluster Analysis"),
 
+      #navbarPage(title = "ClusterApp", windowTitle = tags$img(src = "favicon.png", width = 30, height = 30)),
+
       navlistPanel(
 
         widths = c(3,9),
@@ -62,8 +64,7 @@ app_ui <- function(request) {
                                      #textOutput("columnStatus"),
                                      br(),
                                      br(),
-                                     br(),
-                                     br(),
+
 
                                      textInput("dateFormat", "If necessary, adjust the format of your date:", value = "%Y-%m-%d %H:%M:%S"),
 
@@ -72,9 +73,19 @@ app_ui <- function(request) {
                                                          tags$i(
                                                            class = "glyphicon glyphicon-info-sign",
                                                            style = "color:#b20019;",
-                                                           title = "Data can be in different coordinate systems. The most common coordinate system from WRAM Export is WGS84 (EPSG: 4326). Coordinate columns are usually named Longitude (Northing) and Latitude (Easting). The EPSG code is a unique code for each coordinate system. Find the codes on https://epsg.io/."
-                                                         )),
-                                               value = "4326"))),
+                                                           title = "Data can be in different coordinate systems. The most common coordinate system from WRAM Export is WGS84 (EPSG: 4326). Coordinate columns are usually named Longitude (Northing) and Latitude (Easting). The EPSG code is a unique code for each coordinate system."
+                                                         ),
+                                                         tags$a(href="https://epsg.io/", "Find the codes here.")),
+                                               value = "4326"),
+                                     textInput("UTM_zone",
+                                               tags$span("The output will be in the UTM format. Please enter the right zone:",
+                                                         tags$i(
+                                                           class = "glyphicon glyphicon-info-sign",
+                                                           style = "color:#b20019;",
+                                                           title = "UTM coordinate system is separated into zones over the world. Please find the appropriate zone in which your data lies. Be aware that this should be the same zone as a previous cluster shape, that might have been downloaded before."
+                                                         ),
+                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here.")),
+                                               value = "33"))),
 
 
 
@@ -189,7 +200,7 @@ app_ui <- function(request) {
                                                                                                   tags$i(
                                                                                                     class = "glyphicon glyphicon-info-sign",
                                                                                                     style = "color:#b20019;",
-                                                                                                    title = "You have to download the shapefile of this cluster analysis, if this should be used in the following anaylsis as a latest cluster analysis file. This file will be downloaded in the coordinate system UTM Zone 33. Downloading .csv or.gpx files are optional. GPX will be in WGS84."
+                                                                                                    title = "You have to download the shapefile of this cluster analysis, if this should be used in the following anaylsis as a latest cluster analysis file. This file will be downloaded in the coordinate system UTM and the specified zone. Downloading .csv or.gpx files are optional. GPX will be in WGS84."
                                                                                                   )))),
                               h5("Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS points and the track for the individuals. The points increase in size the more recent the points have been made."),
                               # fluidRow(column(2, shinyFilesButton("rasterfile",
@@ -218,7 +229,7 @@ app_ui <- function(request) {
                                                                                                 tags$i(
                                                                                                   class = "glyphicon glyphicon-info-sign",
                                                                                                   style = "color:#b20019;",
-                                                                                                  title = "Downloading this file is useful for uploading it on your GPS, it is not necessary for any further analysis. The shapefile will be downloaded in the coordinate system UTM Zone 33, while the GPX file is downloaded in WGS84."
+                                                                                                  title = "Downloading this file is useful for uploading it on your GPS, it is not necessary for any further analysis. The shapefile will be downloaded in the coordinate system UTM and the specified zone, while the GPX file is downloaded in WGS84."
                                                                                                 ))))))
                  )
         )

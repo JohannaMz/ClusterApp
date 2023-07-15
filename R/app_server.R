@@ -170,7 +170,8 @@ app_server <- function(input, output, session) {
         indID = input$indID,
         lastClustersFile = lastClustersFile(),
         minute_diff = input$minute_diff,
-        oldclusters = input$oldclusters
+        oldclusters = input$oldclusters,
+        UTM_zone = input$UTM_zone
       )
 
     output

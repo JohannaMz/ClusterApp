@@ -23,18 +23,8 @@ The app can then be started by the command:
 
 ``` r
 library(ClusterApp)
-#> The legacy packages maptools, rgdal, and rgeos, underpinning the sp package,
-#> which was just loaded, will retire in October 2023.
-#> Please refer to R-spatial evolution reports for details, especially
-#> https://r-spatial.org/r/2023/05/15/evolution4.html.
-#> It may be desirable to make the sf package available;
-#> package maintainers should consider adding sf to Suggests:.
-#> The sp package is now running under evolution status 2
-#>      (status 2 uses the sf package in place of rgdal)
-ClusterApp::run_app()
+#ClusterApp::run_app()
 ```
-
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
 
 ## Getting help
 
@@ -46,4 +36,20 @@ questions and suggestions, contact [Johanna Märtz](johanna@maertz.eu).
 
 ``` r
 citation("ClusterApp")
+#> To cite package 'ClusterApp' in publications use:
+#> 
+#>   Märtz J, Tallian A, Wikenros C, Heeres R (2023). _ClusterApp: A Shiny
+#>   R application to guide and streamline cluster studies based on GPS
+#>   data_. R package version 0.0.0.9000,
+#>   <https://github.com/JohannaMz/ClusterApp>.
+#> 
+#> A BibTeX entry for LaTeX users is
+#> 
+#>   @Manual{,
+#>     title = {ClusterApp: A Shiny R application to guide and streamline cluster studies based on GPS data},
+#>     author = {Johanna Märtz and Aimee Tallian and Camilla Wikenros and Rick Heeres},
+#>     year = {2023},
+#>     note = {R package version 0.0.0.9000},
+#>     url = {https://github.com/JohannaMz/ClusterApp},
+#>   }
 ```

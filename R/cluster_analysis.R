@@ -28,7 +28,8 @@ cluster_analysis <- function(intensive.start ,
                              indID,
                              lastClustersFile,
                              minute_diff,
-                             oldclusters){
+                             oldclusters,
+                             UTM_zone){
 
   if (is.null(datapoints)) {
     status <- "Please upload data in the right format."
@@ -113,7 +114,9 @@ cluster_analysis <- function(intensive.start ,
 
         #make the data spatial
         data_sf <- sf::st_as_sf(datapoints, coords = c("North", "East"), crs = EPSGcode)
-        data_sf <- st_transform(data_sf, crs = st_crs(25833)) #change WGS84 to UTM zone 33 to have meters (this only works for most of sweden, if the app should be used in norway this needs to be adjsuted)
+        UTM_coord <- as.numeric(paste0("258", UTM_zone))
+
+        data_sf <- st_transform(data_sf, crs = st_crs(UTM_coord)) #change WGS84 to UTM to have meters
 
         #make a track from the data
         data_sf_traj <- sf::st_as_sf(as_sftraj(data_sf, group = c(id = "ID"), time = "ts"))

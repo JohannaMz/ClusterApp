@@ -31,9 +31,9 @@ devtools::install_github("JohannaMz/ClusterApp")
 
 The app can then be started by the command:
 
-```{r example}
+```{r example, echo=TRUE, message=FALSE, warning=FALSE}
 library(ClusterApp)
-ClusterApp::run_app()
+#ClusterApp::run_app()
 ```
 
 ## Getting help
@@ -42,6 +42,6 @@ If you encounter a bug, please [submit an issue](https://github.com/JohannaMz/Cl
 
 ## Citation
 
-```r
+```{r citation}
 citation("ClusterApp")
 ```

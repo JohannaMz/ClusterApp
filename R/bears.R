@@ -14,6 +14,6 @@
 #'   \item{Height}{Height of position.}
 #'
 #' }
-#' @source
+#' @source Aimee Tallian
 #'
 "bears"
