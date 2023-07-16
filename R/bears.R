@@ -1,6 +1,6 @@
 #' GPS location data of bears
 #'
-#' Directly exported GPS data for three bears (2 males Hakan and Gommor and 1 solitary female Blistra) from the spring study in Sweden. Gommors data includes proximity events, which are triggers that are sent more frequently than the actual time distances.
+#' Directly exported GPS data for three bears (2 males Hakan and Gommor and 1 solitary female Blistra) in Sweden. Gommors data includes proximity events, GPS locations sent more frequently, which are triggered when the collar is in proximity to another collared individual.
 #'
 #' @format A data frame with 8 rows and 2223 column(s)
 #' \describe{
@@ -14,6 +14,6 @@
 #'   \item{Height}{Height of position.}
 #'
 #' }
-#' @source Aimee Tallian
+#' @source The Skandinavian Brown Bear Project - Contact: Aimee Tallian
 #'
 "bears"

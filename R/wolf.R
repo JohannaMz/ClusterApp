@@ -15,6 +15,6 @@
 #'   \item{Height}{Height of position.}
 #'
 #' }
-#' @source Camilla Wikenros
+#' @source Scandinavian Wolf Research Project (SKANDULV) - Contact: Camilla Wikenros
 #'
 "wolf"

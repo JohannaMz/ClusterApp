@@ -20,7 +20,7 @@ A data frame with 8 rows and 1134 column(s)
 }
 }
 \source{
-Camilla Wikenros
+Scandinavian Wolf Research Project (SKANDULV) - Contact: Camilla Wikenros
 }
 \usage{
 wolf
