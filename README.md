@@ -1,8 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-inst/app/www/favicon.png
-
 # ClusterApp <img style="padding: 15px 0px 0px 0px;"  src='inst/app/www/favicon.png' align="right" height="140"/>
 
 <!-- badges: start -->
