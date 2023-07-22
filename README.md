@@ -35,7 +35,7 @@ ClusterApp::run_app()
 ## Tutorial
 
 A tutorial for the usage of the app can be accessed
-[here](https://github.com/JohannaMz/ClusterApp/ClusterApp_tutorial.pdf).
+[here](ClusterApp_tutorial.pdf).
 
 ## Getting help
 
