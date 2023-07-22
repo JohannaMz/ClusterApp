@@ -1,5 +1,11 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<script>
+   $(document).ready(function() {
+     $head = $('#header');
+     $head.prepend('<img src=\"inst/app/www/favicon.png" style=\"float: right;width: 150px;\"/>')
+   });
+</script>
 
 # ClusterApp
 
@@ -23,14 +29,19 @@ The app can then be started by the command:
 
 ``` r
 library(ClusterApp)
-#ClusterApp::run_app()
+ClusterApp::run_app()
 ```
+
+## Tutorial
+
+A tutorial for the usage of the app can be accessed
+[here](https://github.com/JohannaMz/ClusterApp/ClusterApp_tutorial.pdf).
 
 ## Getting help
 
 If you encounter a bug, please [submit an
 issue](https://github.com/JohannaMz/ClusterApp/issues). For more general
-questions and suggestions, contact [Johanna Märtz](johanna@maertz.eu).
+questions and suggestions, contact Johanna Märtz (<johanna@maertz.eu>).
 
 ## Citation
 
