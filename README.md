@@ -1,13 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<script>
-   $(document).ready(function() {
-     $head = $('#header');
-     $head.prepend('<img src=\"favicon.png\" style=\"float: right;width: 150px;\"/>')
-   });
-</script>
 
-# ClusterApp
+# ClusterApp <img style="padding: 15px 0px 0px 0px;"  src='https://raw.githubusercontent.com/JohannaMz/ClusterApp/inst/app/www/favicon.png' align="right" height="140"/>
 
 <!-- badges: start -->
 <!-- badges: end -->
