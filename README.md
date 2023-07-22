@@ -3,7 +3,7 @@
 <script>
    $(document).ready(function() {
      $head = $('#header');
-     $head.prepend('<img src=\"inst/app/www/favicon.png" style=\"float: right;width: 150px;\"/>')
+     $head.prepend('<img src=\"favicon.png\" style=\"float: right;width: 150px;\"/>')
    });
 </script>
 
