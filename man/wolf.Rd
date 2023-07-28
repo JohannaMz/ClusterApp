@@ -5,7 +5,7 @@
 \alias{wolf}
 \title{GPS location data of wolf individual}
 \format{
-A data frame with 8 rows and 1134 column(s)
+A data frame with 9 rows and 1134 column
 \describe{
   \item{Object_ID}{The ID of the monitored individual.}
   \item{Collar_ID}{The ID of the collar fit on the individual.}
