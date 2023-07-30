@@ -129,11 +129,11 @@ app_ui <- function(request) {
                                                    title = "The number of points within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of points within a polygon, the less clusters will develop."
                                                  )), value = 2),
 
-                          shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the intensive period:",
+                          shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the study period:",
                                                                               tags$i(
                                                                                 class = "glyphicon glyphicon-info-sign",
                                                                                 style = "color:#b20019;",
-                                                                                title = "Define the time frame that you are interested in.  Usually there is a time frame where the GPS sent positions more intensivly (e.g. every hour in comparison to usually only send every three hours)."
+                                                                                title = "Define the time frame that you are interested in.  Usually there is a time frame where the GPS sent positions more intensivly (e.g. every hour in comparison to usually only send every three hours) or the individual is monitored over a set number of weeks."
                                                                               ))), #tick if you need a time frame around the intensive period
                           # numericInput("prepostPeriod", label = tags$span("Enter the number of days that will be added before and after the intensive period:",
                           #                                                 tags$i(
