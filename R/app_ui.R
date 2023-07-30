@@ -37,9 +37,9 @@ app_ui <- function(request) {
                                                                         tags$i(
                                                                           class = "glyphicon glyphicon-info-sign",
                                                                           style = "color:#b20019;",
-                                                                            title = "Find the file that includes your newest GPS data for the individual you are monitoring. It makes sense to have a seperate folder for each individual and always copy the GPS files here. This way, you will have a folder per monitored individual that will contain all important files for the cluster analysis that was performed."
+                                                                            title = "Find the file that includes your newest GPS data for the individual(s) you are monitoring. It makes sense to have a seperate folder for each study and always copy the GPS files here. This way, you will have a folder per monitored individual(s) that will contain all important files for the cluster analysis that was performed."
                                                                         )),
-                                                      title = "Find the original GPS points for the individual.",
+                                                      title = "Find the original GPS points for the individual(s).",
                                                       multiple = FALSE)),
                               column(2, radioButtons("separator","CSV Separator: ", choiceNames = list("tab", ";",",",":"), choiceValues = list("\t",";",",",":"), selected="\t",inline=TRUE))
                             ),
@@ -49,7 +49,7 @@ app_ui <- function(request) {
                             #textOutput("fileStatus"),
 
                             h5("The file needs the columns:"),
-                            h6("The column with the individuals ID (or multiple IDs) in character format,
+                            h6("The column with the individuals ID(s) in character format,
             Timestamp either in character or date format,
             East and North coordinates for each point (in numeric)."),
                             h6("Select the appropriate column names here:"),
@@ -105,12 +105,12 @@ app_ui <- function(request) {
         tabPanel("Adjust Cluster Analysis Parameters",
                  fluidRow(
                    column(2,
-                          textInput("indID", tags$span("Give the individual or group of individuals a unique ID:",
+                          textInput("indID", tags$span("Give the individual or group of individuals a label:",
                                                        tags$i(
                                                          class = "glyphicon glyphicon-info-sign",
                                                          style = "color:#b20019;",
-                                                         title = "Within the first step, you have chosen the column which includes the individual ID/IDs. Here you should enter a unique identifier for this analysis. If you are only looking at one individual, you can choose for the same ID as in the column. If you are looking at multiple individuals at the same time, give them a group name. It makes sense to use the same name as the folder name your data is located in."
-                                                       )), value = "ID"),
+                                                         title = "Within the first step, you have chosen the column which includes the individual ID(s). Here you should enter a unique label for this analysis. It makes sense to use the same label as the folder name your data is located in."
+                                                       )), value = "label"),
 
 
                           numericInput("buffer",
@@ -127,8 +127,7 @@ app_ui <- function(request) {
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
                                                    title = "The number of points within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of points within a polygon, the less clusters will develop."
-                                                 )),
-                                       value = 2),
+                                                 )), value = 2),
 
                           shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the intensive period:",
                                                                               tags$i(
@@ -145,7 +144,7 @@ app_ui <- function(request) {
                    ),
                    column(4, offset = 1,
                           h5("Optional time stamp filtering:"),
-                          h6("Here it is optional to set the time difference in minutes it needs between GPS locations. If nothing is filled in all GPS points will be used for the cluster analysis and the mean time frame is taken as a difference value for the calculations of 'Percent of time spent at the location.'"),
+                          h6("Here it is optional to set the time difference it needs between GPS locations in minutes. If nothing is filled in all GPS points will be used for the cluster analysis and the mean time frame is taken as a difference value for the calculations of 'Percent of time spent at the location.'"),
                           br(),
                           verbatimTextOutput("minute_diff_summary", placeholder = TRUE),
                           numericInput("minute_diff",
@@ -159,7 +158,7 @@ app_ui <- function(request) {
 
                    column(4, offset = 1,
                           h5("Some additional info, if you already have done an analysis before:"),
-                          h6("Here the path to the latest cluster file appears, if this one is saved in the same folder as your input GPS file and has the same ID."),
+                          h6("Here the path to the latest cluster file appears, if this one is saved in the same folder as your input GPS file and has the same label."),
                           br(),
                           verbatimTextOutput("file_path_last",placeholder = TRUE),
                           h6("Should old clusters automatically be marked as done?"),
@@ -191,7 +190,7 @@ app_ui <- function(request) {
                  tabsetPanel(
                    tabPanel("Clusters",
                             fluidRow(
-                              h5("The clusters table shows all clusters that were formed by the number of GPS points that were buffered and grew together. The data can be filtered in the top row and this data is downloaded with the .csv and .gpx file. The columns State, Event, Date done and Fieldworker can be edited. These edits will be saved when downloaded."),
+                              h5("The clusters table shows all clusters that were formed by the number of GPS points that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done and Fieldworker can be edited. These edits will be saved when downloaded."),
 
                               DT::dataTableOutput('clustersTable'),
                               column(4,checkboxGroupInput("downloadClusters_buttons", "Choose output format:", choiceNames =  list( ".shp",".csv", ".gpx"), selected = c(".shp"), choiceValues = list( ".shp",".csv", ".gpx"), inline = TRUE)),
@@ -221,7 +220,7 @@ app_ui <- function(request) {
 
 
                    tabPanel("Points Table",
-                            h5("The points datatable shows all GPS points, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the ID, the cluster it belongs to or SP for single point, the month, day and hour the point was made."),
+                            h5("The points datatable shows all GPS points, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the cluster it belongs to or SP for single point, the month, day and hour the point was made."),
                             fluidRow(
                               DT::dataTableOutput("pointsTable"),
                               column(4, checkboxGroupInput("downloadPoints_buttons", "Choose output format:", choiceNames =  list( ".shp",".csv", ".gpx"), choiceValues = list( ".shp",".csv", ".gpx"), inline = TRUE)),
