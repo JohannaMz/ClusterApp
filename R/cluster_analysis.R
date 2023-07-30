@@ -154,7 +154,7 @@ cluster_analysis <- function(intensive.start ,
             summarize(sum = sum(Status), date_min = min(ts), date_max = max(ts)) %>%
             filter(sum >= 1) %>%
             mutate(ID = i,
-                   prec_time = sum/round(as.numeric(difftime(date_max, date_min, units = "mins"))/minute_diff, 0)) %>%
+                   prec_time = round(sum/round(as.numeric(difftime(date_max, date_min, units = "mins"))/minute_diff, 0), 2)) %>%
             #drop the geometry column because we will add the polygon geometry now
             st_drop_geometry() %>%
             left_join(Multi_sf, by = c("ClusID")) %>%
