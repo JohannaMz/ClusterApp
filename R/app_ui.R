@@ -109,7 +109,7 @@ app_ui <- function(request) {
                                                        tags$i(
                                                          class = "glyphicon glyphicon-info-sign",
                                                          style = "color:#b20019;",
-                                                         title = "Within the first step, you have chosen the column which includes the individual ID(s). Here you should enter a unique label for this analysis. It makes sense to use the same label as the folder name your data is located in."
+                                                         title = "Here you should enter a unique label for this analysis, which will be an identifier for this cluster analysis of the individual(s) that are being studied. It makes sense to use the same label as the folder name your data is located in."
                                                        )), value = "label"),
 
 
