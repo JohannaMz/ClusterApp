@@ -84,8 +84,8 @@ app_ui <- function(request) {
                                                            style = "color:#b20019;",
                                                            title = "UTM coordinate system is separated into zones over the world. Please find the appropriate zone in which your data lies. Be aware that this should be the same zone as a previous cluster shape, that might have been downloaded before."
                                                          ),
-                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here.")),
-                                               value = "33"))),
+                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here."))
+                                               ))),
 
 
 
@@ -119,7 +119,7 @@ app_ui <- function(request) {
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
                                                    title = "The size of the buffer corresponds to the radius of the buffer that is put around each GPS point. Combining buffers are the basis for clusters to emerge. Setting the size of the buffer depends on your question, the larger you set the radius, the more clusters will develop and possibly combine to large areas."
-                                                 )), value = 50),
+                                                 ))),
 
                           numericInput("count",
                                        tags$span("Set the number of points it needs to be a buffer:",
@@ -127,7 +127,7 @@ app_ui <- function(request) {
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
                                                    title = "The number of points within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of points within a polygon, the less clusters will develop."
-                                                 )), value = 2),
+                                                 ))),
 
                           shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the study period:",
                                                                               tags$i(
