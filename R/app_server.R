@@ -61,24 +61,24 @@ app_server <- function(input, output, session) {
 
   output$pickerID <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'ID',
-                label = 'ID',
+                label = 'Animal ID',
                 choices = colnames(file()))
   })
 
   output$pickerLMT_Date <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'LMT_Date',
-                label = 'LMT_Date',
+                label = 'Timestamp',
                 choices = colnames(file()))
   })
 
   output$pickerEast <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'East',
-                label = 'East (Latitude)',
+                label = 'Easting (Latitude)',
                 choices = colnames(file()))
   })
   output$pickerNorth <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'North',
-                label = 'North (Longitude)',
+                label = 'Northing (Longitude)',
                 choices = colnames(file()))
   })
 
@@ -238,7 +238,7 @@ app_server <- function(input, output, session) {
 
 
     DT::datatable(Clusters_sf_table$data,
-                  colnames = c("Individual ID" = "ID",
+                  colnames = c("Animal ID" = "ID",
                                "Cluster ID" = "ClusID",
                                "Number of points" = "sum",
                                "Percent of time spent at the location" = "prec_time",
@@ -514,7 +514,7 @@ app_server <- function(input, output, session) {
 
     datatable(Join_sf_table$data,
               colnames = c("Point ID" = "ident",
-                           "Individual ID" = "ID",
+                           "Animal ID" = "ID",
                            "Time stamp" = "ts",
                            "East" = "x",
                            "North" = "y"),
