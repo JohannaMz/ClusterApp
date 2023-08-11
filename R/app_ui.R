@@ -119,7 +119,7 @@ app_ui <- function(request) {
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
                                                    title = "The size of the buffer corresponds to the radius of the buffer that is put around each GPS point. Combining buffers are the basis for clusters to emerge. Setting the size of the buffer depends on your question, the larger you set the radius, the more clusters will develop and possibly combine to large areas."
-                                                 ))),
+                                                 )), value = NA),
 
                           numericInput("count",
                                        tags$span("Set the number of points it needs to be a buffer:",
@@ -127,7 +127,7 @@ app_ui <- function(request) {
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
                                                    title = "The number of points within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of points within a polygon, the less clusters will develop."
-                                                 ))),
+                                                 )), value = NA),
 
                           shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the study period:",
                                                                               tags$i(
