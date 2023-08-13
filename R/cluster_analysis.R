@@ -21,20 +21,34 @@ cluster_analysis <- function(intensive.start ,
                              East ,
                              North,
                              dateFormat ,
-                             prepostPeriod ,
+                             prepostPeriod = 0 ,
                              EPSGcode ,
                              buffer,
                              count,
-                             indID,
+                             indID, #label
                              lastClustersFile,
                              minute_diff,
                              oldclusters,
                              UTM_zone){
-
   if (is.null(datapoints)) {
     status <- "Please upload data in the right format."
     cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
-  } else {
+
+  } else if (is.na(dateFormat)|
+      is.na(EPSGcode)|
+      is.na(UTM_zone)){
+
+    status <- "Input missing in Tab 1: Upload GPS data. Check if you have entered a date format, a input EPSG code and the output UTM zone."
+    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+
+  } else if (is.na(indID)|
+             is.na(buffer)|
+             is.na(count)){
+
+    status <- "Input missing in Tab 2: Adjust Cluster Analysis Parameters. Check if you have entered a label, buffer size and the number of points needed for a cluster."
+    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+
+  }  else {
 
     datapoints <- datapoints %>%
       dplyr::select(c(ID, LMT_Date, East, North))

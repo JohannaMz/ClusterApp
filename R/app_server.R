@@ -427,8 +427,8 @@ app_server <- function(input, output, session) {
                                                                                                                        "Time stamp" = "ts",
                                                                                                                        "ID" = "ID",
                                                                                                                        "Cluster ID" = "ClusID"), legend.show = FALSE)+
-          tm_shape(last_position) +
-          tm_markers(group = "Last Position", popup.vars = c("Point ID" = "ident",
+          tm_shape(last_position, name = "Last Position") +
+          tm_markers( popup.vars = c("Point ID" = "ident",
                                                              "Time stamp" = "ts",
                                                              "ID" = "ID")) +
 
