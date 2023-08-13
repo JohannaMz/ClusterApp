@@ -61,24 +61,24 @@ app_server <- function(input, output, session) {
 
   output$pickerID <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'ID',
-                label = 'Animal ID',
+                label = 'Animal ID(s) as character',
                 choices = colnames(file()))
   })
 
   output$pickerLMT_Date <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'LMT_Date',
-                label = 'Timestamp',
+                label = 'Timestamp as character or Date format',
                 choices = colnames(file()))
   })
 
   output$pickerEast <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'East',
-                label = 'Easting (Latitude)',
+                label = 'Easting (Latitude) as numeric',
                 choices = colnames(file()))
   })
   output$pickerNorth <- renderUI(if(length(file_path()>0)){
     pickerInput(inputId = 'North',
-                label = 'Northing (Longitude)',
+                label = 'Northing (Longitude) as numeric',
                 choices = colnames(file()))
   })
 

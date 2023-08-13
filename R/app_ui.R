@@ -21,7 +21,7 @@ app_ui <- function(request) {
       # Application title
       titlePanel("Cluster Analysis"),
 
-      #navbarPage(title = "ClusterApp", windowTitle = tags$img(src = "favicon.png", width = 30, height = 30)),
+      #navbarPage(title = "ClusterApp", windowTitle = tags$img(src = "inst/app/www/favicon.png", width = 30, height = 30)),
 
       navlistPanel(
 
@@ -48,11 +48,7 @@ app_ui <- function(request) {
                             verbatimTextOutput("file_path",placeholder = TRUE),
                             #textOutput("fileStatus"),
 
-                            h5("The file needs the columns:"),
-                            h6("The column with the individuals ID(s) in character format,
-            Timestamp either in character or date format,
-            East and North coordinates for each point (in numeric)."),
-                            h6("Select the appropriate column names here:"),
+                            h5("Select the appropriate column names here:"),
 
                             fluidRow(
                               column(6, uiOutput("pickerID"),
@@ -60,11 +56,7 @@ app_ui <- function(request) {
                                      uiOutput("pickerEast"),
                                      uiOutput("pickerNorth")),
                               column(6,
-
-                                     #textOutput("columnStatus"),
                                      br(),
-                                     br(),
-
 
                                      textInput("dateFormat", "If necessary, adjust the format of your date:", value = "%Y-%m-%d %H:%M:%S"),
 
@@ -77,18 +69,17 @@ app_ui <- function(request) {
                                                          ),
                                                          tags$a(href="https://epsg.io/", "Find the codes here.")),
                                                value = "4326"),
-                                     textInput("UTM_zone",
+                                     numericInput("UTM_zone",
                                                tags$span("The output will be in the UTM format. Please enter the right zone:",
                                                          tags$i(
                                                            class = "glyphicon glyphicon-info-sign",
                                                            style = "color:#b20019;",
                                                            title = "UTM coordinate system is separated into zones over the world. Please find the appropriate zone in which your data lies. Be aware that this should be the same zone as a previous cluster shape, that might have been downloaded before."
                                                          ),
-                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here."))
-                                               ))),
-
-
-
+                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here.")),
+                                               value = NA)
+                                     )
+                              ),
                    ),
                    tabPanel("Data",
 
@@ -143,8 +134,12 @@ app_ui <- function(request) {
                           #                                                 )), value = 0)
                    ),
                    column(4, offset = 1,
-                          h5("Optional time stamp filtering:"),
-                          h6("Here it is optional to set the time difference it needs between GPS locations in minutes. If nothing is filled in all GPS points will be used for the cluster analysis and the mean time frame is taken as a difference value for the calculations of 'Percent of time spent at the location.'"),
+                          h5(tags$span("Summary for optional time stamp filtering:",
+                                       tags$i(
+                                         class = "glyphicon glyphicon-info-sign",
+                                         style = "color:#b20019;",
+                                         title = "Here it is optional to set the time difference it needs between GPS locations in minutes. If nothing is filled in all GPS points will be used for the cluster analysis and the mean time frame is taken as a difference value for the calculations of 'Percent of time spent at the location.'"
+                                       ))),
                           br(),
                           verbatimTextOutput("minute_diff_summary", placeholder = TRUE),
                           numericInput("minute_diff",
@@ -157,8 +152,12 @@ app_ui <- function(request) {
                                        value = NA)),
 
                    column(4, offset = 1,
-                          h5("Some additional info, if you already have done an analysis before:"),
-                          h6("Here the path to the latest cluster file appears, if this one is saved in the same folder as your input GPS file and has the same label."),
+                          h5(tags$span("Some additional info, if you already have done an analysis before:",
+                                       tags$i(
+                                         class = "glyphicon glyphicon-info-sign",
+                                         style = "color:#b20019;",
+                                         title = "Here the path to the latest cluster file appears, if this one is saved in the same folder as your input GPS file and has the same label."
+                                       ))),
                           br(),
                           verbatimTextOutput("file_path_last",placeholder = TRUE),
                           h6("Should old clusters automatically be marked as done?"),
@@ -188,9 +187,13 @@ app_ui <- function(request) {
                  br(),
 
                  tabsetPanel(
-                   tabPanel("Clusters",
+                   tabPanel(tags$span("Clusters table",
+                                      tags$i(
+                                        class = "glyphicon glyphicon-info-sign",
+                                        style = "color:#b20019;",
+                                        title = "The clusters table shows all clusters that were formed by the number of GPS points that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done and Fieldworker can be edited. These edits will be saved when downloaded."
+                                      )),
                             fluidRow(
-                              h5("The clusters table shows all clusters that were formed by the number of GPS points that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done and Fieldworker can be edited. These edits will be saved when downloaded."),
 
                               DT::dataTableOutput('clustersTable'),
                               column(4,checkboxGroupInput("downloadClusters_buttons", "Choose output format:", choiceNames =  list( ".shp",".csv", ".gpx"), selected = c(".shp"), choiceValues = list( ".shp",".csv", ".gpx"), inline = TRUE)),
@@ -201,7 +204,7 @@ app_ui <- function(request) {
                                                                                                     style = "color:#b20019;",
                                                                                                     title = "You have to download the shapefile of this cluster analysis, if this should be used in the following anaylsis as a latest cluster analysis file. This file will be downloaded in the coordinate system UTM and the specified zone. Downloading .csv or.gpx files are optional. GPX will be in WGS84."
                                                                                                   )))),
-                              h5("Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS points and the track for the individuals. The points increase in size the more recent the points have been made."),
+                              #h5("Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS points and the track for the individuals. The points increase in size the more recent the points have been made."),
                               # fluidRow(column(2, shinyFilesButton("rasterfile",
                               #                                     label = tags$span("tiff file :",
                               #                                                       tags$i(
@@ -214,13 +217,22 @@ app_ui <- function(request) {
                               #
                               #          column(8, actionButton("go",label = "Plot Data", class = "btn-success", width = '100%'))),
 
-                              actionButton("go",label = "Plot Data", class = "btn-success", width = '100%'),
+                              actionButton("go",label = tags$span("Plot data",
+                                                                  tags$i(
+                                                                    class = "glyphicon glyphicon-info-sign",
+                                                                    style = "color:#b20019;",
+                                                                    title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS points and the track for the individuals. The points increase in size the more recent the points have been made."
+                                                                  )), class = "btn-success", width = '100%'),
                               leafletOutput('clusterMap'),
                               actionButton("downloadMap", label = "Download interactive map as html."))),
 
 
-                   tabPanel("Points Table",
-                            h5("The points datatable shows all GPS points, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the cluster it belongs to or SP for single point, the month, day and hour the point was made."),
+                   tabPanel(tags$span("Points table",
+                                      tags$i(
+                                        class = "glyphicon glyphicon-info-sign",
+                                        style = "color:#b20019;",
+                                        title = "The points datatable shows all GPS points, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the cluster it belongs to or SP for single point, the month, day and hour the point was made."
+                                      )),
                             fluidRow(
                               DT::dataTableOutput("pointsTable"),
                               column(4, checkboxGroupInput("downloadPoints_buttons", "Choose output format:", choiceNames =  list( ".shp",".csv", ".gpx"), choiceValues = list( ".shp",".csv", ".gpx"), inline = TRUE)),
@@ -234,9 +246,10 @@ app_ui <- function(request) {
         )
       ),
 
-      hr(),
-      print("This app is developed by Johanna Maertz. Any questions, feedback or ideas to improve it mail to johanna@maertz.eu.")
-
+      tags$div(
+        style = "text-align: center; margin-top: 20px;",
+        HTML("This app is developed by <a href='mailto:johanna@maertz.eu'>Johanna Maertz</a>. Any questions, feedback, or ideas to improve it, please feel free to reach out.")
+      )
     )
   )
 }

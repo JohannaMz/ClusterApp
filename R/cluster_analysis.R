@@ -20,9 +20,9 @@ cluster_analysis <- function(intensive.start ,
                              LMT_Date ,
                              East ,
                              North,
-                             dateFormat ,
+                             dateFormat,
                              prepostPeriod = 0 ,
-                             EPSGcode ,
+                             EPSGcode,
                              buffer,
                              count,
                              indID, #label
@@ -30,6 +30,7 @@ cluster_analysis <- function(intensive.start ,
                              minute_diff,
                              oldclusters,
                              UTM_zone){
+
   if (is.null(datapoints)) {
     status <- "Please upload data in the right format."
     cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
@@ -38,7 +39,7 @@ cluster_analysis <- function(intensive.start ,
       is.na(EPSGcode)|
       is.na(UTM_zone)){
 
-    status <- "Input missing in Tab 1: Upload GPS data. Check if you have entered a date format, a input EPSG code and the output UTM zone."
+    status <- "Input missing in Tab 1: Upload GPS data. Check if you have entered a date format, an input EPSG code and the output UTM zone."
     cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
 
   } else if (is.na(indID)|
