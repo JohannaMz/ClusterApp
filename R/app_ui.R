@@ -164,7 +164,7 @@ app_ui <- function(request) {
                           verbatimTextOutput("file_path_last",placeholder = TRUE),
 
                           shinyFilesButton("latestfile_manual",
-                                           label = tags$span("Optionally load a latest file manually:",
+                                           label = tags$span("Optionally load a latest file manually",
                                                              tags$i(
                                                                class = "glyphicon glyphicon-info-sign",
                                                                style = "color:#b20019;",
