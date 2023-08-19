@@ -18,7 +18,10 @@ Imports:
     leaflet,
     lubridate,
     magrittr,
+    openxlsx,
+    raster,
     readr,
+    readxl,
     sf,
     sftrack,
     shiny (>= 1.7.3),
@@ -41,4 +44,3 @@ LazyData: true
 RoxygenNote: 7.2.3
 URL: https://github.com/JohannaMz/ClusterApp
 BugReports: https://github.com/JohannaMz/ClusterApp/issues
-

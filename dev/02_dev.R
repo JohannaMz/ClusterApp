@@ -36,6 +36,8 @@ usethis::use_package("hms")
 usethis::use_package("sftrack")
 usethis::use_package("stats")
 usethis::use_package("tidyr")
+usethis::use_package("readxl")
+usethis::use_package("openxlsx")
 usethis::use_pipe()
 
 

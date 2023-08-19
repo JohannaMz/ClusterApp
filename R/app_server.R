@@ -11,9 +11,11 @@
 #' @importFrom leaflet hideGroup renderLeaflet
 #' @importFrom foreign read.dbf
 #' @importFrom readr parse_number read_delim
-#' @importFrom sf read_sf st_as_sf st_cast st_crs st_drop_geometry st_transform st_write
+#' @importFrom sf read_sf st_as_sf st_cast st_crs st_drop_geometry st_transform st_write st_coordinates st_as_text
 #' @importFrom tmap tm_dots tm_fill tm_lines tm_markers tm_shape tm_text tmap_leaflet tmap_options tmap_save
 #' @importFrom utils str write.csv
+#' @importFrom readxl read_excel
+#' @importFrom openxlsx write.xlsx
 #' @noRd
 #'
 #'
@@ -127,26 +129,46 @@ app_server <- function(input, output, session) {
   })
 
 
+  #load latest file manually
+  shinyFileChoose(input, 'latestfile_manual', roots = volumes(), filetypes = c("shp", "xlsx"))
+
+  latestfile_manual <- reactive(input$latestfile_manual)
+
+  latestfile_manual_path <- reactive({
+    as.character(parseFilePaths(volumes,latestfile_manual())$datapath)})
+
 
   #search in this folder for an older cluster file from that individual
-  lastClustersFile <- reactive(ifelse((sum(grepl(paste0("Clusters_", input$indID),
-                                                 list.files(dirname(file_path()))))>0) &
-                                        (sum(grepl(paste0("\\bClusters_", input$indID,"_",
-                                                          stringr::str_sub(list.files(dirname(file_path()),
-                                                                                      pattern = paste0("Clusters_", input$indID)), -10)  %>%
-                                                            readr::parse_number() %>%
-                                                            max(),".shp\\b"), list.files(dirname(file_path())))>0)),
+  lastClustersFile <- reactive(
+    if(length(latestfile_manual_path()>0)) {
+      latestfile_manual_path()
+    } else if((sum(grepl(paste0("Clusters_", input$indID),
+                                            list.files(dirname(file_path()))))>0) &
+                                 (sum(grepl(paste0("\\bClusters_", input$indID,"_",
+                                                   stringr::str_sub(list.files(dirname(file_path()),
+                                                                               pattern = paste0("Clusters_", input$indID)), -10)  %>%
+                                                     readr::parse_number() %>%
+                                                     max(),".shp\\b"), list.files(dirname(file_path())))>0))) {
 
-                                      paste(dirname(file_path()),"/Clusters_", input$indID,"_",
-                                            stringr::str_sub(list.files(dirname(file_path()),
-                                                                        pattern = paste0("Clusters_", input$indID)), -10)  %>%
-                                              readr::parse_number() %>%
-                                              max(),".shp" ,sep = ""), "No latest cluster file.")
-  )
+                                   paste(dirname(file_path()),"/Clusters_", input$indID,"_",
+                                         stringr::str_sub(list.files(dirname(file_path()),
+                                                                     pattern = paste0("Clusters_", input$indID)), -10)  %>%
+                                         readr::parse_number() %>%
+                                         max(),".shp" ,sep = "")
+
+    } else {
+                                   "No latest cluster file."
+}
+)
 
 
 
-  output$file_path_last <- renderPrint(lastClustersFile())
+output$file_path_last <- renderPrint(lastClustersFile())
+
+
+
+
+
 
 
 
@@ -298,18 +320,28 @@ app_server <- function(input, output, session) {
 
     }
 
-    if (".csv" %in% input$downloadClusters_buttons) {
+    if (".xlsx" %in% input$downloadClusters_buttons) {
+      # Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],] %>%
+      #   st_drop_geometry()
+      # Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],]
+
+      geometry <- st_as_text(Clusters_sf_table$data[input[["clustersTable_rows_all"]],]$geometry)
+
       Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],] %>%
-        st_drop_geometry()
+        st_drop_geometry() %>%
+        cbind(geometry)
 
 
+      #############
 
       if(length(latestfile_path()>0)){
-        fileName_clusters <- paste(dirname(latestfile_path()), "/CsvClusters_", input$indID, "_", thedate, ".csv", sep = "")
-        write.csv(Clusters_csv, fileName_clusters)
+        fileName_clusters <- paste(dirname(latestfile_path()), "/Clusters_", input$indID, "_", thedate, ".xlsx", sep = "")
+        #write.csv(Clusters_csv, fileName_clusters)
+        write.xlsx(Clusters_csv, fileName_clusters)
       } else {
-        fileName_clusters <- paste(dirname(file_path()), "/CsvClusters_", input$indID, "_", thedate, ".csv", sep = "")
-        write.csv(Clusters_csv, fileName_clusters)
+        fileName_clusters <- paste(dirname(file_path()), "/Clusters_", input$indID, "_", thedate, ".xlsx", sep = "")
+        #write.csv(Clusters_csv, fileName_clusters)
+        write.xlsx(Clusters_csv, fileName_clusters)
       }
 
     }
@@ -541,13 +573,18 @@ app_server <- function(input, output, session) {
 
     }
 
-    if (".csv" %in% input$downloadPoints_buttons) {
-      Points_csv <- Join_sf_table$data[input[["clustersTable_rows_all"]],] %>%
-        st_drop_geometry()
+    if (".xlsx" %in% input$downloadPoints_buttons) {
+      Points_csv <- Join_sf_table$data[input[["clustersTable_rows_all"]],]
+
+      geometry <- st_as_text(Points_csv$geometry)
+
+      Points_csv <- Points_csv %>%
+        st_drop_geometry() %>%
+        cbind(geometry)
 
 
-      fileName_points <- paste(dirname(file_path()), "/CsvPoints_", input$indID, "_", thedate, ".csv", sep = "")
-      write.csv(Points_csv, fileName_points)
+      fileName_points <- paste(dirname(file_path()), "/Points_", input$indID, "_", thedate, ".xlsx", sep = "")
+      write.xlsx(Points_csv, fileName_points)
 
     }
 

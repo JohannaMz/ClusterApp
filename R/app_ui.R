@@ -9,6 +9,7 @@
 #' @noRd
 #'
 #'
+#'
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
@@ -156,10 +157,24 @@ app_ui <- function(request) {
                                        tags$i(
                                          class = "glyphicon glyphicon-info-sign",
                                          style = "color:#b20019;",
-                                         title = "Here the path to the latest cluster file appears, if this one is saved in the same folder as your input GPS file and has the same label."
+                                         title = "Here the path to the latest cluster file appears automatically, if this one is saved in the same folder as your input GPS file and has the same label."
                                        ))),
                           br(),
+
                           verbatimTextOutput("file_path_last",placeholder = TRUE),
+
+                          shinyFilesButton("latestfile_manual",
+                                           label = tags$span("Optionally load a latest file manually:",
+                                                             tags$i(
+                                                               class = "glyphicon glyphicon-info-sign",
+                                                               style = "color:#b20019;",
+                                                               title = "Manually find a latest cluster file to be used in the analysis. This file has to have the columns: ID, ClusID, sum, prec_time, date_min, date_max,  State , Event,  Done, Worker, center_x, center_y, geometry. Manual changes to the file within the columns State , Event,  Done and Worker will be used.")),
+                                           title = "Manually find a latest cluster file to be used.",
+                                           multiple = FALSE),
+
+                          br(),
+                          br(),
+
                           h6("Should old clusters automatically be marked as done?"),
                           checkboxInput("oldclusters", label = "", value = FALSE)))
         ),
@@ -196,13 +211,13 @@ app_ui <- function(request) {
                             fluidRow(
 
                               DT::dataTableOutput('clustersTable'),
-                              column(4,checkboxGroupInput("downloadClusters_buttons", "Choose output format:", choiceNames =  list( ".shp",".csv", ".gpx"), selected = c(".shp"), choiceValues = list( ".shp",".csv", ".gpx"), inline = TRUE)),
+                              column(4,checkboxGroupInput("downloadClusters_buttons", "Choose output format:", choiceNames =  list( ".shp",".xlsx", ".gpx"), selected = c(".shp"), choiceValues = list( ".shp",".xlsx", ".gpx"), inline = TRUE)),
 
                               column(4, br(), actionButton("downloadClusters", label =  tags$span("Download cluster table.",
                                                                                                   tags$i(
                                                                                                     class = "glyphicon glyphicon-info-sign",
                                                                                                     style = "color:#b20019;",
-                                                                                                    title = "You have to download the shapefile of this cluster analysis, if this should be used in the following anaylsis as a latest cluster analysis file. This file will be downloaded in the coordinate system UTM and the specified zone. Downloading .csv or.gpx files are optional. GPX will be in WGS84."
+                                                                                                    title = "You have to download the shapefile of this cluster analysis, if this should be used in the following anaylsis as a latest cluster analysis file. This file will be downloaded in the coordinate system UTM and the specified zone. Downloading .xlsx or.gpx files are optional. GPX will be in WGS84."
                                                                                                   )))),
                               #h5("Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS points and the track for the individuals. The points increase in size the more recent the points have been made."),
                               # fluidRow(column(2, shinyFilesButton("rasterfile",
@@ -235,12 +250,12 @@ app_ui <- function(request) {
                                       )),
                             fluidRow(
                               DT::dataTableOutput("pointsTable"),
-                              column(4, checkboxGroupInput("downloadPoints_buttons", "Choose output format:", choiceNames =  list( ".shp",".csv", ".gpx"), choiceValues = list( ".shp",".csv", ".gpx"), inline = TRUE)),
+                              column(4, checkboxGroupInput("downloadPoints_buttons", "Choose output format:", choiceNames =  list( ".shp",".xlsx", ".gpx"), choiceValues = list( ".shp",".xlsx", ".gpx"), inline = TRUE)),
                               column(4, br(), actionButton("downloadPoints", label =  tags$span("Download points table.",
                                                                                                 tags$i(
                                                                                                   class = "glyphicon glyphicon-info-sign",
                                                                                                   style = "color:#b20019;",
-                                                                                                  title = "Downloading this file is useful for uploading it on your GPS, it is not necessary for any further analysis. The shapefile will be downloaded in the coordinate system UTM and the specified zone, while the GPX file is downloaded in WGS84."
+                                                                                                  title = "Downloading this file is useful for uploading it on your GPS, it is not necessary for any further analysis. The shapefile and excel file will be downloaded in the coordinate system UTM and the specified zone, while the GPX file is downloaded in WGS84."
                                                                                                 ))))))
                  )
         )

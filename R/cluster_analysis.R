@@ -9,6 +9,8 @@
 #' @importFrom sf st_as_sf st_buffer st_cast st_centroid st_coordinates st_crs st_drop_geometry st_geometry st_join st_read st_transform st_union
 #' @importFrom sftrack as_sftraj
 #' @importFrom tidyr separate unite
+#' @importFrom readxl read_excel
+#' @importFrom openxlsx write.xlsx
 #'
 #' @noRd
 
@@ -30,6 +32,7 @@ cluster_analysis <- function(intensive.start ,
                              minute_diff,
                              oldclusters,
                              UTM_zone){
+  message <- "Working."
 
   if (is.null(datapoints)) {
     status <- "Please upload data in the right format."
@@ -52,12 +55,12 @@ cluster_analysis <- function(intensive.start ,
   }  else {
 
     datapoints <- datapoints %>%
-      dplyr::select(c(ID, LMT_Date, East, North))
+      dplyr::select(all_of(ID), all_of(LMT_Date), all_of(East), all_of(North))
 
     colnames(datapoints) <- c("ID", "LMT_Date", "East", "North")
 
 
-    if (is.character(datapoints$ID == FALSE)) {
+    if (is.character(datapoints$ID) == FALSE) {
       status <- "ID is not a character value. Choose a different column."
       cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
 
@@ -78,7 +81,7 @@ cluster_analysis <- function(intensive.start ,
     else {
 
       datapoints <- datapoints %>%
-        mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat),
+        dplyr::mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat),
                "LMT_Date" = date(ts),
                "LMT_Time" = as.factor(hms::as_hms(ymd_hms(ts))))
 
@@ -99,8 +102,7 @@ cluster_analysis <- function(intensive.start ,
           ungroup() %>%
           dplyr::select(-c(diff_min, time_group_minu))
 
-      }
-      else {
+      } else {
         minute_diff_data <- datapoints %>%
           arrange(ID, ts) %>%
           group_by(ID) %>%
@@ -109,6 +111,7 @@ cluster_analysis <- function(intensive.start ,
         minute_diff = round(mean(minute_diff_data$diff_min, na.rm = TRUE), 0)
 
       }
+
 
 
       datapoints$Status <- NA
@@ -124,14 +127,13 @@ cluster_analysis <- function(intensive.start ,
         status <- "No data within this intensive period. Try another time frame."
         cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
 
-      }
-      else {
+      } else {
 
         #make the data spatial
         data_sf <- sf::st_as_sf(datapoints, coords = c("North", "East"), crs = EPSGcode)
         UTM_coord <- as.numeric(paste0("258", UTM_zone))
 
-        data_sf <- st_transform(data_sf, crs = st_crs(UTM_coord)) #change WGS84 to UTM to have meters
+        data_sf <- sf::st_transform(data_sf, crs = st_crs(UTM_coord)) #change WGS84 to UTM to have meters
 
         #make a track from the data
         data_sf_traj <- sf::st_as_sf(as_sftraj(data_sf, group = c(id = "ID"), time = "ts"))
@@ -150,7 +152,9 @@ cluster_analysis <- function(intensive.start ,
           Buffer_sf <- st_buffer(data_sf_ID, buffer)
           Multi <- st_union(Buffer_sf)
           Multi <- st_cast(Multi, "POLYGON")
-          Multi_sf <- sf::st_as_sf(Multi)
+          Multi_sf <- Multi %>%
+            sf::st_as_sf() %>%
+            rename(geometry = x)
 
           #preliminary cluster ID to cluster points together: get this to work when there are no clusters! ifelse....
           Multi_sf$ClusID <- seq(1:nrow(Multi_sf)) #seq(stats::rnorm(nrow(Multi_sf)))
@@ -198,8 +202,30 @@ cluster_analysis <- function(intensive.start ,
 
           if (lastClustersFile != "No latest cluster file.") {
 
-            #identify already exsiting clusters from the analysis before: upload data
-            Clusters_sf_before <- st_read(lastClustersFile)
+              #identify already exsiting clusters from the analysis before: upload data
+
+            Clusters_sf_before <- if(sum(strsplit(basename(lastClustersFile), split="\\.")[[1]][-1] == "xlsx") == TRUE){
+
+            #read_excel(lastClustersFile)
+            st_as_sf(read_excel(lastClustersFile), wkt = "geometry", crs = UTM_coord)
+
+            } else if (sum(strsplit(basename(lastClustersFile), split="\\.")[[1]][-1] == "shp") == TRUE){
+
+            read_sf(lastClustersFile)
+
+            } else {
+              NULL
+            }
+
+
+
+            if(sum(c("ID", "ClusID", "sum", "prec_time", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
+                       "Worker" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  13){
+
+
+            Clusters_sf_before <- dplyr::select(Clusters_sf_before, ID, ClusID, sum, prec_time, date_min,  date_max,  State ,    Event,     Done  ,
+                                                    Worker ,center_x,center_y,geometry)
+
 
             Clusters_sf_before <- filter(Clusters_sf_before, ID == i)
 
@@ -208,7 +234,7 @@ cluster_analysis <- function(intensive.start ,
 
             #adjust ClusID again: this is the file that will be used later again, so it has to be safed to your working directory: Clusters_"date"
             Clusters_sf <- Clusters_sf %>%
-              dplyr::select(ClusID.y, ID.x, x, sum.x, sum.y,  prec_time.x, date_min.x, date_max.x, Event.y, Done.y, Worker.y, State.y) %>%
+              dplyr::select(ClusID.y, ID.x, geometry, sum.x, sum.y,  prec_time.x, date_min.x, date_max.x, Event.y, Done.y, Worker.y, State.y) %>%
               rename("ClusID" = "ClusID.y",
                      "ID" = "ID.x",
                      "prec_time" = "prec_time.x",
@@ -251,11 +277,18 @@ cluster_analysis <- function(intensive.start ,
               dplyr::select(-c(sum.y)) %>%
               rename("sum" = "sum.x")
 
-
-
+            } else {
+              message <- "Column names wrong."
+            }
 
           }
 
+
+          if(message == "Column names wrong."){
+            status = "The latest cluster file could not be loaded or does not have the right column names. Did you change any column names? Check again."
+            cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+
+          } else {
 
           Clusters_sf$center <- Clusters_sf %>%
             st_centroid() %>%
@@ -291,13 +324,14 @@ cluster_analysis <- function(intensive.start ,
 
           Join_sf_combined <- rbind(Join_sf_combined, Join_sf)
 
-        }
+
 
         status <- "Done!"
         cluster_list <- list(Clusters_sf = Clusters_sf_combined, Join_sf = Join_sf_combined, data_sf_traj = data_sf_traj, status = status)
 
+          }
+        }
       }
-
     }
 
   }

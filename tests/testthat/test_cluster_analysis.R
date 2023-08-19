@@ -4,6 +4,8 @@ library(sf)
 library(lubridate)
 library(sftrack)
 library(tidyr)
+library(readr)
+library(openxlsx)
 
 # Load your cluster_analysis function here
 source("R/cluster_analysis.R")
@@ -45,12 +47,12 @@ test_that("Cluster analysis function works as expected", {
 
   # Test if the output is a list
   expect_type(cluster_analysis(intensive.start, intensive.end, example_data, ID, LMT_Date, East, North,
-                             dateFormat, prepostPeriod, EPSGcode, buffer, count, lastClustersFile,
+                             dateFormat, prepostPeriod, EPSGcode, buffer, count,indID, lastClustersFile,
                              minute_diff, oldclusters, UTM_zone), "list")
 
   # Test if the output list contains the expected elements
   expect_named(cluster_analysis(intensive.start, intensive.end, example_data, ID, LMT_Date, East, North,
-                                dateFormat, prepostPeriod, EPSGcode, buffer, count, lastClustersFile,
+                                dateFormat, prepostPeriod, EPSGcode, buffer, count,indID, lastClustersFile,
                                 minute_diff, oldclusters, UTM_zone), c("Clusters_sf", "Join_sf", "data_sf_traj", "status"))
 
   # You can add more specific tests for the behavior and output of your function here
