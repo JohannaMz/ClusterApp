@@ -11,7 +11,9 @@ cluster studies based on GPS data.
 
 ## Installation
 
-You can install the development version of ClusterApp from
+For the installation to work, you need
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) downloaded. You
+can install the development version of ClusterApp from
 [GitHub](https://github.com/) with:
 
 ``` r

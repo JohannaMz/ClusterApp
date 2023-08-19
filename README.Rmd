@@ -25,13 +25,13 @@ The goal of ClusterApp is a Shiny application to guide and streamline cluster st
 
 ## Installation
 
+For the installation to work, you need [Rtools](https://cran.r-project.org/bin/windows/Rtools/) downloaded. 
 You can install the development version of ClusterApp from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("JohannaMz/ClusterApp")
 ```
-
 The app can then be started by the command:
 
 ``` r
