@@ -55,8 +55,5 @@ test_that("Cluster analysis function works as expected", {
                                 dateFormat, prepostPeriod, EPSGcode, buffer, count,indID, lastClustersFile,
                                 minute_diff, oldclusters, UTM_zone), c("Clusters_sf", "Join_sf", "data_sf_traj", "status"))
 
-  # You can add more specific tests for the behavior and output of your function here
-  # For example, you can test if the output clusters have the correct structure,
-  # if the data transformation steps are working correctly, etc.
 
 })

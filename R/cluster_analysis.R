@@ -17,7 +17,7 @@
 
 cluster_analysis <- function(intensive.start ,
                              intensive.end ,
-                             datapoints,
+                             datapoints, #read_delim(file_path(), delim = input$separator, escape_double = FALSE, trim_ws = TRUE)
                              ID ,
                              LMT_Date ,
                              East ,
@@ -30,6 +30,7 @@ cluster_analysis <- function(intensive.start ,
                              indID, #label
                              lastClustersFile,
                              minute_diff,
+                             onlyClusters,
                              oldclusters,
                              UTM_zone){
   message <- "Working."
@@ -173,13 +174,36 @@ cluster_analysis <- function(intensive.start ,
             summarize(sum = sum(Status), date_min = min(ts), date_max = max(ts)) %>%
             filter(sum >= 1) %>%
             mutate(ID = i,
-                   prec_time = round(sum/round(as.numeric(difftime(date_max, date_min, units = "mins"))/minute_diff, 0), 2)) %>%
+                   prec_time = round(sum/(round(as.numeric(difftime(date_max, date_min, units = "mins"))/minute_diff, 0)+1), 2)) %>%
             #drop the geometry column because we will add the polygon geometry now
             st_drop_geometry() %>%
             left_join(Multi_sf, by = c("ClusID")) %>%
             #arrange the data according to date
             arrange(date_min)
 
+          #identify points inside to outside cluster
+          for (j in 1:nrow(Clusters_sf)) {
+
+            Join_sf_filter <- filter(Join_sf, ts >= Clusters_sf$date_min[j] & ts <= Clusters_sf$date_max[j])
+
+            inside <- nrow(filter(Join_sf_filter, ClusID == Clusters_sf$ClusID[j]))
+            outside <- nrow(filter(Join_sf_filter, ClusID != Clusters_sf$ClusID[j]))
+            Clusters_sf$inout[j] <- paste0(inside, "/", outside)
+            Clusters_sf$ratio[j] <- if(outside == 0){
+              "All points within cluster."
+            } else if(inside < outside){
+              "More points outside of cluster."
+            } else if(inside > outside){
+              "More points inside of cluster."
+            } else if(inside == outside){
+              "Even number of points inside and outside of cluster."
+            }
+
+          }
+
+          if(onlyClusters == TRUE){
+            Clusters_sf <- filter(Clusters_sf, ratio == "All points within cluster.")
+          }
 
           #so that now the new cluster ID can be assigned with 1 being the oldest
           if(nrow(Clusters_sf) != 0){
@@ -219,12 +243,12 @@ cluster_analysis <- function(intensive.start ,
 
 
 
-            if(sum(c("ID", "ClusID", "sum", "prec_time", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
-                       "Worker" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  13){
+            if(sum(c("ID", "ClusID", "sum", "prec_time","inout" , "ratio", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
+                     "Worker" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  15){
 
 
-            Clusters_sf_before <- dplyr::select(Clusters_sf_before, ID, ClusID, sum, prec_time, date_min,  date_max,  State ,    Event,     Done  ,
-                                                    Worker ,center_x,center_y,geometry)
+              Clusters_sf_before <- dplyr::select(Clusters_sf_before, ID, ClusID, sum, prec_time, inout , ratio, date_min,  date_max,  State ,    Event,     Done  ,
+                                                  Worker ,center_x,center_y,geometry)
 
 
             Clusters_sf_before <- filter(Clusters_sf_before, ID == i)
@@ -234,10 +258,12 @@ cluster_analysis <- function(intensive.start ,
 
             #adjust ClusID again: this is the file that will be used later again, so it has to be safed to your working directory: Clusters_"date"
             Clusters_sf <- Clusters_sf %>%
-              dplyr::select(ClusID.y, ID.x, geometry, sum.x, sum.y,  prec_time.x, date_min.x, date_max.x, Event.y, Done.y, Worker.y, State.y) %>%
+              dplyr::select(ClusID.y, ID.x, geometry, sum.x, sum.y,  prec_time.x, inout.x, ratio.x, date_min.x, date_max.x, Event.y, Done.y, Worker.y, State.y) %>%
               rename("ClusID" = "ClusID.y",
                      "ID" = "ID.x",
                      "prec_time" = "prec_time.x",
+                     "inout" = "inout.x",
+                     "ratio" = "ratio.x",
                      "date_min" = "date_min.x",
                      "date_max" = "date_max.x",
                      "Event" = "Event.y",
@@ -298,8 +324,7 @@ cluster_analysis <- function(intensive.start ,
           Clusters_sf <- Clusters_sf %>%
             mutate(center_x = round(st_coordinates(center)[,1], 2),
                    center_y = round(st_coordinates(center)[,2], 2)) %>%
-            dplyr::select(ID, ClusID, sum, prec_time, date_min, date_max, State, Event, Done, Worker, center_x, center_y)
-
+            dplyr::select(ID, ClusID, sum, prec_time, inout, ratio, date_min, date_max, State, Event, Done, Worker, center_x, center_y)
 
           Clusters_sf_combined <- rbind(Clusters_sf_combined, Clusters_sf)
 

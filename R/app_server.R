@@ -192,6 +192,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
         indID = input$indID,
         lastClustersFile = lastClustersFile(),
         minute_diff = input$minute_diff,
+        onlyClusters = input$onlyClusters,
         oldclusters = input$oldclusters,
         UTM_zone = input$UTM_zone
       )
@@ -258,12 +259,15 @@ output$file_path_last <- renderPrint(lastClustersFile())
 
   output$clustersTable <- renderDataTable({
 
-
-    DT::datatable(Clusters_sf_table$data,
+Clusters_sf_table$data %>%
+      #st_drop_geometry %>%
+    DT::datatable(
                   colnames = c("Animal ID" = "ID",
                                "Cluster ID" = "ClusID",
                                "Number of points" = "sum",
                                "Percent of time spent at the location" = "prec_time",
+                               "Number of points within/outside of the cluster" = "inout",
+                               "Ratio points within/outside of the cluser" = "ratio",
                                "First date visited" = "date_min",
                                "Last date visited" = "date_max",
                                "State" = "State",
@@ -275,13 +279,13 @@ output$file_path_last <- renderPrint(lastClustersFile())
                     pageLength = 10,
                     scrollX = TRUE,
                     server = FALSE,
-                    columnDefs = list(list(targets = '_all', className = 'dt-center'),
-                                      list(targets = c(12), visible = FALSE))), #hide the geometry column
+                     columnDefs = list(list(targets = '_all', className = 'dt-center'),
+                                       list(targets = c(14), visible = FALSE))), #hide the geometry column
                   rownames = FALSE,
                   extensions = 'Buttons',
                   filter = list(position = "top"),
                   selection = "single",
-                  editable = list(target = "cell", disable = list(columns =c(0:5,10, 11)))) #make columns after number 4 editable. define selectInput!
+                  editable = list(target = "cell", disable = list(columns =c(0:7,12, 12)))) #make columns after number 7 editable. define selectInput!
   })
 
 

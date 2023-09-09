@@ -150,7 +150,10 @@ app_ui <- function(request) {
                                                    style = "color:#b20019;",
                                                    title = "In the output above, you see the summary of time differences in your data. It makes sense to set your time difference at the approximate mean of your data, to use as many points possible for the analysis without inflating clusters by GPS points that were taken shortly after one another."
                                                  )),
-                                       value = NA)),
+                                       value = NA),
+                          br(), br(),
+                          h6("Should only clusters with only points within be used?"),
+                          checkboxInput("onlyClusters", label = "", value = FALSE)),
 
                    column(4, offset = 1,
                           h5(tags$span("Some additional info, if you already have done an analysis before:",
