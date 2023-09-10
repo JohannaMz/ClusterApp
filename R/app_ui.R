@@ -152,7 +152,7 @@ app_ui <- function(request) {
                                                  )),
                                        value = NA),
                           br(), br(),
-                          h6("Should only clusters with only points within be used?"),
+                          h6("Should only clusters with consecutive GPS locations be used?"),
                           checkboxInput("onlyClusters", label = "", value = FALSE)),
 
                    column(4, offset = 1,

@@ -179,7 +179,8 @@ output$file_path_last <- renderPrint(lastClustersFile())
     output <- cluster_analysis(
         intensive.start = input$intensivePeriod[1],
         intensive.end = input$intensivePeriod[2],
-        datapoints = file(),
+        datapoints = file_path(),
+        sep = input$separator,
         ID = input$ID,
         LMT_Date = input$LMT_Date,
         East = input$East,
@@ -267,7 +268,7 @@ Clusters_sf_table$data %>%
                                "Number of points" = "sum",
                                "Percent of time spent at the location" = "prec_time",
                                "Number of points within/outside of the cluster" = "inout",
-                               "Ratio points within/outside of the cluser" = "ratio",
+                               "Classification of clusters by GPS locations" = "ratio",
                                "First date visited" = "date_min",
                                "Last date visited" = "date_max",
                                "State" = "State",
@@ -306,8 +307,20 @@ Clusters_sf_table$data %>%
 
   # download the clusters file
 
-  observeEvent(input$downloadClusters, {
+  #extract settings file from output list
+settings <- reactive({
+    cluster_list <- cluster_list()
+    cluster_list$settings
+  })
+
+# #fill the reactuve value with the data
+# observe({
+#   Clusters_sf_table$data <- settings()
+# }
+
+observeEvent(input$downloadClusters, {
     thedate <- strftime(Sys.Date(),"%y%m%d")
+
 
     if (".shp" %in% input$downloadClusters_buttons) {
 
@@ -319,6 +332,10 @@ Clusters_sf_table$data %>%
       } else {
         fileName_clusters <- paste(dirname(file_path()), "/Clusters_", input$indID, "_", thedate, ".shp", sep = "")
         st_write(Clusters_sf_table$data, fileName_clusters, append = FALSE)
+
+        fileName_settings <- paste(dirname(file_path()), "/Settings_", input$indID, "_", thedate, ".txt", sep = "")
+        write.table(settings(), fileName_settings, sep = "=", col.names = FALSE)
+
       }
 
 

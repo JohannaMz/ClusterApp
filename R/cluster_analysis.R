@@ -17,7 +17,8 @@
 
 cluster_analysis <- function(intensive.start ,
                              intensive.end ,
-                             datapoints, #read_delim(file_path(), delim = input$separator, escape_double = FALSE, trim_ws = TRUE)
+                             datapoints,
+                             sep,
                              ID ,
                              LMT_Date ,
                              East ,
@@ -35,25 +36,59 @@ cluster_analysis <- function(intensive.start ,
                              UTM_zone){
   message <- "Working."
 
+  settings <- c("start of intensive period" = as.character(intensive.start),
+                          "end of intensive period" = as.character(intensive.end),
+                          "path to datapoints" = datapoints,
+                          "ID column name" = ID,
+                          "LMT_Date column name" = LMT_Date,
+                          "East column name" = East,
+                          "North column name" = North,
+                          "date format" = dateFormat,
+                          #"prepostPeriod" = prepostPeriod,
+                          "EPSGcode of datapoints file" = as.character(EPSGcode$input),
+                          "buffer radius around points" = buffer,
+                          "count of points necessary within a buffer" = count,
+                          "label" = indID,
+                          "path to latest clusters file" = lastClustersFile,
+                          "minute difference between GPS points" = minute_diff,
+                          "filter for clusters with only consecutive points" = onlyClusters,
+                          "old clusters marked as done" = oldclusters,
+                          "UTM zone for output data" = UTM_zone)
+
+
+  datapoints <- if(sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "csv") == TRUE){
+    read_delim(datapoints, delim = sep, escape_double = FALSE, trim_ws = TRUE)
+
+  }else if(sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "dbf") == TRUE){
+    read.dbf(datapoints, as.is = FALSE)
+
+  } else if (sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "shp") == TRUE){
+    read_sf(datapoints)
+  } else {
+    NULL
+  }
+
+
   if (is.null(datapoints)) {
     status <- "Please upload data in the right format."
-    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
   } else if (is.na(dateFormat)|
       is.na(EPSGcode)|
       is.na(UTM_zone)){
 
     status <- "Input missing in Tab 1: Upload GPS data. Check if you have entered a date format, an input EPSG code and the output UTM zone."
-    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
   } else if (is.na(indID)|
              is.na(buffer)|
              is.na(count)){
 
     status <- "Input missing in Tab 2: Adjust Cluster Analysis Parameters. Check if you have entered a label, buffer size and the number of points needed for a cluster."
-    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+    cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
   }  else {
+
 
     datapoints <- datapoints %>%
       dplyr::select(all_of(ID), all_of(LMT_Date), all_of(East), all_of(North))
@@ -63,7 +98,7 @@ cluster_analysis <- function(intensive.start ,
 
     if (is.character(datapoints$ID) == FALSE) {
       status <- "ID is not a character value. Choose a different column."
-      cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+      cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
     }
     else if (is.character(datapoints$LMT_Date) == FALSE &
@@ -71,12 +106,12 @@ cluster_analysis <- function(intensive.start ,
              is.POSIXct(datapoints$LMT_Date) == FALSE){
 
       status <- "LMT_Date is not a character, Date or POSIXct value. Adjust this please."
-      cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+      cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
     }
     else if (is.numeric(datapoints$East) == FALSE| is.numeric(datapoints$North) == FALSE){
       status <- "East and/or North coordinates are not numeric. Find the right columns."
-      cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+      cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
     }
     else {
@@ -126,7 +161,7 @@ cluster_analysis <- function(intensive.start ,
 
       if (nrow(datapoints) == 0) {
         status <- "No data within this intensive period. Try another time frame."
-        cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+        cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
       } else {
 
@@ -312,7 +347,7 @@ cluster_analysis <- function(intensive.start ,
 
           if(message == "Column names wrong."){
             status = "The latest cluster file could not be loaded or does not have the right column names. Did you change any column names? Check again."
-            cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status)
+            cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
           } else {
 
@@ -352,7 +387,7 @@ cluster_analysis <- function(intensive.start ,
 
 
         status <- "Done!"
-        cluster_list <- list(Clusters_sf = Clusters_sf_combined, Join_sf = Join_sf_combined, data_sf_traj = data_sf_traj, status = status)
+        cluster_list <- list(Clusters_sf = Clusters_sf_combined, Join_sf = Join_sf_combined, data_sf_traj = data_sf_traj, status = status, settings = settings)
 
           }
         }
