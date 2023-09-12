@@ -68,7 +68,7 @@ app_ui <- function(request) {
                                                            style = "color:#b20019;",
                                                            title = "Data can be in different coordinate systems. The most common coordinate system from WRAM Export is WGS84 (EPSG: 4326). Coordinate columns are usually named Longitude (Northing) and Latitude (Easting). The EPSG code is a unique code for each coordinate system."
                                                          ),
-                                                         tags$a(href="https://epsg.io/", "Find the codes here.")),
+                                                         tags$a(href="https://epsg.io/", "Find the codes here.", target="_blank")),
                                                value = "4326"),
                                      numericInput("UTM_zone",
                                                tags$span("The output will be in the UTM format. Please enter the right zone:",
@@ -77,7 +77,7 @@ app_ui <- function(request) {
                                                            style = "color:#b20019;",
                                                            title = "UTM coordinate system is separated into zones over the world. Please find the appropriate zone in which your data lies. Be aware that this should be the same zone as a previous cluster shape, that might have been downloaded before."
                                                          ),
-                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here.")),
+                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here.", target="_blank")),
                                                value = NA)
                                      )
                               ),
@@ -160,7 +160,7 @@ app_ui <- function(request) {
                                        tags$i(
                                          class = "glyphicon glyphicon-info-sign",
                                          style = "color:#b20019;",
-                                         title = "Here the path to the latest cluster file appears automatically, if this one is saved in the same folder as your input GPS file and has the same label."
+                                         title = "Here the path to the latest cluster shapefile (.shp) appears automatically, if this one is saved in the same folder as your input GPS file and has the same label."
                                        ))),
                           br(),
 
@@ -171,7 +171,7 @@ app_ui <- function(request) {
                                                              tags$i(
                                                                class = "glyphicon glyphicon-info-sign",
                                                                style = "color:#b20019;",
-                                                               title = "Manually find a latest cluster file to be used in the analysis. This file has to have the columns: ID, ClusID, sum, prec_time, date_min, date_max,  State , Event,  Done, Worker, center_x, center_y, geometry. Manual changes to the file within the columns State , Event,  Done and Worker will be used.")),
+                                                               title = "Manually find a latest cluster file to be used in the analysis (allowed formats are .shp or .xlsx). This file has to have the columns: ID, ClusID, sum, prec_time, date_min, date_max,  State , Event,  Done, Worker, center_x, center_y, geometry. Manual changes to the file within the columns State , Event,  Done and Worker will be used.")),
                                            title = "Manually find a latest cluster file to be used.",
                                            multiple = FALSE),
 
