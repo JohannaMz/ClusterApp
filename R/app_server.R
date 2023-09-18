@@ -265,9 +265,9 @@ Clusters_sf_table$data %>%
     DT::datatable(
                   colnames = c("Animal ID" = "ID",
                                "Cluster ID" = "ClusID",
-                               "Number of points" = "sum",
+                               "Number of GPS locations" = "sum",
                                "Percent of time spent at the location" = "prec_time",
-                               "Number of points within/outside of the cluster" = "inout",
+                               "Number of GPS locations within/outside of the cluster" = "inout",
                                "Classification of clusters by GPS locations" = "ratio",
                                "First date visited" = "date_min",
                                "Last date visited" = "date_max",
@@ -423,11 +423,11 @@ observeEvent(input$downloadClusters, {
         init <- tm_shape(Clusters_sf_table$data[filter,]) +
           tm_fill(group = "State of clusters",col = "State", lwd = 8, palette = c("Done" = "green",
                                                                                   "New" = "red",
-                                                                                  "Points added" = "blue",
+                                                                                  "GPS locations added" = "blue",
                                                                                   "Not done" = "orange"),
                   popup.vars = c("Individual ID" = "ID",
                                  "Cluster ID" = "ClusID",
-                                 "Number of points" = "sum",
+                                 "Number of GPS locations" = "sum",
                                  "First date visited" = "date_min",
                                  "Last date visited" = "date_max",
                                  "State" = "State")) +
@@ -465,7 +465,7 @@ observeEvent(input$downloadClusters, {
                                                                                   "Not done" = "orange"),
                   popup.vars = c("Cluster ID" = "ClusID",
                                  "Individual ID" = "ID",
-                                 "Number of points" = "sum",
+                                 "Number of GPS locations" = "sum",
                                  "First date visited" = "date_min",
                                  "Last date visited" = "date_max",
                                  "State" = "State")) +
@@ -476,7 +476,7 @@ observeEvent(input$downloadClusters, {
           tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
 
           tm_shape(cluster_list$Join_sf) +
-          tm_dots(group = "GPS Points", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
+          tm_dots(group = "GPS Locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
                                                                                                                        "Time stamp" = "ts",
                                                                                                                        "ID" = "ID",
                                                                                                                        "Cluster ID" = "ClusID"), legend.show = FALSE)+
@@ -527,7 +527,7 @@ observeEvent(input$downloadClusters, {
         hideGroup(c("Events for clusters", "Cluster IDs"))
     } else {
       tmap_leaflet(map()) %>%
-        hideGroup(c("Events for clusters", "Cluster IDs", "GPS Points", "Track"))
+        hideGroup(c("Events for clusters", "Cluster IDs", "GPS Locations", "Track"))
     }
 
 

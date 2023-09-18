@@ -36,22 +36,22 @@ cluster_analysis <- function(intensive.start ,
                              UTM_zone){
   message <- "Working."
 
-  settings <- c("start of intensive period" = as.character(intensive.start),
-                          "end of intensive period" = as.character(intensive.end),
-                          "path to datapoints" = datapoints,
+  settings <- c("start of study period" = as.character(intensive.start),
+                          "end of study period" = as.character(intensive.end),
+                          "path to GPS data" = datapoints,
                           "ID column name" = ID,
                           "LMT_Date column name" = LMT_Date,
                           "East column name" = East,
                           "North column name" = North,
                           "date format" = dateFormat,
                           #"prepostPeriod" = prepostPeriod,
-                          "EPSGcode of datapoints file" = as.character(EPSGcode$input),
-                          "buffer radius around points" = buffer,
-                          "count of points necessary within a buffer" = count,
+                          "EPSGcode of GPS data file" = as.character(EPSGcode$input),
+                          "buffer radius around GPS locations" = buffer,
+                          "count of locations necessary within a buffer" = count,
                           "label" = indID,
                           "path to latest clusters file" = lastClustersFile,
-                          "minute difference between GPS points" = minute_diff,
-                          "filter for clusters with only consecutive points" = onlyClusters,
+                          "minute difference between GPS fixes" = minute_diff,
+                          "filter for clusters with only consecutive locations" = onlyClusters,
                           "old clusters marked as done" = oldclusters,
                           "UTM zone for output data" = UTM_zone)
 
@@ -84,7 +84,7 @@ cluster_analysis <- function(intensive.start ,
              is.na(buffer)|
              is.na(count)){
 
-    status <- "Input missing in Tab 2: Adjust Cluster Analysis Parameters. Check if you have entered a label, buffer size and the number of points needed for a cluster."
+    status <- "Input missing in Tab 2: Adjust Cluster Analysis Parameters. Check if you have entered a label, buffer size and the number of GPS locations needed for a cluster."
     cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
   }  else {
@@ -160,7 +160,7 @@ cluster_analysis <- function(intensive.start ,
       datapoints <- datapoints[!(is.na(datapoints$Status)), ]
 
       if (nrow(datapoints) == 0) {
-        status <- "No data within this intensive period. Try another time frame."
+        status <- "No data within this study period. Try another time frame."
         cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
       } else {
@@ -225,19 +225,19 @@ cluster_analysis <- function(intensive.start ,
             outside <- nrow(filter(Join_sf_filter, ClusID != Clusters_sf$ClusID[j]))
             Clusters_sf$inout[j] <- paste0(inside, "/", outside)
             Clusters_sf$ratio[j] <- if(outside == 0){
-              "All points within cluster."
+              "All GPS locations within cluster."
             } else if(inside < outside){
-              "More points outside of cluster."
+              "More GPS locations outside of cluster."
             } else if(inside > outside){
-              "More points inside of cluster."
+              "More GPS locations inside of cluster."
             } else if(inside == outside){
-              "Even number of points inside and outside of cluster."
+              "Even number of GPS locations inside and outside of cluster."
             }
 
           }
 
           if(onlyClusters == TRUE){
-            Clusters_sf <- filter(Clusters_sf, ratio == "All points within cluster.")
+            Clusters_sf <- filter(Clusters_sf, ratio == "All GPS locations within cluster.")
           }
 
           #so that now the new cluster ID can be assigned with 1 being the oldest

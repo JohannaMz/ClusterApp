@@ -40,7 +40,7 @@ app_ui <- function(request) {
                                                                           style = "color:#b20019;",
                                                                             title = "Find the file that includes your newest GPS data for the individual(s) you are monitoring. It makes sense to have a seperate folder for each study and always copy the GPS files here. This way, you will have a folder per monitored individual(s) that will contain all important files for the cluster analysis that was performed."
                                                                         )),
-                                                      title = "Find the original GPS points for the individual(s).",
+                                                      title = "Find the original GPS data for the individual(s).",
                                                       multiple = FALSE)),
                               column(2, radioButtons("separator","CSV Separator: ", choiceNames = list("tab", ";",",",":"), choiceValues = list("\t",";",",",":"), selected="\t",inline=TRUE))
                             ),
@@ -110,15 +110,15 @@ app_ui <- function(request) {
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
-                                                   title = "The size of the buffer corresponds to the radius of the buffer that is put around each GPS point. Combining buffers are the basis for clusters to emerge. Setting the size of the buffer depends on your question, the larger you set the radius, the more clusters will develop and possibly combine to large areas."
+                                                   title = "The size of the buffer corresponds to the radius of the buffer that is put around each GPS location. Combining buffers are the basis for clusters to emerge. Setting the size of the buffer depends on your question, the larger you set the radius, the more clusters will develop and possibly combine to large areas."
                                                  )), value = NA),
 
                           numericInput("count",
-                                       tags$span("Set the number of points it needs to be a buffer:",
+                                       tags$span("Set the number of GPS locations it needs to be a buffer:",
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
-                                                   title = "The number of points within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of points within a polygon, the less clusters will develop."
+                                                   title = "The number of locations within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of GPS locations within a polygon, the less clusters will develop."
                                                  )), value = NA),
 
                           shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the study period:",
@@ -139,16 +139,16 @@ app_ui <- function(request) {
                                        tags$i(
                                          class = "glyphicon glyphicon-info-sign",
                                          style = "color:#b20019;",
-                                         title = "Here it is optional to set the time difference it needs between GPS locations in minutes. If nothing is filled in all GPS points will be used for the cluster analysis and the mean time frame is taken as a difference value for the calculations of 'Percent of time spent at the location.'"
+                                         title = "Here it is optional to set the time difference it needs between GPS locations in minutes. If nothing is filled in all data will be used for the cluster analysis and the mean time frame is taken as a difference value for the calculations of 'Percent of time spent at the location.'"
                                        ))),
                           br(),
                           verbatimTextOutput("minute_diff_summary", placeholder = TRUE),
                           numericInput("minute_diff",
-                                       tags$span("Set the time difference needed between GPS points in minutes:",
+                                       tags$span("Set the time difference needed between GPS locations in minutes:",
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
-                                                   title = "In the output above, you see the summary of time differences in your data. It makes sense to set your time difference at the approximate mean of your data, to use as many points possible for the analysis without inflating clusters by GPS points that were taken shortly after one another."
+                                                   title = "In the output above, you see the summary of time differences in your data. It makes sense to set your time difference at the approximate mean of your data, to use as many locations possible for the analysis without inflating clusters by GPS data that were taken shortly after one another."
                                                  )),
                                        value = NA),
                           br(), br(),
@@ -209,7 +209,7 @@ app_ui <- function(request) {
                                       tags$i(
                                         class = "glyphicon glyphicon-info-sign",
                                         style = "color:#b20019;",
-                                        title = "The clusters table shows all clusters that were formed by the number of GPS points that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done and Fieldworker can be edited. These edits will be saved when downloaded."
+                                        title = "The clusters table shows all clusters that were formed by the number of GPS locations that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done and Fieldworker can be edited. These edits will be saved when downloaded."
                                       )),
                             fluidRow(
 
@@ -239,22 +239,22 @@ app_ui <- function(request) {
                                                                   tags$i(
                                                                     class = "glyphicon glyphicon-info-sign",
                                                                     style = "color:#b20019;",
-                                                                    title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS points and the track for the individuals. The points increase in size the more recent the points have been made."
+                                                                    title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS locations and the track for the individuals. The points increase in size the more recent the GPS locations have been made."
                                                                   )), class = "btn-success", width = '100%'),
                               leafletOutput('clusterMap'),
                               actionButton("downloadMap", label = "Download interactive map as html."))),
 
 
-                   tabPanel(tags$span("Points table",
+                   tabPanel(tags$span("GPS data",
                                       tags$i(
                                         class = "glyphicon glyphicon-info-sign",
                                         style = "color:#b20019;",
-                                        title = "The points datatable shows all GPS points, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the cluster it belongs to or SP for single point, the month, day and hour the point was made."
+                                        title = "The GPS datatable shows all GPS locations, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the cluster it belongs to or SP for single point, the month, day and hour of the GPS location."
                                       )),
                             fluidRow(
                               DT::dataTableOutput("pointsTable"),
                               column(4, checkboxGroupInput("downloadPoints_buttons", "Choose output format:", choiceNames =  list( ".shp",".xlsx", ".gpx"), choiceValues = list( ".shp",".xlsx", ".gpx"), inline = TRUE)),
-                              column(4, br(), actionButton("downloadPoints", label =  tags$span("Download points table.",
+                              column(4, br(), actionButton("downloadPoints", label =  tags$span("Download GPS datatable.",
                                                                                                 tags$i(
                                                                                                   class = "glyphicon glyphicon-info-sign",
                                                                                                   style = "color:#b20019;",
