@@ -277,7 +277,6 @@ cluster_analysis <- function(intensive.start ,
             }
 
 
-
             if(sum(c("ID", "ClusID", "sum", "prec_time","inout" , "ratio", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
                      "Worker" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  15){
 

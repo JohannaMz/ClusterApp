@@ -6,6 +6,7 @@ library(sftrack)
 library(tidyr)
 library(readr)
 library(openxlsx)
+library(readxl)
 
 # not updated anymore!!
 

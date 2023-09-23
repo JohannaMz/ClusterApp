@@ -11,7 +11,7 @@
 #' @importFrom leaflet hideGroup renderLeaflet
 #' @importFrom foreign read.dbf
 #' @importFrom readr parse_number read_delim
-#' @importFrom sf read_sf st_as_sf st_cast st_crs st_drop_geometry st_transform st_write st_coordinates st_as_text
+#' @importFrom sf read_sf st_as_sf st_cast st_crs st_drop_geometry st_transform st_write st_coordinates st_as_text st_simplify
 #' @importFrom tmap tm_dots tm_fill tm_lines tm_markers tm_shape tm_text tmap_leaflet tmap_options tmap_save
 #' @importFrom utils str write.csv
 #' @importFrom readxl read_excel
@@ -342,13 +342,36 @@ observeEvent(input$downloadClusters, {
     }
 
     if (".xlsx" %in% input$downloadClusters_buttons) {
-      # Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],] %>%
-      #   st_drop_geometry()
-      # Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],]
 
-      geometry <- st_as_text(Clusters_sf_table$data[input[["clustersTable_rows_all"]],]$geometry)
+      Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],]
 
-      Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],] %>%
+      #threshold 64000, because excel cannot write column larger than ~32000 characters. sf df has always textfile*2 -> 32000*2 = 64000
+      threshold = 64000
+      tolerance = 0.01
+
+      if (sum(nchar(Clusters_csv$geometry) > threshold) > 0) {
+        simplification_needed <- TRUE
+      } else {
+        simplification_needed <- FALSE
+      }
+
+      while (simplification_needed) {
+
+        if (sum(nchar(Clusters_csv$geometry) > threshold) > 0) {
+
+          Clusters_csv <- st_simplify(Clusters_csv, dTolerance = tolerance)
+          tolerance = tolerance + 0.01
+
+          } else {
+
+          simplification_needed <- FALSE
+        }
+      }
+
+
+      geometry <- st_as_text(Clusters_csv$geometry)
+
+      Clusters_csv <- Clusters_csv %>%
         st_drop_geometry() %>%
         cbind(geometry)
 
@@ -471,7 +494,7 @@ observeEvent(input$downloadClusters, {
                                  "State" = "State")) +
 
           tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "Events for clusters", col = "Event", lwd = 1, lty = "dashed", colorNA = NULL)  +
+          tm_fill(group = "Events for clusters", col = "Event", lwd = 1, lty = "dashed", colorNA = NULL, palette = "Dark2")  +
 
           tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
 
@@ -479,13 +502,15 @@ observeEvent(input$downloadClusters, {
           tm_dots(group = "GPS Locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
                                                                                                                        "Time stamp" = "ts",
                                                                                                                        "ID" = "ID",
-                                                                                                                       "Cluster ID" = "ClusID"), legend.show = FALSE)+
+                                                                                                                       "Cluster ID" = "ClusID"),
+                  palette = "Set1",
+                  legend.show = FALSE)+
           tm_shape(last_position, name = "Last Position") +
           tm_markers( popup.vars = c("Point ID" = "ident",
                                                              "Time stamp" = "ts",
                                                              "ID" = "ID")) +
 
-          tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID")) + #highlight first and last position
+          tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Set1") +
 
           tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
 
