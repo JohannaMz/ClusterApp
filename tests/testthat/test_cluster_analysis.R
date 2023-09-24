@@ -12,8 +12,6 @@
 test_that("Cluster analysis function works as expected", {
 
 
-  #source("R/cluster_analysis.R")
-
   intensive.start = as.Date("2023-08-01")
   intensive.end = as.Date("2023-08-02")
   datapoints =  data.frame(

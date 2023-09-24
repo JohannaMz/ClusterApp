@@ -1,3 +1,4 @@
-codecov:
-  token: 41204d55-d09d-49cc-98e1-d985d569d982
-  require_ci_to_pass: yes
+- name: Upload coverage reports to Codecov
+  uses: codecov/codecov-action@v3
+  env:
+    CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
