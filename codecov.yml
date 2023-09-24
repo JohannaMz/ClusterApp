@@ -1,14 +1,3 @@
-comment: false
-
-coverage:
-  status:
-    project:
-      default:
-        target: auto
-        threshold: 1%
-        informational: true
-    patch:
-      default:
-        target: auto
-        threshold: 1%
-        informational: true
+codecov:
+  token: 41204d55-d09d-49cc-98e1-d985d569d982
+  require_ci_to_pass: yes

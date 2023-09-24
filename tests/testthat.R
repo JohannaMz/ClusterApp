@@ -10,3 +10,4 @@ library(testthat)
 library(ClusterApp)
 
 test_check("ClusterApp")
+Sys.setenv("R_TESTS" = "")

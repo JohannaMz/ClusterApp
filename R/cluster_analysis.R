@@ -56,7 +56,9 @@ cluster_analysis <- function(intensive.start ,
                           "UTM zone for output data" = UTM_zone)
 
 
-  datapoints <- if(sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "csv") == TRUE){
+  datapoints <- if (is.data.frame(datapoints)) {
+    datapoints
+  }else if(sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "csv") == TRUE){
     read_delim(datapoints, delim = sep, escape_double = FALSE, trim_ws = TRUE)
 
   }else if(sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "dbf") == TRUE){
