@@ -4,6 +4,9 @@
 # ClusterApp <img style="padding: 15px 0px 0px 0px;"  src='inst/app/www/favicon.png' align="right" height="140"/>
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/JohannaMz/ClusterApp/branch/master/graph/badge.svg)](https://app.codecov.io/gh/JohannaMz/ClusterApp?branch=master)
 <!-- badges: end -->
 
 The goal of ClusterApp is a Shiny application to guide and streamline

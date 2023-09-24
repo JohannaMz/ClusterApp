@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 
 
 <!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/JohannaMz/ClusterApp/branch/master/graph/badge.svg)](https://app.codecov.io/gh/JohannaMz/ClusterApp?branch=master)
 <!-- badges: end -->
 
 The goal of ClusterApp is a Shiny application to guide and streamline cluster studies based on GPS data.
