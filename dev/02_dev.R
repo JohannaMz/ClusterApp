@@ -100,7 +100,7 @@ usethis::use_coverage()
 # Create a summary readme for the testthat subdirectory
 covrpage::covrpage()
 
-## CI ----
+## CI ---- Continuous integration
 ## Use this part of the script if you need to set up a CI
 ## service for your application
 ##
@@ -112,31 +112,31 @@ usethis::use_github_action()
 
 # Chose one of the three
 # See https://usethis.r-lib.org/reference/use_github_action.html
-usethis::use_github_action_check_release()
+#usethis::use_github_action_check_release()
 usethis::use_github_action_check_standard()
-usethis::use_github_action_check_full()
+#usethis::use_github_action_check_full()
 
 
-# Add action for PR
-usethis::use_github_action_pr_commands()
+# Add action for PR (pull Request)
+#usethis::use_github_action_pr_commands()
 
-# Travis CI
-usethis::use_travis()
-usethis::use_travis_badge()
-
-# AppVeyor
-usethis::use_appveyor()
-usethis::use_appveyor_badge()
-
-# Circle CI
-usethis::use_circleci()
-usethis::use_circleci_badge()
-
-# Jenkins
-usethis::use_jenkins()
-
-# GitLab CI
-usethis::use_gitlab_ci()
+# # Travis CI
+# usethis::use_travis()
+# usethis::use_travis_badge()
+#
+# # AppVeyor
+# usethis::use_appveyor()
+# usethis::use_appveyor_badge()
+#
+# # Circle CI
+# usethis::use_circleci()
+# usethis::use_circleci_badge()
+#
+# # Jenkins
+# usethis::use_jenkins()
+#
+# # GitLab CI
+# usethis::use_gitlab_ci()
 
 # You're now set! ----
 # go to dev/03_deploy.R

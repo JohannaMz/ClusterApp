@@ -7,6 +7,7 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/JohannaMz/ClusterApp/branch/master/graph/badge.svg)](https://app.codecov.io/gh/JohannaMz/ClusterApp?branch=master)
+[![R-CMD-check](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of ClusterApp is a Shiny application to guide and streamline
@@ -56,7 +57,8 @@ citation("ClusterApp")
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
-#>     title = {ClusterApp: A Shiny R application to guide and streamline cluster studies based on GPS data},
+#>     title = {ClusterApp: A Shiny R application to guide and streamline cluster studies based
+#> on GPS data},
 #>     author = {Johanna Märtz and Aimee Tallian and Camilla Wikenros and Rick Heeres},
 #>     year = {2023},
 #>     note = {R package version 0.0.0.9000},
