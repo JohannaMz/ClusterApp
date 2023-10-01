@@ -26,6 +26,6 @@ Scandinavian Wolf Research Project (SKANDULV) - Contact: Camilla Wikenros
 wolf
 }
 \description{
-Directly exported GPS data for the male wolf in Prästskogen territory (Sweden) during winter 2022. The intensive period went from 28-02-2022 until 18-04-2022.
+Directly exported GPS data for the male wolf in Prästskogen territory (Sweden) during winter 2022. The study period went from 28-02-2022 until 18-04-2022.
 }
 \keyword{datasets}

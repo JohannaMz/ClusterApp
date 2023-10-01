@@ -1,6 +1,6 @@
 #' GPS location data of three bears
 #'
-#' Historic data for 3 bears(Läfmamäck = adult male; Ruta = adult female; Järpa = subadult female) from 2014 . The intensive period went from 01-05-2014 until 31-05-2014.
+#' Historic data for 3 bears(Läfmamäck = adult male; Ruta = adult female; Järpa = subadult female) from 2014 . The study period went from 01-05-2014 until 31-05-2014.
 #'
 #' @format A data frame with 8 rows and 2204 column
 #' \describe{

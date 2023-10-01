@@ -6,6 +6,7 @@
 #' @importFrom shiny actionButton br checkboxGroupInput checkboxInput column fluidPage dateRangeInput fluidRow h5 h6 hr navlistPanel numericInput radioButtons span tabPanel tabsetPanel tagList textInput textOutput titlePanel uiOutput verbatimTextOutput
 #' @importFrom DT dataTableOutput
 #' @importFrom leaflet leafletOutput
+#' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
 #'
 #'
@@ -17,12 +18,18 @@ app_ui <- function(request) {
     # Your application UI logic
 
     fluidPage(
-
       theme = bslib::bs_theme(bootswatch = "superhero"),
-      # Application title
-      titlePanel("Cluster Analysis"),
 
-      #navbarPage(title = "ClusterApp", windowTitle = tags$img(src = "inst/app/www/favicon.png", width = 30, height = 30)),
+      # tags$head(
+      #   tags$link(rel = "icon", type = "image/png", href = "inst/app/www/favicon.png")
+      # ),
+      # titlePanel("ClusterApp: A Shiny R application to guide cluster studies based on GPS data"),
+
+
+      # Application title
+      #titlePanel("ClusterApp: A Shiny R application to guide cluster studies based on GPS data", windowTitle = tags$img(src = "www/favicon.png")),
+
+     # navbarPage(title = "ClusterApp", windowTitle = tags$img(src = "inst/app/www/favicon.png", width = 30, height = 30)),
 
       navlistPanel(
 
@@ -32,8 +39,15 @@ app_ui <- function(request) {
                  tabsetPanel(
                    tabPanel("Settings",
                             fluidRow(
-                              column(4, br(),
-                                     shinyFilesButton("GISfile",
+
+                              tags$head(
+                                tags$style(
+                                  HTML("label{float:left;}", ".radio-inline, .checkbox-inline {padding-left: 20px;}"))),
+
+                              column(8, br(), radioButtons("demo_data", "File upload: ", choiceNames = list("Manual upload", "Demo data wolf", "Demo data bears"),
+                                                     choiceValues = list("Manual upload", "Demo data wolf", "Demo data bears"), selected="Manual upload",inline=TRUE),
+                                     br(), br(),
+                                      shinyFilesButton("GISfile",
                                                       label = tags$span("Upload the original GPS file (.csv, .shp or .dbf) here:",
                                                                         tags$i(
                                                                           class = "glyphicon glyphicon-info-sign",
@@ -41,21 +55,40 @@ app_ui <- function(request) {
                                                                             title = "Find the file that includes your newest GPS data for the individual(s) you are monitoring. It makes sense to have a seperate folder for each study and always copy the GPS files here. This way, you will have a folder per monitored individual(s) that will contain all important files for the cluster analysis that was performed."
                                                                         )),
                                                       title = "Find the original GPS data for the individual(s).",
-                                                      multiple = FALSE)),
-                              column(2, radioButtons("separator","CSV Separator: ", choiceNames = list("tab", ";",",",":"), choiceValues = list("\t",";",",",":"), selected="\t",inline=TRUE))
-                            ),
+                                                      multiple = FALSE),
+                                     br(),br(),
+                                     radioButtons("separator","CSV Separator:", choiceNames = list("tab", ";",",",":"), choiceValues = list("\t",";",",",":"), selected=",",inline=TRUE)),
+                              ),
 
 
-                            verbatimTextOutput("file_path",placeholder = TRUE),
+                            br(), verbatimTextOutput("file_path",placeholder = TRUE),
                             #textOutput("fileStatus"),
 
                             h5("Select the appropriate column names here:"),
 
                             fluidRow(
-                              column(6, uiOutput("pickerID"),
-                                     uiOutput("pickerLMT_Date"),
-                                     uiOutput("pickerEast"),
-                                     uiOutput("pickerNorth")),
+                              column(6,
+                                pickerInput(
+                                  inputId = "ID",
+                                  label = "Animal ID(s) as character",
+                                  choices = colnames(NULL)),
+                                pickerInput(
+                                  inputId = "LMT_Date",
+                                  label = "Timestamp as Date format",
+                                  choices = colnames(NULL)),
+                                pickerInput(
+                                  inputId = "East",
+                                  label = "Easting (Latitude) as numeric'",
+                                  choices = colnames(NULL)),
+                                pickerInput(
+                                  inputId = "North",
+                                  label = "Northing (Longitude) as numeric",
+                                  choices = colnames(NULL))),
+
+                                     #uiOutput("pickerID"),
+                                     #uiOutput("pickerLMT_Date"),
+                                     #uiOutput("pickerEast"),
+                                     #uiOutput("pickerNorth")),
                               column(6,
                                      br(),
 
@@ -282,6 +315,7 @@ app_ui <- function(request) {
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
 golem_add_external_resources <- function() {
+
   add_resource_path(
     "www",
     app_sys("app/www")

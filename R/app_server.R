@@ -25,14 +25,21 @@ app_server <- function(input, output, session) {
 
   ## Dateipfad
   volumes = getVolumes()
+
   shinyFileChoose(input, 'GISfile', roots = volumes(), filetypes = c("dbf", "csv", "shp"))
 
-  GISfile <- reactive(input$GISfile)
 
+  #GISfile <- reactive(input$GISfile)
 
   file_path <- reactive({
-    as.character(parseFilePaths(volumes,GISfile())$datapath)
+    if (input$demo_data == "Manual upload") {
+      as.character(parseFilePaths(volumes,input$GISfile)$datapath)
+    } else if(input$demo_data == "Demo data wolf"|input$demo_data == "Demo data bears"){
+      as.character(getwd())
+    }
+
   })
+
 
 
   output$file_path <- renderPrint(if(length(file_path()>0)){
@@ -43,46 +50,63 @@ app_server <- function(input, output, session) {
 
 
   file <- reactive({
-    if(sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "csv") == TRUE){
+    req(file_path())
+    if(input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "csv") == TRUE){
       read_delim(file_path(), delim = input$separator, escape_double = FALSE, trim_ws = TRUE)
 
-    }else if(sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "dbf") == TRUE){
+    }else if(input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "dbf") == TRUE){
       read.dbf(file_path(), as.is = FALSE)
 
-    } else if (sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "shp") == TRUE){
+    } else if (input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "shp") == TRUE){
       read_sf(file_path())
-    } else {
+
+    } else if(input$demo_data == "Demo data wolf"){
+      ClusterApp::wolf
+    } else if(input$demo_data == "Demo data bears"){
+      ClusterApp::bears
+
+    }
+  else {
       NULL
     }
   })
 
 
 
+observe({
+  updatePickerInput(session = session, inputId = "ID",
+                    choices = colnames(file()))
+  updatePickerInput(session = session, inputId = "LMT_Date",
+                           choices = colnames(file()))
+  updatePickerInput(session = session, inputId = "East",
+                           choices = colnames(file()))
+  updatePickerInput(session = session, inputId = "North",
+                           choices = colnames(file()))})
 
 
 
-  output$pickerID <- renderUI(if(length(file_path()>0)){
-    pickerInput(inputId = 'ID',
-                label = 'Animal ID(s) as character',
-                choices = colnames(file()))
-  })
+  # output$pickerID <- renderUI(if(length(file_path()>0)){
+  #   pickerInput(inputId = 'ID',
+  #               label = 'Animal ID(s) as character',
+  #               choices = colnames(file()))
+  # })
 
-  output$pickerLMT_Date <- renderUI(if(length(file_path()>0)){
-    pickerInput(inputId = 'LMT_Date',
-                label = 'Timestamp as character or Date format',
-                choices = colnames(file()))
-  })
-
-  output$pickerEast <- renderUI(if(length(file_path()>0)){
-    pickerInput(inputId = 'East',
-                label = 'Easting (Latitude) as numeric',
-                choices = colnames(file()))
-  })
-  output$pickerNorth <- renderUI(if(length(file_path()>0)){
-    pickerInput(inputId = 'North',
-                label = 'Northing (Longitude) as numeric',
-                choices = colnames(file()))
-  })
+  # output$pickerLMT_Date <- renderUI(if(length(file_path()>0)){
+  #   pickerInput(inputId = 'LMT_Date',
+  #               label = 'Timestamp as character or Date format',
+  #               choices = colnames(file()))
+  # })
+  #
+  # output$pickerEast <- renderUI(if(length(file_path()>0)){
+  #   pickerInput(inputId = 'East',
+  #               label = 'Easting (Latitude) as numeric',
+  #               choices = colnames(file()))
+  # })
+  # output$pickerNorth <- renderUI(if(length(file_path()>0)){
+  #   pickerInput(inputId = 'North',
+  #               label = 'Northing (Longitude) as numeric',
+  #               choices = colnames(file()))
+  # })
 
 
 
@@ -175,28 +199,51 @@ output$file_path_last <- renderPrint(lastClustersFile())
 
   cluster_list <- eventReactive(
     input$doit, {
-
-    output <- cluster_analysis(
-        intensive.start = input$intensivePeriod[1],
-        intensive.end = input$intensivePeriod[2],
-        datapoints = file_path(),
-        sep = input$separator,
-        ID = input$ID,
-        LMT_Date = input$LMT_Date,
-        East = input$East,
-        North = input$North,
-        dateFormat = dateFormat(),
-        prepostPeriod = 0, #input$prepostPeriod
-        EPSGcode = EPSGcode(),
-        buffer = input$buffer,
-        count = input$count,
-        indID = input$indID,
-        lastClustersFile = lastClustersFile(),
-        minute_diff = input$minute_diff,
-        onlyClusters = input$onlyClusters,
-        oldclusters = input$oldclusters,
-        UTM_zone = input$UTM_zone
-      )
+      if (input$demo_data == "Manual upload") {
+                output <- cluster_analysis(
+                    intensive.start = input$intensivePeriod[1],
+                    intensive.end = input$intensivePeriod[2],
+                    datapoints = file_path(),
+                    sep = input$separator,
+                    ID = input$ID,
+                    LMT_Date = input$LMT_Date,
+                    East = input$East,
+                    North = input$North,
+                    dateFormat = dateFormat(),
+                    prepostPeriod = 0, #input$prepostPeriod
+                    EPSGcode = EPSGcode(),
+                    buffer = input$buffer,
+                    count = input$count,
+                    indID = input$indID,
+                    lastClustersFile = lastClustersFile(),
+                    minute_diff = input$minute_diff,
+                    onlyClusters = input$onlyClusters,
+                    oldclusters = input$oldclusters,
+                    UTM_zone = input$UTM_zone
+                  )
+      } else if (input$demo_data == "Demo data wolf"|input$demo_data == "Demo data bears"){
+        output <- cluster_analysis(
+          intensive.start = input$intensivePeriod[1],
+          intensive.end = input$intensivePeriod[2],
+          datapoints = file(),
+          sep = input$separator,
+          ID = input$ID,
+          LMT_Date = input$LMT_Date,
+          East = input$East,
+          North = input$North,
+          dateFormat = dateFormat(),
+          prepostPeriod = 0, #input$prepostPeriod
+          EPSGcode = EPSGcode(),
+          buffer = input$buffer,
+          count = input$count,
+          indID = input$indID,
+          lastClustersFile = lastClustersFile(),
+          minute_diff = input$minute_diff,
+          onlyClusters = input$onlyClusters,
+          oldclusters = input$oldclusters,
+          UTM_zone = input$UTM_zone
+        )
+      }
 
     output
 

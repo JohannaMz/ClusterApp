@@ -18,6 +18,13 @@
 devtools::check()
 rhub::check_for_cran()
 
+
+# tests
+# Launch a test, and record a series of
+# snapshots of your application
+shinytest::recordTest(loadTimeout = 600000) #not working anymore after the last changes...
+
+
 # Deploy
 
 ## Local, CRAN or Package Manager ----
@@ -27,7 +34,7 @@ devtools::build()
 
 ## RStudio ----
 ## If you want to deploy on RStudio related platforms
-# golem::add_rstudioconnect_file()
+golem::add_rstudioconnect_file()
 # golem::add_shinyappsio_file()
 # golem::add_shinyserver_file()
 

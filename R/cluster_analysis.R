@@ -103,11 +103,11 @@ cluster_analysis <- function(intensive.start ,
       cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
     }
-    else if (is.character(datapoints$LMT_Date) == FALSE &
+    else if (#is.character(datapoints$LMT_Date) == FALSE &
              is.Date(datapoints$LMT_Date) == FALSE &
              is.POSIXct(datapoints$LMT_Date) == FALSE){
 
-      status <- "LMT_Date is not a character, Date or POSIXct value. Adjust this please."
+      status <- "LMT_Date is not a Date or POSIXct value. Adjust this please."
       cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
     }
@@ -400,3 +400,4 @@ cluster_analysis <- function(intensive.start ,
   cluster_list
 
 }
+

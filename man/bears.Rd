@@ -25,6 +25,6 @@ Scandinavian Brown Bear Project - Contact: Aimee Tallian
 bears
 }
 \description{
-Historic data for 3 bears(Läfmamäck = adult male; Ruta = adult female; Järpa = subadult female) from 2014 . The intensive period went from 01-05-2014 until 31-05-2014.
+Historic data for 3 bears(Läfmamäck = adult male; Ruta = adult female; Järpa = subadult female) from 2014 . The study period went from 01-05-2014 until 31-05-2014.
 }
 \keyword{datasets}
