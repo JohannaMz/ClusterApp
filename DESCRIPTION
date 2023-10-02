@@ -30,7 +30,6 @@ Imports:
     lubridate,
     magrittr,
     openxlsx,
-    pkgload,
     readr,
     readxl,
     sf,
