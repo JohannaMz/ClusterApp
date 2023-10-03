@@ -40,13 +40,13 @@ app_ui <- function(request) {
                    tabPanel("Settings",
                             fluidRow(
 
-                              tags$head(
-                                tags$style(
-                                  HTML("label{float:left;}", ".radio-inline, .checkbox-inline {padding-left: 20px;}"))),
+                              # tags$head(
+                              #   tags$style(
+                              #     HTML("label{float:left;}", ".radio-inline, .checkbox-inline {padding-left: 20px;}"))),
 
                               column(8, br(), radioButtons("demo_data", "File upload: ", choiceNames = list("Manual upload", "Demo data wolf", "Demo data bears"),
                                                      choiceValues = list("Manual upload", "Demo data wolf", "Demo data bears"), selected="Manual upload",inline=TRUE),
-                                     br(), br(),
+                                     br(),
                                       shinyFilesButton("GISfile",
                                                       label = tags$span("Upload the original GPS file (.csv, .shp or .dbf) here:",
                                                                         tags$i(
