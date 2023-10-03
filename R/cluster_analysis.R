@@ -24,7 +24,7 @@ cluster_analysis <- function(intensive.start ,
                              East ,
                              North,
                              dateFormat,
-                             prepostPeriod = 0 ,
+                             prepostPeriod,
                              EPSGcode,
                              buffer,
                              count,
@@ -44,7 +44,7 @@ cluster_analysis <- function(intensive.start ,
                           "East column name" = East,
                           "North column name" = North,
                           "date format" = dateFormat,
-                          #"prepostPeriod" = prepostPeriod,
+                          "prepostPeriod" = prepostPeriod,
                           "EPSGcode of GPS data file" = as.character(EPSGcode),
                           "buffer radius around GPS locations" = buffer,
                           "count of locations necessary within a buffer" = count,
@@ -98,8 +98,8 @@ cluster_analysis <- function(intensive.start ,
     colnames(datapoints) <- c("ID", "LMT_Date", "East", "North")
 
 
-    if (is.character(datapoints$ID) == FALSE) {
-      status <- "ID is not a character value. Choose a different column."
+    if (is.character(datapoints$ID) == FALSE & is.numeric(datapoints$ID) == FALSE) {
+      status <- "ID is not a character or numeric value. Choose a different column."
       cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
     }
@@ -121,10 +121,11 @@ cluster_analysis <- function(intensive.start ,
       datapoints <- datapoints %>%
         dplyr::mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat),
                "LMT_Date" = date(ts),
-               "LMT_Time" = as.factor(hms::as_hms(ymd_hms(ts))))
+               "LMT_Time" = as.factor(hms::as_hms(ymd_hms(ts))),
+               "ID" = as.factor(ID))
 
 
-      datapoints <- datapoints[!is.na(datapoints$East),]
+      datapoints <- filter(datapoints, !is.na(East) & !is.na(North) & East != 0 & North != 0)
 
 
       if (!is.na(minute_diff)) {
@@ -379,7 +380,7 @@ cluster_analysis <- function(intensive.start ,
           Join_sf <- Join_sf %>%
             separate(LMT_Date, sep = "-", into = c("year", "month", "day")) %>%
             separate(LMT_Time, sep = ":", into = c("hour", "minute", "second")) %>%
-            unite(ident, ClusID, month, day, hour, remove = FALSE,  sep = "-") %>%
+            unite(ident, ClusID, month, day, hour, remove = FALSE,  sep = "_") %>%
             mutate(x = round(st_coordinates(.)[,1], 2),
                    y = round(st_coordinates(.)[,2], 2))
 

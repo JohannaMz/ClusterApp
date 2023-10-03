@@ -232,7 +232,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
           East = input$East,
           North = input$North,
           dateFormat = dateFormat(),
-          prepostPeriod = 0, #input$prepostPeriod
+          prepostPeriod = input$prepostPeriod,
           EPSGcode = EPSGcode(),
           buffer = input$buffer,
           count = input$count,
@@ -550,14 +550,14 @@ observeEvent(input$downloadClusters, {
                                                                                                                        "Time stamp" = "ts",
                                                                                                                        "ID" = "ID",
                                                                                                                        "Cluster ID" = "ClusID"),
-                  palette = "Set1",
+                  palette = "Dark2",
                   legend.show = FALSE)+
           tm_shape(last_position, name = "Last Position") +
           tm_markers( popup.vars = c("Point ID" = "ident",
                                                              "Time stamp" = "ts",
                                                              "ID" = "ID")) +
 
-          tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Set1") +
+          tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Dark2") +
 
           tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
 
@@ -684,14 +684,16 @@ observeEvent(input$downloadClusters, {
 
     if (".gpx" %in% input$downloadPoints_buttons) {
 
+
+
       fileName_points <- paste(dirname(file_path()), "/GPXPoints_", input$indID, "_", thedate, ".gpx", sep = "")
 
       Join_gpx <- Join_sf_table$data[input[["pointsTable_rows_all"]],] %>%
         st_transform(4326) %>%
-        dplyr::select(ident, ts) %>%
+        dplyr::select(ident) %>%
         rename(name = ident)
 
-      st_write(Join_gpx, fileName_points, dataset_options="GPX_USE_EXTENSIONS=yes",layer="waypoints", driver = "GPX", append = FALSE)
+      st_write(Join_gpx, fileName_points, dataset_options = "GPX_USE_EXTENSIONS=YES",layer="waypoints", driver = "GPX", append = FALSE)
 
     }
 
