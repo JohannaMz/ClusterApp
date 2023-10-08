@@ -26,7 +26,7 @@ app_server <- function(input, output, session) {
   ## Dateipfad
   volumes = getVolumes()
 
-  shinyFileChoose(input, 'GISfile', roots = volumes(), filetypes = c("dbf", "csv", "shp"))
+  shinyFileChoose(input, 'GISfile', roots = volumes(), filetypes = c("csv", "shp")) #"dbf",
 
 
   #GISfile <- reactive(input$GISfile)
@@ -54,8 +54,8 @@ app_server <- function(input, output, session) {
     if(input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "csv") == TRUE){
       read_delim(file_path(), delim = input$separator, escape_double = FALSE, trim_ws = TRUE)
 
-    }else if(input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "dbf") == TRUE){
-      read.dbf(file_path(), as.is = FALSE)
+    # }else if(input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "dbf") == TRUE){
+    #   read.dbf(file_path(), as.is = FALSE)
 
     } else if (input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "shp") == TRUE){
       read_sf(file_path())
@@ -693,7 +693,7 @@ observeEvent(input$downloadClusters, {
         dplyr::select(ident) %>%
         rename(name = ident)
 
-      st_write(Join_gpx, fileName_points, dataset_options = "GPX_USE_EXTENSIONS=YES",layer="waypoints", driver = "GPX", append = FALSE)
+      st_write(Join_gpx, fileName_points, dataset_options = "GPX_USE_EXTENSIONS=YES", layer="waypoints", driver = "GPX", append = FALSE)
 
     }
 

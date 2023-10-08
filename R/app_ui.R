@@ -48,7 +48,7 @@ app_ui <- function(request) {
                                                      choiceValues = list("Manual upload", "Demo data wolf", "Demo data bears"), selected="Manual upload",inline=TRUE),
                                      br(),
                                       shinyFilesButton("GISfile",
-                                                      label = tags$span("Upload the original GPS file (.csv, .shp or .dbf) here:",
+                                                      label = tags$span("Upload the original GPS file (.csv or .shp) here:",
                                                                         tags$i(
                                                                           class = "glyphicon glyphicon-info-sign",
                                                                           style = "color:#b20019;",
