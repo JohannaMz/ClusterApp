@@ -160,11 +160,11 @@ app_ui <- function(request) {
                                                                                 style = "color:#b20019;",
                                                                                 title = "Define the time frame that you are interested in.  Usually there is a time frame where the GPS sent positions more intensivly (e.g. every hour in comparison to usually only send every three hours) or the individual is monitored over a set number of weeks."
                                                                               ))), #tick if you need a time frame around the intensive period
-                          numericInput("prepostPeriod", label = tags$span("Enter the number of days that will be added before and after the intensive period:",
+                          numericInput("prepostPeriod", label = tags$span("Enter the number of days that will be added before and after the study period:",
                                                                           tags$i(
                                                                             class = "glyphicon glyphicon-info-sign",
                                                                             style = "color:#b20019;",
-                                                                            title = "For some analysis you might want to add a time frame around the intensive periods of a number of days. Points within this time frame are still taken into account for clusters, if at least one point within was also during the intensive period."
+                                                                            title = "For some analysis you might want to add a time frame around the study periods of a number of days. Points within this time frame are still taken into account for clusters, if at least one point within was also during the study period."
                                                                           )), value = 0)
                    ),
                    column(4, offset = 1,
@@ -185,7 +185,10 @@ app_ui <- function(request) {
                                                  )),
                                        value = NA),
                           br(), br(),
-                          h6("Should only clusters with consecutive GPS locations be used?"),
+                          h6("Should the columns related to the time spent and the number of points within/outside of the cluster be displayed in the cluster table?"),
+                          checkboxInput("extraColumns", label = "", value = FALSE),
+                          br(),
+                          h6("Should only clusters with consecutive GPS locations be developed?"),
                           checkboxInput("onlyClusters", label = "", value = FALSE)),
 
                    column(4, offset = 1,

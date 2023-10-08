@@ -306,8 +306,38 @@ output$file_path_last <- renderPrint(lastClustersFile())
   #if the analysis is run, render the table
 
   output$clustersTable <- renderDataTable({
+  if (input$extraColumns == FALSE| input$onlyClusters == TRUE) {
+    Clusters_sf_table$data %>%
+      #st_drop_geometry %>%
+      DT::datatable(
+        colnames = c("Animal ID" = "ID",
+                     "Cluster ID" = "ClusID",
+                     "Number of GPS locations" = "sum",
+                     "Percent of time spent at the location" = "prec_time",
+                     "Number of GPS locations within/outside of the cluster" = "inout",
+                     "Classification of clusters by GPS locations" = "ratio",
+                     "First date visited" = "date_min",
+                     "Last date visited" = "date_max",
+                     "State" = "State",
+                     "Date done" = "Done",
+                     "Fieldworker" = "Worker",
+                     "Centerpoint East" = "center_x",
+                     "Centerpoint North" = "center_y"),
+        options = list(
+          pageLength = 10,
+          scrollX = TRUE,
+          server = FALSE,
+          columnDefs = list(list(targets = '_all', className = 'dt-center'),
+                            list(targets = c(3,4,5,14), visible = FALSE))), #hide multiple columns
+        rownames = FALSE,
+        extensions = 'Buttons',
+        filter = list(position = "top"),
+        selection = "single",
+        editable = list(target = "cell", disable = list(columns =c(0:7,12, 12)))) #make columns after number 7 editable. define selectInput!
 
-Clusters_sf_table$data %>%
+
+  } else {
+    Clusters_sf_table$data %>%
       #st_drop_geometry %>%
     DT::datatable(
                   colnames = c("Animal ID" = "ID",
@@ -334,7 +364,10 @@ Clusters_sf_table$data %>%
                   filter = list(position = "top"),
                   selection = "single",
                   editable = list(target = "cell", disable = list(columns =c(0:7,12, 12)))) #make columns after number 7 editable. define selectInput!
-  })
+
+
+  }
+ })
 
 
 
@@ -491,7 +524,7 @@ observeEvent(input$downloadClusters, {
 
       if (length(latestfile_path()>0)) {
         init <- tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "State of clusters",col = "State", lwd = 8, palette = c("Done" = "green",
+          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, lwd = 8, palette = c("Done" = "green",
                                                                                   "New" = "red",
                                                                                   "GPS locations added" = "blue",
                                                                                   "Not done" = "orange"),
@@ -529,7 +562,7 @@ observeEvent(input$downloadClusters, {
 
 
         init <- tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "State of clusters",col = "State", lwd = 8, palette = c("Done" = "green",
+          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, lwd = 8, palette = c("Done" = "green",
                                                                                   "New" = "red",
                                                                                   "Points added" = "blue",
                                                                                   "Not done" = "orange"),
@@ -640,6 +673,7 @@ observeEvent(input$downloadClusters, {
     datatable(Join_sf_table$data,
               colnames = c("Point ID" = "ident",
                            "Animal ID" = "ID",
+                           "Cluster ID" = "ClusID",
                            "Time stamp" = "ts",
                            "East" = "x",
                            "North" = "y"),
@@ -648,7 +682,7 @@ observeEvent(input$downloadClusters, {
                 scrollX = TRUE,
                 server = FALSE,
                 columnDefs = list(list(targets = '_all', className = 'dt-center'),
-                                  list(targets = c(1,3,4,6,7,8,9,10,11), visible = FALSE))),
+                                  list(targets = c(1,3,4,6,7,8,9,10), visible = FALSE))),
               rownames = FALSE,
               extensions = 'Buttons',
               filter = list(position = "top"))
@@ -694,6 +728,19 @@ observeEvent(input$downloadClusters, {
         rename(name = ident)
 
       st_write(Join_gpx, fileName_points, dataset_options = "GPX_USE_EXTENSIONS=YES", layer="waypoints", driver = "GPX", append = FALSE)
+
+
+      # Join_gpx <- cluster_list$Join_sf %>%
+      #   st_transform(4326) %>%
+      #   mutate(latitude = st_coordinates(.)[,1],
+      #          longitude = st_coordinates(.)[,2])%>%
+      #   dplyr::select(ident, latitude, longitude) %>%
+      #   st_drop_geometry()
+      #
+      # writeGPX(Join_gpx, filename = "C:/Users/johan/Documents/ClusterApp Data/Wolf/gpx_points.gpx", type = "w")
+      # st_write(Join_gpx, "C:/Users/johan/Documents/ClusterApp Data/Wolf/gpx_points.gpx", dataset_options = "GPX_USE_EXTENSIONS=YES", layer="waypoints", driver = "GPX", append = FALSE)
+
+
 
     }
 

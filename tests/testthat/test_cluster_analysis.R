@@ -7,14 +7,14 @@
 # library(readr)
 # library(openxlsx)
 # library(readxl)
-
+#
 
 test_that("Cluster analysis function works as expected", {
 
 
-  intensive.start = as.Date("2022-02-28") #as.Date("2023-08-01")
-  intensive.end = as.Date("2022-03-16") #as.Date("2023-08-02")
-   datapoints = # "C:/Users/johan/Documents/ClusterApp Data/Wolf/wolf.csv"
+  intensive.start = as.Date("2023-08-01")
+  intensive.end = as.Date("2023-08-02")
+   datapoints =  #"C:/Users/johan/Documents/ClusterApp Data/Wolf/wolf.csv"
   data.frame(
     Object_ID = c("A", "A", "A", "A"),
     LMT_date = as.POSIXct(c("2023-08-01 10:00:00", "2023-08-01 11:00:00",
