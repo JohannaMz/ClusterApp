@@ -22,7 +22,7 @@ run_app()
 
 
 # once app has closed, display reactlog from shiny
-shiny::reactlogShow()
+#shiny::reactlogShow()
 
 
 

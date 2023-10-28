@@ -36,6 +36,7 @@ Imports:
     sftrack,
     shiny (>= 1.7.3),
     shinyFiles,
+    shinytest2,
     shinyWidgets,
     stats,
     stringr,
