@@ -21,8 +21,10 @@ rhub::check_for_cran()
 
 # tests
 # Launch a test, and record a series of
-# snapshots of your application
-shinytest::recordTest(loadTimeout = 600000) #not working anymore after the last changes...
+shinytest2::record_test()
+
+
+
 
 
 # Deploy

@@ -1,0 +1,31 @@
+library(shinytest2)
+
+test_that("{shinytest2} recording: ClusterApp", {
+  app <- AppDriver$new(name = "ClusterApp", height = 603, width = 979)
+  app$set_inputs(demo_data = "Demo data wolf")
+  app$set_inputs(LMT_Date = "LMT_date")
+  app$set_inputs(East = "Latitude")
+  app$set_inputs(North = "Longitude")
+  app$set_inputs(UTM_zone = 33)
+  app$expect_values()
+})
+
+
+test_that("{shinytest2} recording: wolf_demo_workflow", {
+  app <- AppDriver$new(name = "wolf_demo_workflow", height = 603, width = 979)
+  app$set_inputs(demo_data = "Demo data wolf")
+  app$set_inputs(LMT_Date = "LMT_date")
+  app$set_inputs(East = "Latitude")
+  app$set_inputs(North = "Longitude")
+  app$set_inputs(UTM_zone = 33)
+  app$set_inputs(indID = "wol")
+  app$set_inputs(indID = "wolf")
+  app$set_inputs(indID = "wolf_demo")
+  app$set_inputs(buffer = 50)
+  app$set_inputs(count = character(0))
+  app$set_inputs(count = 2)
+  app$set_inputs(intensivePeriod = c("2022-02-15", "2023-10-28"))
+  app$set_inputs(intensivePeriod = c("2022-02-15", "2022-03-17"))
+  app$click("doit")
+  app$expect_values()
+})

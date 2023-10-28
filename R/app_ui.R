@@ -85,10 +85,6 @@ app_ui <- function(request) {
                                   label = "Northing (Longitude) as numeric",
                                   choices = colnames(NULL))),
 
-                                     #uiOutput("pickerID"),
-                                     #uiOutput("pickerLMT_Date"),
-                                     #uiOutput("pickerEast"),
-                                     #uiOutput("pickerNorth")),
                               column(6,
                                      br(),
 

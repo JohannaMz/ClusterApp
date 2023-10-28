@@ -26,13 +26,9 @@ app_server <- function(input, output, session) {
   ## Dateipfad
   volumes = getVolumes()
 
-  shinyFileChoose(input, 'GISfile', roots = volumes(), filetypes = c("csv", "shp")) #"dbf",
-
-
-  #GISfile <- reactive(input$GISfile)
-
   file_path <- reactive({
     if (input$demo_data == "Manual upload") {
+      shinyFileChoose(input, 'GISfile', roots = volumes(), filetypes = c("csv", "shp")) #"dbf",
       as.character(parseFilePaths(volumes,input$GISfile)$datapath)
     } else if(input$demo_data == "Demo data wolf"|input$demo_data == "Demo data bears"){
       as.character(getwd())
@@ -51,6 +47,7 @@ app_server <- function(input, output, session) {
 
   file <- reactive({
     req(file_path())
+
     if(input$demo_data == "Manual upload" & sum(strsplit(basename(file_path()), split="\\.")[[1]][-1] == "csv") == TRUE){
       read_delim(file_path(), delim = input$separator, escape_double = FALSE, trim_ws = TRUE)
 
@@ -74,6 +71,7 @@ app_server <- function(input, output, session) {
 
 
 observe({
+  req(file())
   updatePickerInput(session = session, inputId = "ID",
                     choices = colnames(file()))
   updatePickerInput(session = session, inputId = "LMT_Date",
@@ -85,31 +83,6 @@ observe({
 
 
 
-  # output$pickerID <- renderUI(if(length(file_path()>0)){
-  #   pickerInput(inputId = 'ID',
-  #               label = 'Animal ID(s) as character',
-  #               choices = colnames(file()))
-  # })
-
-  # output$pickerLMT_Date <- renderUI(if(length(file_path()>0)){
-  #   pickerInput(inputId = 'LMT_Date',
-  #               label = 'Timestamp as character or Date format',
-  #               choices = colnames(file()))
-  # })
-  #
-  # output$pickerEast <- renderUI(if(length(file_path()>0)){
-  #   pickerInput(inputId = 'East',
-  #               label = 'Easting (Latitude) as numeric',
-  #               choices = colnames(file()))
-  # })
-  # output$pickerNorth <- renderUI(if(length(file_path()>0)){
-  #   pickerInput(inputId = 'North',
-  #               label = 'Northing (Longitude) as numeric',
-  #               choices = colnames(file()))
-  # })
-
-
-
   output$file_str <- renderPrint(if(length(file_path()>0)){
     str(file())})
 
@@ -118,9 +91,9 @@ observe({
     summary(file())})
 
 
-
-  EPSGcode <- reactive({st_crs(as.numeric(input$EPSG))})
   dateFormat <- reactive({input$dateFormat})
+  EPSGcode <- reactive({st_crs(as.numeric(input$EPSG))})
+  UTM_zone <- reactive({as.numeric(input$UTM_zone)})
 
 
   minute_diff_summary <- reactive({
@@ -210,7 +183,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
                     East = input$East,
                     North = input$North,
                     dateFormat = dateFormat(),
-                    prepostPeriod = 0, #input$prepostPeriod
+                    prepostPeriod = input$prepostPeriod,
                     EPSGcode = EPSGcode(),
                     buffer = input$buffer,
                     count = input$count,
@@ -219,7 +192,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
                     minute_diff = input$minute_diff,
                     onlyClusters = input$onlyClusters,
                     oldclusters = input$oldclusters,
-                    UTM_zone = input$UTM_zone
+                    UTM_zone = UTM_zone()
                   )
       } else if (input$demo_data == "Demo data wolf"|input$demo_data == "Demo data bears"){
         output <- cluster_analysis(
