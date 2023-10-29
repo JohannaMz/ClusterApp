@@ -4,7 +4,7 @@
     "East": "Latitude",
     "GISfile": 0,
     "ID": "Object_ID",
-    "LMT_Date": "Object_ID",
+    "LMT_Date": "LMT_date",
     "North": "Longitude",
     "UTM_zone": 33,
     "buffer": null,
