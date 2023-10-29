@@ -15,14 +15,14 @@
 
 ## Run R-CMD- checks ----
 ## Check the package before sending to prod
-devtools::check()
-rhub::check_for_cran()
+# devtools::check()
+# rhub::check_for_cran()
 
 
 # tests
 # Launch a test, and record a series of
 #shinytest2::use_shinytest2(".", setup = TRUE)
-#shinytest2::record_test()
+shinytest2::record_test()
 
 
 

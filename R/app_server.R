@@ -278,7 +278,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
 
   #if the analysis is run, render the table
 
-  output$clustersTable <- renderDataTable({
+  output$clustersTable <- DT::renderDataTable({
   if (input$extraColumns == FALSE| input$onlyClusters == TRUE) {
     Clusters_sf_table$data %>%
       #st_drop_geometry %>%
@@ -645,7 +645,7 @@ observeEvent(input$downloadClusters, {
 
 
 
-  output$pointsTable <- renderDataTable({
+  output$pointsTable <- DT::renderDataTable({
 
     req(input$doit)
 

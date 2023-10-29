@@ -496,8 +496,8 @@ if (is.null(datapoints)) {
                                         separate(LMT_Date, sep = "-", into = c("year", "month", "day")) %>%
                                         separate(LMT_Time, sep = ":", into = c("hour", "minute", "second")) %>%
                                         unite(ident, ClusID, month, day, hour, remove = FALSE,  sep = "_") %>%
-                                        mutate(x = round(st_coordinates(.)[,1], 2),
-                                               y = round(st_coordinates(.)[,2], 2))
+                                        mutate(x = round(st_coordinates(Join_sf)[,1], 2),
+                                               y = round(st_coordinates(Join_sf)[,2], 2))
 
                                       Join_sf_combined <- rbind(Join_sf_combined, Join_sf)
 
