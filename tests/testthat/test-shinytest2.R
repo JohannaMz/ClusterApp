@@ -1,6 +1,12 @@
+
 library(shinytest2)
 
+testthat::skip_on_ci()
+
 test_that("{shinytest2} recording: ClusterApp", {
+
+  testthat::skip_on_cran()
+
   app <- AppDriver$new(name = "ClusterApp", height = 603, width = 979)
   app$set_inputs(demo_data = "Demo data wolf")
   app$set_inputs(LMT_Date = "LMT_date")
@@ -12,6 +18,9 @@ test_that("{shinytest2} recording: ClusterApp", {
 
 
 test_that("{shinytest2} recording: wolf_demo_workflow", {
+
+  testthat::skip_on_cran()
+
   app <- AppDriver$new(name = "wolf_demo_workflow", height = 603, width = 979)
   app$set_inputs(demo_data = "Demo data wolf")
   app$set_inputs(LMT_Date = "LMT_date")
@@ -31,6 +40,9 @@ test_that("{shinytest2} recording: wolf_demo_workflow", {
 
 
 test_that("{shinytest2} recording: bears_demo_workflow", {
+
+  testthat::skip_on_cran()
+
   app <- AppDriver$new(name = "bears_demo_workflow", height = 603, width = 979)
   app$set_inputs(demo_data = "Demo data bears")
   app$set_inputs(LMT_Date = "LMT_date")
