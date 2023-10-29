@@ -22,7 +22,7 @@
 # tests
 # Launch a test, and record a series of
 #shinytest2::use_shinytest2(".", setup = TRUE)
-shinytest2::record_test()
+#shinytest2::record_test()
 
 
 
