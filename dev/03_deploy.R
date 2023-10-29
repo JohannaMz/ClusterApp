@@ -13,7 +13,7 @@
 
 # Test your app
 
-## Run checks ----
+## Run R-CMD- checks ----
 ## Check the package before sending to prod
 devtools::check()
 rhub::check_for_cran()

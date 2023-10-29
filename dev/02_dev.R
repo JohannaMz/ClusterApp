@@ -41,6 +41,7 @@ usethis::use_package("openxlsx")
 usethis::use_package("golem")
 usethis::use_package("shinytest2")
 usethis::use_package("methods")
+#usethis::use_package("rlang")
 usethis::use_pipe()
 
 

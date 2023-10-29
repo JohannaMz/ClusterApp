@@ -21,7 +21,7 @@
 #'
 app_server <- function(input, output, session) {
 
-
+  #globalVariables(c("ClusID", "crs", "ident", "ts_num"))
 
   ## Dateipfad
   volumes = getVolumes()
@@ -214,7 +214,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
           minute_diff = input$minute_diff,
           onlyClusters = input$onlyClusters,
           oldclusters = input$oldclusters,
-          UTM_zone = input$UTM_zone
+          UTM_zone = UTM_zone()
         )
       }
 
@@ -444,6 +444,8 @@ observeEvent(input$downloadClusters, {
     }
 
     if (".gpx" %in% input$downloadClusters_buttons) {
+      ClusID  <- NULL
+
       Clusters_gpx <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],] %>%
         st_cast("LINESTRING") %>%
         st_transform(4326) %>%
@@ -516,12 +518,15 @@ observeEvent(input$downloadClusters, {
           tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
 
         if (length(s)>0) {
-          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs == 25833)
+          UTM_zone <-  as.numeric(paste0("258", UTM_zone()))
+          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs = UTM_zone)
           init + tm_shape(selection) + tm_dots(size = 4, alpha = 0.5, col = "yellow")
         } else init
 
 
       } else{
+
+        ts_num <- NULL
 
         cluster_list <- cluster_list()
         cluster_list$Join_sf <- cluster_list$Join_sf %>%
@@ -569,7 +574,8 @@ observeEvent(input$downloadClusters, {
 
 
         if (length(s)>0) {
-          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs == 25833)
+          UTM_zone <-  as.numeric(paste0("258", UTM_zone()))
+          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs =  UTM_zone)
           init + tm_shape(selection) + tm_dots(size = 4, alpha = 0.5, col = "yellow")
         } else init
 
@@ -691,7 +697,7 @@ observeEvent(input$downloadClusters, {
 
     if (".gpx" %in% input$downloadPoints_buttons) {
 
-
+      ident <- NULL
 
       fileName_points <- paste(dirname(file_path()), "/GPXPoints_", input$indID, "_", thedate, ".gpx", sep = "")
 

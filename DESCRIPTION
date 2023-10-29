@@ -45,8 +45,7 @@ Imports:
     utils
 Suggests: 
     knitr,
-    rmarkdown,
-    shinytest2
+    rmarkdown
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
