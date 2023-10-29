@@ -29,6 +29,7 @@ Imports:
     leaflet,
     lubridate,
     magrittr,
+    methods,
     openxlsx,
     readr,
     readxl,
@@ -36,7 +37,6 @@ Imports:
     sftrack,
     shiny (>= 1.7.3),
     shinyFiles,
-    shinytest2,
     shinyWidgets,
     stats,
     stringr,
@@ -46,7 +46,7 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    shinytest2
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

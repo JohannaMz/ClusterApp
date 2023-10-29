@@ -2,7 +2,7 @@
 #' @description The main cluster analysis function for the app
 #'
 #' @return The function returns a list of 4 files, which are the clusters, the GPS points, a track of each individual and a status message
-#' @importFrom dplyr filter lag select arrange group_by left_join mutate n rename slice summarize ungroup
+#' @importFrom dplyr filter lag select arrange group_by left_join mutate n rename slice summarize ungroup all_of
 #' @importFrom lubridate date is.Date is.POSIXct ymd_hms
 #' @importFrom stats aggregate cutree dist hclust
 #' @importFrom hms as_hms
@@ -12,6 +12,9 @@
 #' @importFrom readxl read_excel
 #' @importFrom openxlsx write.xlsx
 #' @importFrom foreign read.dbf
+#' @importFrom methods is
+#' @importFrom stats ts
+#' @importFrom utils write.table
 #'
 #' @noRd
 
@@ -35,6 +38,10 @@ cluster_analysis <- function(intensive.start ,
                              onlyClusters,
                              oldclusters,
                              UTM_zone){
+
+  #binding the variables locally to the function for the R-CMD-Check
+  ClusID <- crs <- ts <- ts_num <- ident <- diff_min <- time_group_minu <- x <- prev_ClusID <- new_cluster <- Status <- date_max <- date_min <- prec_time <- inout <- ratio <- State <- Event <- Done <- Worker <- center_x <- center_y <- geometry <- ClusID.y <- ID.x <- sum.x <- sum.y <- prec_time.x <- inout.x <- ratio.x <- date_min.x <- date_max.x <- Event.y <- Done.y <- Worker.y <- State.y <- sum.y <- center <- LMT_Time <- month <- day <- hour <- NULL
+
   message <- "Working."
 
   settings <- c("start of study period" = as.character(intensive.start),
@@ -279,6 +286,7 @@ if (is.null(datapoints)) {
 
                                   inside <- nrow(filter(Join_sf_filter, ClusID == Clusters_sf$ClusID[j]))
                                   outside <- nrow(filter(Join_sf_filter, ClusID != Clusters_sf$ClusID[j]))
+
 
                                   Clusters_sf$inout[j] <- paste0(inside, "/", outside)
                                   Clusters_sf$ratio[j] <- if(outside == 0){
