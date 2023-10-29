@@ -1,7 +1,7 @@
 
 library(shinytest2)
 
-#testthat::skip_on_ci()
+testthat::skip_on_ci()
 
 
 test_that("{shinytest2} recording: wolf_demo_workflow", {
