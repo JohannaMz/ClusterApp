@@ -15,13 +15,6 @@ knitr::opts_chunk$set(
 ```
 
 
-The ‘ClusterApp’ is an application to guide and streamline field studies based on GPS data. It is developed in Shiny (Chang et al., 2023) within R version 4.3.1 (R Development Core Team, 2023) and built with the golem framework (Fay et al., 2023). 
-The following document gives a tutorial on the basic usage of the app with the dataset ‘wolf’ provided by the Scandinavian Wolf Research Project (SKANDULV), as well as the usage of the app when applying it on multiple individuals with the dataset ‘bears’ provided by the Scandinavian Brown Bear Research Project (SBBRP). There are five chapters describing the general usage of the app. Chapter 1: Starting the app describes how to download and start the app. Chapter 2: Getting to know the app focuses on implementing a cluster analysis using the ‘wolf’ dataset. Chapter 3: Consecutive analysis deals with important points when running subsequent analyses using an already downloaded shapefile or excel file from a previously executed cluster analysis. Chapter 4: Analysis on multiple individuals deals with performing cluster analysis on multiple individuals within the same GPS file. Chapter 5: Handling GPS bursts gives a short introduction on the possibilities of the app to work with GPS burst data, such as proximity-triggered GPS events.
-
-The chosen cluster parameter settings within the tutorial are based on real cluster studies conducted on the individual(s) within the GPS data sets provided by SKANDULV and SBBRP (Ordiz et al., 2020; Wikenros et al., 2023). The wolf data follows one individual and was collected over a two-month period from 28 February – 17 April 2022. The objective of this study was to assess predation and scavenging, thus fieldworkers searched for carcasses that wolves killed or otherwise visited. Clusters were generated using 100 m buffers and minimum of 2 GPS locations. The bear data includes the GPS locations of three individuals that were followed during 1 May – 31 May 2014 (Ordiz et al., 2020). The goal of this study was to assess bear predation on moose while collecting data on other relevant bear behavior and signs of activity. Clusters were generated using 30 m buffers with a minimum of 2 GPS locations (Ordiz et al., 2020; Rauset et al., 2012).
-
-
-```{r, echo=FALSE, out.width="100%", eval=TRUE}
-knitr::include_graphics("https://raw.githubusercontent.com/JohannaMz/ClusterApp/main/inst/app/www/Supp_Figure1.png")
-
+```{r setup}
+library(ClusterApp)
 ```
