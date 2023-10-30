@@ -5,8 +5,6 @@
 
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/JohannaMz/ClusterApp/branch/master/graph/badge.svg)](https://app.codecov.io/gh/JohannaMz/ClusterApp?branch=master)
 [![R-CMD-check](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
