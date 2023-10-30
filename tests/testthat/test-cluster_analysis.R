@@ -42,17 +42,17 @@ test_that("Cluster analysis function works as expected", {
   UTM_zone = 33
 
   # Test if the function runs without errors
-  expect_no_error(ClusterApp::cluster_analysis(intensive.start, intensive.end, datapoints,sep, ID, LMT_Date, East, North,
+  expect_no_error(cluster_analysis(intensive.start, intensive.end, datapoints,sep, ID, LMT_Date, East, North,
                                    dateFormat, prepostPeriod, EPSGcode, buffer, count,indID, lastClustersFile,
                                    minute_diff, oldclusters,onlyClusters, UTM_zone))
 
   # Test if the output is a list
-  expect_type(ClusterApp::cluster_analysis(intensive.start, intensive.end, datapoints,sep, ID, LMT_Date, East, North,
+  expect_type(cluster_analysis(intensive.start, intensive.end, datapoints,sep, ID, LMT_Date, East, North,
                              dateFormat, prepostPeriod, EPSGcode, buffer, count,indID, lastClustersFile,
                              minute_diff, oldclusters, onlyClusters, UTM_zone), "list")
 
   # Test if the output list contains the expected elements
-  expect_named(ClusterApp::cluster_analysis(intensive.start, intensive.end, datapoints,sep, ID, LMT_Date, East, North,
+  expect_named(cluster_analysis(intensive.start, intensive.end, datapoints,sep, ID, LMT_Date, East, North,
                                 dateFormat, prepostPeriod, EPSGcode, buffer, count,indID, lastClustersFile,
                                 minute_diff, oldclusters,onlyClusters, UTM_zone), c("Clusters_sf", "Join_sf", "data_sf_traj", "status", "settings"))
 
