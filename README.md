@@ -6,6 +6,10 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+
 <!-- badges: end -->
 
 The goal of ClusterApp is a Shiny application to guide and streamline
@@ -32,8 +36,8 @@ ClusterApp::run_app()
 
 ## Tutorial
 
-A tutorial for the usage of the app can be accessed
-[here](ClusterApp_tutorial.pdf).
+A tutorial for the usage of the app can be found
+[here](https://github.com/JohannaMz/ClusterApp/doc/ClusterApp.html).
 
 ## Getting help
 
