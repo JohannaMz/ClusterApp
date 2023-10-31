@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 The ‘ClusterApp’ is an application to guide and streamline field studies based on GPS data. It is developed in Shiny (Chang et al., 2023) within R version 4.3.1 (R Development Core Team, 2023) and built with the golem framework (Fay et al., 2023). 
 
-The following document gives a tutorial on the basic usage of the app with the dataset ‘wolf’ provided by the Scandinavian Wolf Research Project (SKANDULV), as well as the usage of the app when applying it on multiple individuals with the dataset ‘bears’ provided by the Scandinavian Brown Bear Research Project (SBBRP). There are five chapters describing the general usage of the app. **Chapter 1: Starting the app** describes how to download and start the app. **Chapter 2: Getting to know the app** focuses on implementing a cluster analysis using the ‘wolf’ dataset. **Chapter 3: Consecutive analysis** deals with important points when running subsequent analyses using an already downloaded shapefile or excel file from a previously executed cluster analysis. **Chapter 4: Analysis on multiple individuals** deals with performing cluster analysis on multiple individuals within the same GPS file. **Chapter 5: Handling GPS bursts** gives a short introduction on the possibilities of the app to work with GPS burst data, such as proximity-triggered GPS events.
+The following document gives a tutorial on the basic usage of the app with the dataset ‘wolf’ provided by the Scandinavian Wolf Research Project (SKANDULV), as well as the usage of the app when applying it on multiple individuals with the dataset ‘bears’ provided by the Scandinavian Brown Bear Research Project (SBBRP). There are five chapters describing the general usage of the app. **Chapter 1: Starting the application** describes how to download and start the app. **Chapter 2: Getting to know the app** focuses on implementing a cluster analysis using the ‘wolf’ dataset. **Chapter 3: Consecutive analysis** deals with important points when running subsequent analyses using an already downloaded shapefile or excel file from a previously executed cluster analysis. **Chapter 4: Analysis on multiple individuals** deals with performing cluster analysis on multiple individuals within the same GPS file. **Chapter 5: Handling GPS bursts** gives a short introduction on the possibilities of the app to work with GPS burst data, such as proximity-triggered GPS events.
 
 The chosen cluster parameter settings within the tutorial are based on real cluster studies conducted on the individual(s) within the GPS data sets provided by SKANDULV and SBBRP (Ordiz et al., 2020; Wikenros et al., 2023). The wolf data follows one individual and was collected over a two-month period from 28 February – 17 April 2022. The objective of this study was to assess predation and scavenging, thus fieldworkers searched for carcasses that wolves killed or otherwise visited. Clusters were generated using 100 m buffers and minimum of 2 GPS locations. The bear data includes the GPS locations of three individuals that were followed during 1 May – 31 May 2014 (Ordiz et al., 2020). The goal of this study was to assess bear predation on moose while collecting data on other relevant bear behavior and signs of activity. Clusters were generated using 30 m buffers with a minimum of 2 GPS locations (Ordiz et al., 2020; Rauset et al., 2012).
 
@@ -37,13 +37,13 @@ library(ClusterApp)
 If you want to follow the tutorial with a manual upload of the data (which will be addressed in the following chapters), you have to download the GPS data. Data for the wolf examples are loaded by the command: 
 
 ```{r setup wolf, eval = FALSE, echo = TRUE}
-data <- ClusterApp::wolf
+wolf <- ClusterApp::wolf
 ```
 
 And the data for the bear examples, including multiple individuals, are loaded by the command: 
 
 ```{r setup bears, eval = FALSE, echo = TRUE}
-data <- ClusterApp::bears
+bears <- ClusterApp::bears
 ```
 
 A shortcut to accessing the demo data can be found on the first tab under ‘File upload’. This is per default set to ‘Manual upload’, however ‘Demo data wolf’ or ‘Demo data bears’ can be selected directly, which will load the data for usage within the app. The file path is set to the local working directory, so files will be downloaded into this folder. 
@@ -52,7 +52,7 @@ More information regarding the two datasets can be found by searching for the da
 
 
 ```{r setup csv, eval = FALSE, echo = TRUE}
-write.csv(data, “path/to/folder/data.csv”)
+write.csv(data, “path/to/folder/data.csv”) #replace data with either wolf or bears 
 ```
 
 After loading the package, you can start the application by running the command: 
@@ -66,15 +66,15 @@ The application opens in a separate window and R runs in the background. For a b
 The application has three main steps:
 
 1. Upload GPS data
-* Upload the GPS data 
-* Define the necessary column names
-* Adjust date format and coordinate system format
+ * Upload the GPS data 
+ * Define the necessary column names
+ * Adjust date format and coordinate system format
 
 2. Adjust Cluster Analysis Parameters
-* Adjust all the parameters necessary for the cluster analysis
+ * Adjust all the parameters necessary for the cluster analysis
 
 3. Cluster Analysis Output 
-* Look at the results, enter data in cluster file, and download cluster -, GPS data- and map files 
+ * Look at the results, enter data in cluster file, and download cluster -, GPS data- and map files 
 
 ## GETTING TO KNOW THE APPLICATION 
 
