@@ -118,7 +118,7 @@ usethis::use_github_action()
 #usethis::use_github_action_check_release()
 usethis::use_github_action_check_standard()
 #usethis::use_github_action_check_full()
-
+pkgcheck::use_github_action_pkgcheck()
 
 # Add action for PR (pull Request)
 #usethis::use_github_action_pr_commands()

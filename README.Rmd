@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions/workflows/R-CMD-check.yaml)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-
+[![pkgcheck](https://github.com/JohannaMz/ClusterApp/actions/workflows/pkgcheck/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions?query=workflow%3Apkgcheck)
 <!-- badges: end -->
 
 The goal of ClusterApp is a Shiny application to guide and streamline cluster studies based on GPS data.
