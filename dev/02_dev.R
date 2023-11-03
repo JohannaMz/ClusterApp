@@ -119,6 +119,8 @@ usethis::use_github_action()
 usethis::use_github_action_check_standard()
 #usethis::use_github_action_check_full()
 pkgcheck::use_github_action_pkgcheck()
+
+#codemeta.json file
 codemetar::write_codemeta()
 
 # Add action for PR (pull Request)

@@ -2,7 +2,6 @@ Package: ClusterApp
 Title: A Shiny R application to guide and streamline cluster studies based
     on GPS data
 Version: 0.0.0.9000
-Date: 2023-07-15
 Authors@R: c(
     person("Johanna", "Märtz", , "johanna@maertz.eu", role = c("cre", "aut"),
            comment = c(ORCID = "0000-0001-9981-0430")),

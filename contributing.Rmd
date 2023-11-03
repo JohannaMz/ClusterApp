@@ -1,0 +1,30 @@
+---
+title: "contributing"
+output: html_document
+date: "2023-10-31"
+--# Contributing to MyPackage
+
+Thank you for considering contributing to ClusterApp! We appreciate your help.
+
+## Reporting Issues
+
+If you encounter a bug or have a feature request, please open an issue on the [issue tracker](https://github.com/JohannaMz/ClusterApp/issues).
+
+## Contributing Code
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and create a pull request.
+4. Ensure your code follows our coding guidelines (see [Coding Style](#coding-style)).
+5. Make sure your pull request is accompanied by tests, if applicable.
+6. Await review and feedback from the maintainers.
+
+## Coding Style
+
+Please follow the coding style used in the package, and adhere to the [R Style Guide](https://style.tidyverse.org/).
+
+## Contact
+
+If you have any questions or need help, feel free to contact me at [johanna@maertz.eu].
+
+Thank you for your contributions!
