@@ -28,7 +28,7 @@ The application can be started by downloading the package from GitHub:
 
 ```{r setup, eval = FALSE, echo = TRUE}
 install.packages("devtools")
-devtools::install_github("JohannaMz/ClusterApp")
+devtools::install_github("JohannaMz/ClusterApp", build_vignettes = TRUE)
 
 library(ClusterApp)
 

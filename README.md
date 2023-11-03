@@ -24,7 +24,7 @@ can install the development version of ClusterApp from
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("JohannaMz/ClusterApp")
+devtools::install_github("JohannaMz/ClusterApp", build_vignettes = TRUE)
 ```
 
 The app can then be started by the command:
@@ -53,9 +53,11 @@ questions and suggestions, contact Johanna Märtz (<johanna@maertz.eu>).
 
 ``` r
 citation("ClusterApp")
+#> Warning in citation("ClusterApp"): could not determine year for 'ClusterApp'
+#> from package DESCRIPTION file
 #> To cite package 'ClusterApp' in publications use:
 #> 
-#>   Märtz J, Tallian A, Wikenros C, Heeres R (2023). _ClusterApp: A Shiny
+#>   Märtz J, Tallian A, Wikenros C, Heeres R (????). _ClusterApp: A Shiny
 #>   R application to guide and streamline cluster studies based on GPS
 #>   data_. R package version 0.0.0.9000,
 #>   <https://github.com/JohannaMz/ClusterApp>.
@@ -66,7 +68,6 @@ citation("ClusterApp")
 #>     title = {ClusterApp: A Shiny R application to guide and streamline cluster studies based
 #> on GPS data},
 #>     author = {Johanna Märtz and Aimee Tallian and Camilla Wikenros and Rick Heeres},
-#>     year = {2023},
 #>     note = {R package version 0.0.0.9000},
 #>     url = {https://github.com/JohannaMz/ClusterApp},
 #>   }
