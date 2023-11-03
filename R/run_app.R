@@ -6,7 +6,8 @@
 #'
 #' @export
 #'
-#' @return Returns the Shiny App
+#' @return NULL (no return value)
+#'
 #' @examples
 #' #starting the app
 #' ClusterApp::run_app()
