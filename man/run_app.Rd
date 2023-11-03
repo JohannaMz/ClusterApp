@@ -42,8 +42,3 @@ NULL (no return value)
 \description{
 Run the Shiny Application
 }
-\examples{
-#starting the app
-ClusterApp::run_app()
-
-}

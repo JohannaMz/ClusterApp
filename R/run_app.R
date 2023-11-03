@@ -8,9 +8,6 @@
 #'
 #' @return NULL (no return value)
 #'
-#' @examples
-#' #starting the app
-#' ClusterApp::run_app()
 #'
 #' @importFrom shiny shinyApp
 #' @importFrom golem with_golem_options
