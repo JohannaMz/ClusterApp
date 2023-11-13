@@ -9,7 +9,7 @@
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![pkgcheck](https://github.com/JohannaMz/ClusterApp/workflows/pkgcheck/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions?query=workflow%3Apkgcheck)
+<!-- ![pkgcheck](https://github.com/JohannaMz/ClusterApp/workflows/pkgcheck/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions?query=workflow%3Apkgcheck) -->
 <!-- badges: end -->
 
 The goal of ClusterApp is a Shiny application to guide and streamline
