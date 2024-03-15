@@ -92,7 +92,7 @@ observe({
 
 
   dateFormat <- reactive({input$dateFormat})
-  EPSGcode <- reactive({st_crs(as.numeric(input$EPSG))})
+  EPSGcode <- reactive({as.numeric(input$EPSG)})
   UTM_zone <- reactive({as.numeric(input$UTM_zone)})
 
 
@@ -164,9 +164,49 @@ observe({
 output$file_path_last <- renderPrint(lastClustersFile())
 
 
+settings_file <- reactive(if((lastClustersFile() != "No latest cluster file.") & #maybe not necessary to have a previous cluster file. If a setting file is there it can be used?? rework later
+  (sum(grepl(paste0("Settings_", input$indID),
+              list.files(dirname(file_path()))))>0) &
+   (sum(grepl(paste0("\\bSettings_", input$indID,"_",
+                     stringr::str_sub(list.files(dirname(file_path()), pattern = paste0("Settings_", input$indID)), -10)  %>%
+                     readr::parse_number() %>%
+                     max(),".txt\\b"), list.files(dirname(file_path()))))>0)){
+
+  read_delim(paste0(dirname(file_path()),"/Settings_", input$indID,"_",
+                   stringr::str_sub(list.files(dirname(file_path()),
+                                               pattern = paste0("Settings_", input$indID)), -10)  %>%
+                     readr::parse_number() %>%
+                     max(),".txt" ,sep = ""),
+
+             delim = "=", escape_double = FALSE, col_names = FALSE,
+             trim_ws = TRUE)
+
+})
 
 
+#update according to the previous settings
+observe({
+   req(settings_file())
+    if(!is.null(settings_file())){
+      updateTextInput(session, "dateFormat", value = settings_file()[[8,2]])
+      updateTextInput(session, "EPSG", value = as.numeric(settings_file()[[10,2]]))
+      updateSelectInput(session, "UTM_zone", selected = settings_file()[[18,2]])
 
+      updateNumericInput(session, "buffer",value = as.numeric(settings_file()[[11,2]]))
+      updateNumericInput(session, "count", value = as.numeric(settings_file()[[12,2]]))
+      updateDateRangeInput(session, "intensivePeriod", start = as.POSIXct(settings_file()[[1,2]], format = "%Y-%m-%d")+ 86400) #plus that many seconds. end is always "today , end = as.POSIXct(settings_file()[[2,2]], format = "%Y-%m-%d")+ 86400
+      updateNumericInput(session ,"prepostPeriod", value = as.numeric(settings_file()[[9,2]]))
+
+      updateNumericInput(session, "minute_diff", value = as.numeric(settings_file()[[15,2]]))
+      updateCheckboxInput(session, "onlyClusters", value = ifelse(settings_file()[[16,2]] == "TRUE", TRUE, FALSE))
+      updateCheckboxInput(session, "oldclusters", value = ifelse(settings_file()[[17,2]] == "TRUE", TRUE, FALSE))
+
+      updatePickerInput(session, "ID", selected = settings_file()[[4,2]])
+      updatePickerInput(session, "LMT_Date", selected = settings_file()[[5,2]])
+      updatePickerInput(session, "East", selected = settings_file()[[6,2]])
+      updatePickerInput(session, "North", selected = settings_file()[[7,2]])
+      }
+   })
 
 
 
@@ -207,7 +247,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
           North = input$North,
           dateFormat = dateFormat(),
           prepostPeriod = input$prepostPeriod,
-          EPSGcode = EPSGcode(),
+          EPSGcode =EPSGcode(),
           buffer = input$buffer,
           count = input$count,
           indID = input$indID,
@@ -384,6 +424,8 @@ observeEvent(input$downloadClusters, {
       if(length(latestfile_path()>0)){
         fileName_clusters <- paste(dirname(latestfile_path()), "/Clusters_", input$indID, "_", thedate, ".shp", sep = "")
         st_write(Clusters_sf_table$data, fileName_clusters, append = FALSE)
+
+        #should the settings table also be donwladed here???
 
       } else {
         fileName_clusters <- paste(dirname(file_path()), "/Clusters_", input$indID, "_", thedate, ".shp", sep = "")

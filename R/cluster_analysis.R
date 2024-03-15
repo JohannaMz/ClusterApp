@@ -202,7 +202,7 @@ if (is.null(datapoints)) {
                     } else {
 
                       #make the data spatial
-                      data_sf <- sf::st_as_sf(datapoints, coords = c("North", "East"), crs = EPSGcode)
+                      data_sf <- sf::st_as_sf(datapoints, coords = c("North", "East"), crs = st_crs(EPSGcode))
                       UTM_coord <- as.numeric(paste0("258", UTM_zone))
 
                       data_sf <- sf::st_transform(data_sf, crs = st_crs(UTM_coord)) #change WGS84 to UTM to have meters
