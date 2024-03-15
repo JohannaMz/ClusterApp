@@ -1,4 +1,4 @@
-library(testthat)
+ library(testthat)
 # library(dplyr)
 # library(sf)
 # library(lubridate)
@@ -7,15 +7,15 @@ library(testthat)
 # library(readr)
 # library(openxlsx)
 # library(readxl)
-#
+
 
 test_that("Cluster analysis function works as expected", {
 
   skip_if_not(interactive())
 
-  intensive.start = as.Date("2023-08-01")
+  intensive.start = as.Date("2010-08-01")
   intensive.end = as.Date("2023-08-02")
-   datapoints =  #"C:/Users/johan/Documents/ClusterApp Data/Wolf/wolf.csv"
+   datapoints =
   data.frame(
     Object_ID = c("A", "A", "A", "A"),
     LMT_date = as.POSIXct(c("2023-08-01 10:00:00", "2023-08-01 11:00:00",

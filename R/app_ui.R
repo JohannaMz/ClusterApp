@@ -97,17 +97,17 @@ app_ui <- function(request) {
                                                            style = "color:#b20019;",
                                                            title = "Data can be in different coordinate systems. The most common coordinate system from WRAM Export is WGS84 (EPSG: 4326). Coordinate columns are usually named Longitude (Northing) and Latitude (Easting). The EPSG code is a unique code for each coordinate system."
                                                          ),
-                                                         tags$a(href="https://epsg.io/", "Find the codes here.", target="_blank")),
+                                                         tags$a(href="https://epsg.io/", "Find the codes here (connection to browser necessary).", target="_blank")),
                                                value = "4326"),
-                                     numericInput("UTM_zone",
+                                     selectInput("UTM_zone",
                                                tags$span("The output will be in the UTM format. Please enter the right zone:",
                                                          tags$i(
                                                            class = "glyphicon glyphicon-info-sign",
                                                            style = "color:#b20019;",
                                                            title = "UTM coordinate system is separated into zones over the world. Please find the appropriate zone in which your data lies. Be aware that this should be the same zone as a previous cluster shape, that might have been downloaded before."
                                                          ),
-                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here.", target="_blank")),
-                                               value = NA)
+                                                         tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here (connection to browser necessary).", target="_blank")),
+                                               choices = 1:60)
                                      )
                               ),
                    ),
@@ -237,7 +237,7 @@ app_ui <- function(request) {
                  br(),
 
                  tabsetPanel(
-                   tabPanel(tags$span("Clusters table",
+                   tabPanel(tags$span("GPS location clusters table",
                                       tags$i(
                                         class = "glyphicon glyphicon-info-sign",
                                         style = "color:#b20019;",

@@ -114,14 +114,15 @@ observe({
 
     data$diff_min[is.na(data$diff_min)] <- mean(data$diff_min, na.rm = TRUE)
 
-    data$diff_min
+    data
 
   }
   )
 
   output$minute_diff_summary <- renderPrint(if(length(file_path()>0)){
 
-    summary(minute_diff_summary())
+    data <- minute_diff_summary()
+    tapply(data$diff_min, data$ID, summary)
 
   })
 
@@ -294,6 +295,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
                      "State" = "State",
                      "Date done" = "Done",
                      "Fieldworker" = "Worker",
+                     "Notes" = "Notes",
                      "Centerpoint East" = "center_x",
                      "Centerpoint North" = "center_y"),
         options = list(
@@ -301,12 +303,12 @@ output$file_path_last <- renderPrint(lastClustersFile())
           scrollX = TRUE,
           server = FALSE,
           columnDefs = list(list(targets = '_all', className = 'dt-center'),
-                            list(targets = c(3,4,5,14), visible = FALSE))), #hide multiple columns
+                            list(targets = c(3,4,5,15), visible = FALSE))), #hide multiple columns
         rownames = FALSE,
         extensions = 'Buttons',
         filter = list(position = "top"),
         selection = "single",
-        editable = list(target = "cell", disable = list(columns =c(0:7,12, 12)))) #make columns after number 7 editable. define selectInput!
+        editable = list(target = "cell", disable = list(columns =c(0:7,13, 13)))) #make columns after number 7 editable. define selectInput!
 
 
   } else {
@@ -324,6 +326,7 @@ output$file_path_last <- renderPrint(lastClustersFile())
                                "State" = "State",
                                "Date done" = "Done",
                                "Fieldworker" = "Worker",
+                               "Notes" = "Notes",
                                "Centerpoint East" = "center_x",
                                "Centerpoint North" = "center_y"),
                   options = list(
@@ -331,12 +334,12 @@ output$file_path_last <- renderPrint(lastClustersFile())
                     scrollX = TRUE,
                     server = FALSE,
                      columnDefs = list(list(targets = '_all', className = 'dt-center'),
-                                       list(targets = c(14), visible = FALSE))), #hide the geometry column
+                                       list(targets = c(15), visible = FALSE))), #hide the geometry column
                   rownames = FALSE,
                   extensions = 'Buttons',
                   filter = list(position = "top"),
                   selection = "single",
-                  editable = list(target = "cell", disable = list(columns =c(0:7,12, 12)))) #make columns after number 7 editable. define selectInput!
+                  editable = list(target = "cell", disable = list(columns =c(0:7,13, 13)))) #make columns after number 7 editable. define selectInput!
 
 
   }

@@ -319,7 +319,7 @@ if (is.null(datapoints)) {
                                   Clusters_sf$Event <- as.character(NA)
                                   Clusters_sf$Done <- as.character(NA)
                                   Clusters_sf$Worker <- as.character(NA)
-
+                                  Clusters_sf$Notes <- as.character(NA)
 
                                   if (lastClustersFile != "No latest cluster file." & onlyClusters == FALSE) {
 
@@ -340,12 +340,12 @@ if (is.null(datapoints)) {
                                     }
 
 
-                                    if(sum(c("ID", "ClusID", "sum", "prec_time","inout" , "ratio", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
-                                             "Worker" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  15){
+                                    if((sum(c("ID", "ClusID", "sum", "prec_time","inout" , "ratio", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
+                                              "Worker", "Notes" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  16) & (st_crs(Clusters_sf) == st_crs(Clusters_sf_before))){
 
 
                                         Clusters_sf_before <- dplyr::select(Clusters_sf_before, ID, ClusID, sum, prec_time, inout , ratio, date_min,  date_max,  State ,    Event,     Done  ,
-                                                                          Worker ,center_x,center_y,geometry)
+                                                                          Worker, Notes ,center_x,center_y,geometry)
 
 
                                         Clusters_sf_before <- filter(Clusters_sf_before, ID == i)
@@ -357,7 +357,7 @@ if (is.null(datapoints)) {
 
                                         #adjust ClusID again: this is the file that will be used later again, so it has to be safed to your working directory: Clusters_"date"
                                         Clusters_sf <- Clusters_sf %>%
-                                          dplyr::select(ClusID.y, ID.x, geometry, sum.x, sum.y,  prec_time.x, inout.x, ratio.x, date_min.x, date_max.x, Event.y, Done.y, Worker.y, State.y) %>%
+                                          dplyr::select(ClusID.y, ID.x, geometry, sum.x, sum.y,  prec_time.x, inout.x, ratio.x, date_min.x, date_max.x, Event.y, Done.y, Worker.y, Notes.y, State.y) %>%
                                           rename("ClusID" = "ClusID.y",
                                                  "ID" = "ID.x",
                                                  "prec_time" = "prec_time.x",
@@ -368,7 +368,8 @@ if (is.null(datapoints)) {
                                                  "Event" = "Event.y",
                                                  "Done" = "Done.y",
                                                  "Worker" = "Worker.y",
-                                                 "State" = "State.y")
+                                                 "State" = "State.y",
+                                                 "Notes" = "Notes.y")
 
 
                                         Clusters_sf <- Clusters_sf[order(Clusters_sf$date_min), ]
@@ -431,12 +432,12 @@ if (is.null(datapoints)) {
                                     }
 
 
-                                    if(sum(c("ID", "ClusID", "sum", "prec_time","inout" , "ratio", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
-                                             "Worker" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  15){
+                                    if((sum(c("ID", "ClusID", "sum", "prec_time","inout" , "ratio", "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
+                                             "Worker", "Notes" ,"center_x","center_y","geometry") %in% names(Clusters_sf_before)) ==  16) & (st_crs(Clusters_sf) == st_crs(Clusters_sf_before))){
 
 
                                       Clusters_sf_before <- dplyr::select(Clusters_sf_before,  ClusID, sum, date_min,  date_max,  ID,prec_time,geometry, inout , ratio, State ,    Event,     Done  ,
-                                                                          Worker )
+                                                                          Worker, Notes )
 
                                       Clusters_sf_before <- filter(Clusters_sf_before, ID == i)
 
@@ -461,7 +462,7 @@ if (is.null(datapoints)) {
 
                                   if(message == "Column names wrong."){
 
-                                      status = "The latest cluster file could not be loaded or does not have the right column names. Did you change any column names? Check again."
+                                      status = "The latest cluster file could not be loaded, doesn't have the same coordinate system or does not have the right column names. Did you change any column names? Is the previous file definitely from the same data? Check again."
                                       cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
                                   } else {
@@ -476,7 +477,7 @@ if (is.null(datapoints)) {
                                                date_max = as.character(date_max),
                                                center_x = round(st_coordinates(center)[,1], 2),
                                                center_y = round(st_coordinates(center)[,2], 2)) %>%
-                                        dplyr::select(ID, ClusID, sum, prec_time, inout, ratio, date_min, date_max, State, Event, Done, Worker, center_x, center_y)
+                                        dplyr::select(ID, ClusID, sum, prec_time, inout, ratio, date_min, date_max, State, Event, Done, Worker,Notes, center_x, center_y)
 
                                       Clusters_sf_combined <- rbind(Clusters_sf_combined, Clusters_sf)
 
