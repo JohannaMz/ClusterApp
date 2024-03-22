@@ -6,6 +6,7 @@
 #' @importFrom shiny eventReactive isolate observe observeEvent reactive reactiveValues renderPrint renderText req renderUI
 #' @import shinyFiles
 #' @import shinyWidgets
+#' @importFrom shinyalert shinyalert
 #' @importFrom dplyr filter mutate group_by arrange desc select slice rename lag
 #' @importFrom DT datatable renderDataTable
 #' @importFrom leaflet hideGroup renderLeaflet
@@ -409,10 +410,7 @@ settings <- reactive({
     cluster_list$settings
   })
 
-# #fill the reactuve value with the data
-# observe({
-#   Clusters_sf_table$data <- settings()
-# }
+
 
 observeEvent(input$downloadClusters, {
     thedate <- strftime(Sys.Date(),"%y%m%d")
@@ -421,11 +419,10 @@ observeEvent(input$downloadClusters, {
     if (".shp" %in% input$downloadClusters_buttons) {
 
 
-      if(length(latestfile_path()>0)){
+      if(length(latestfile_path()>0)){ #if a latest file was uplaoded directly and changes should be saved again
         fileName_clusters <- paste(dirname(latestfile_path()), "/Clusters_", input$indID, "_", thedate, ".shp", sep = "")
         st_write(Clusters_sf_table$data, fileName_clusters, append = FALSE)
 
-        #should the settings table also be donwladed here???
 
       } else {
         fileName_clusters <- paste(dirname(file_path()), "/Clusters_", input$indID, "_", thedate, ".shp", sep = "")
@@ -440,6 +437,10 @@ observeEvent(input$downloadClusters, {
     }
 
     if (".xlsx" %in% input$downloadClusters_buttons) {
+
+      shinyalert(title = "Warning!",
+                 text = "If filtering options were applied in the table, only the filtered data frame will be downloaded as the .xlsx file.",
+                 type = "warning")
 
       Clusters_csv <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],]
 
@@ -489,6 +490,10 @@ observeEvent(input$downloadClusters, {
     }
 
     if (".gpx" %in% input$downloadClusters_buttons) {
+      shinyalert(title = "Warning!",
+                 text = "If filtering options were applied in the table, only the filtered data frame will be downloaded as the .gpx file.",
+                 type = "warning")
+
       ClusID  <- NULL
 
       Clusters_gpx <- Clusters_sf_table$data[input[["clustersTable_rows_all"]],] %>%
@@ -548,8 +553,8 @@ observeEvent(input$downloadClusters, {
                                                                                   "New" = "red",
                                                                                   "GPS locations added" = "blue",
                                                                                   "Not done" = "orange"),
-                  popup.vars = c("Individual ID" = "ID",
-                                 "Cluster ID" = "ClusID",
+                  popup.vars = c("Cluster ID" = "ClusID",
+                                 "Individual ID" = "ID",
                                  "Number of GPS locations" = "sum",
                                  "First date visited" = "date_min",
                                  "Last date visited" = "date_max",
@@ -725,6 +730,10 @@ observeEvent(input$downloadClusters, {
     }
 
     if (".xlsx" %in% input$downloadPoints_buttons) {
+      shinyalert(title = "Warning!",
+                 text = "If filtering options were applied in the table, only the filtered data frame will be downloaded as the .xlsx file.",
+                 type = "warning")
+
       Points_csv <- Join_sf_table$data[input[["clustersTable_rows_all"]],]
 
       geometry <- st_as_text(Points_csv$geometry)
@@ -741,6 +750,10 @@ observeEvent(input$downloadClusters, {
 
 
     if (".gpx" %in% input$downloadPoints_buttons) {
+
+      shinyalert(title = "Warning!",
+                 text = "If filtering options were applied in the table, only the filtered data frame will be downloaded as the .gpx file.",
+                 type = "warning")
 
       ident <- NULL
 

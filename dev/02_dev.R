@@ -20,6 +20,7 @@ attachment::att_amend_desc()
 ## Amend DESCRIPTION with dependencies read from package code parsing
 ## install.packages('attachment') # if needed.
 usethis::use_package("shiny")
+usethis::use_package("shinyalert")
 usethis::use_package("dplyr")
 usethis::use_package("DT")
 usethis::use_package("foreign")

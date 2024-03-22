@@ -44,7 +44,7 @@ app_ui <- function(request) {
                               #   tags$style(
                               #     HTML("label{float:left;}", ".radio-inline, .checkbox-inline {padding-left: 20px;}"))),
 
-                              column(8, br(), radioButtons("demo_data", "File upload: ", choiceNames = list("Manual upload", "Demo data wolf", "Demo data bears"),
+                              column(6, br(), radioButtons("demo_data", "File upload: ", choiceNames = list("Manual upload", "Demo data wolf", "Demo data bears"),
                                                      choiceValues = list("Manual upload", "Demo data wolf", "Demo data bears"), selected="Manual upload",inline=TRUE),
                                      br(),
                                       shinyFilesButton("GISfile",
@@ -58,7 +58,12 @@ app_ui <- function(request) {
                                                       multiple = FALSE),
                                      br(),br(),
                                      radioButtons("separator","CSV Separator:", choiceNames = list("tab", ";",",",":"), choiceValues = list("\t",";",",",":"), selected=",",inline=TRUE)),
-                              ),
+                              column(6,br(), br(), br(),textInput("indID", tags$span("Give the individual or group of individuals a label:",
+                                                                     tags$i(
+                                                                       class = "glyphicon glyphicon-info-sign",
+                                                                       style = "color:#b20019;",
+                                                                       title = "Here you should enter a unique label for this analysis, which will be an identifier for this cluster analysis of the individual(s) that are being studied. It makes sense to use the same label as the folder name your data is located in."
+                                                                     )), value = "label"))),
 
 
                             br(), verbatimTextOutput("file_path",placeholder = TRUE),
@@ -126,12 +131,12 @@ app_ui <- function(request) {
         tabPanel("Adjust Cluster Analysis Parameters",
                  fluidRow(
                    column(2,
-                          textInput("indID", tags$span("Give the individual or group of individuals a label:",
-                                                       tags$i(
-                                                         class = "glyphicon glyphicon-info-sign",
-                                                         style = "color:#b20019;",
-                                                         title = "Here you should enter a unique label for this analysis, which will be an identifier for this cluster analysis of the individual(s) that are being studied. It makes sense to use the same label as the folder name your data is located in."
-                                                       )), value = "label"),
+                          # textInput("indID", tags$span("Give the individual or group of individuals a label:",
+                          #                              tags$i(
+                          #                                class = "glyphicon glyphicon-info-sign",
+                          #                                style = "color:#b20019;",
+                          #                                title = "Here you should enter a unique label for this analysis, which will be an identifier for this cluster analysis of the individual(s) that are being studied. It makes sense to use the same label as the folder name your data is located in."
+                          #                              )), value = "label"),
 
 
                           numericInput("buffer",

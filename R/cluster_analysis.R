@@ -44,41 +44,80 @@ cluster_analysis <- function(intensive.start ,
 
   message <- "Working."
 
-  settings <- c("start of study period" = as.character(intensive.start),
-                          "end of study period" = as.character(intensive.end),
-                          "path to GPS data" = datapoints,
-                          "ID column name" = ID,
-                          "LMT_Date column name" = LMT_Date,
-                          "East column name" = East,
-                          "North column name" = North,
-                          "date format" = dateFormat,
-                          "prepostPeriod" = prepostPeriod,
-                          "EPSGcode of GPS data file" = as.character(EPSGcode),
-                          "buffer radius around GPS locations" = buffer,
-                          "count of locations necessary within a buffer" = count,
-                          "label" = indID,
-                          "path to latest clusters file" = lastClustersFile,
-                          "minute difference between GPS fixes" = minute_diff,
-                          "develop clusters with only consecutive locations" = onlyClusters,
-                          "old clusters marked as done" = oldclusters,
-                          "UTM zone for output data" = UTM_zone)
 
 
 if (is.data.frame(datapoints)) {
   datapoints <- datapoints
 
+  settings <- c("start of study period" = as.character(intensive.start),
+                "end of study period" = as.character(intensive.end),
+                "path to GPS data" = as.character(getwd()),
+                "ID column name" = ID,
+                "LMT_Date column name" = LMT_Date,
+                "East column name" = East,
+                "North column name" = North,
+                "date format" = dateFormat,
+                "prepostPeriod" = prepostPeriod,
+                "EPSGcode of GPS data file" = as.character(EPSGcode),
+                "buffer radius around GPS locations" = buffer,
+                "count of locations necessary within a buffer" = count,
+                "label" = indID,
+                "path to latest clusters file" = lastClustersFile,
+                "minute difference between GPS fixes" = minute_diff,
+                "develop clusters with only consecutive locations" = onlyClusters,
+                "old clusters marked as done" = oldclusters,
+                "UTM zone for output data" = UTM_zone)
+
+
+
   }else if(sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "csv") == TRUE){
+
+  settings <- c("start of study period" = as.character(intensive.start),
+                "end of study period" = as.character(intensive.end),
+                "path to GPS data" = datapoints,
+                "ID column name" = ID,
+                "LMT_Date column name" = LMT_Date,
+                "East column name" = East,
+                "North column name" = North,
+                "date format" = dateFormat,
+                "prepostPeriod" = prepostPeriod,
+                "EPSGcode of GPS data file" = as.character(EPSGcode),
+                "buffer radius around GPS locations" = buffer,
+                "count of locations necessary within a buffer" = count,
+                "label" = indID,
+                "path to latest clusters file" = lastClustersFile,
+                "minute difference between GPS fixes" = minute_diff,
+                "develop clusters with only consecutive locations" = onlyClusters,
+                "old clusters marked as done" = oldclusters,
+                "UTM zone for output data" = UTM_zone)
+
   datapoints <-  read_delim(datapoints, delim = sep, escape_double = FALSE, trim_ws = TRUE)
 
-  # }else if(sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "dbf") == TRUE){
-  # datapoints <- read.dbf(datapoints, as.is = FALSE)
-
-
   } else if (sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "shp") == TRUE){
+
+  settings <- c("start of study period" = as.character(intensive.start),
+                  "end of study period" = as.character(intensive.end),
+                  "path to GPS data" = datapoints,
+                  "ID column name" = ID,
+                  "LMT_Date column name" = LMT_Date,
+                  "East column name" = East,
+                  "North column name" = North,
+                  "date format" = dateFormat,
+                  "prepostPeriod" = prepostPeriod,
+                  "EPSGcode of GPS data file" = as.character(EPSGcode),
+                  "buffer radius around GPS locations" = buffer,
+                  "count of locations necessary within a buffer" = count,
+                  "label" = indID,
+                  "path to latest clusters file" = lastClustersFile,
+                  "minute difference between GPS fixes" = minute_diff,
+                  "develop clusters with only consecutive locations" = onlyClusters,
+                  "old clusters marked as done" = oldclusters,
+                  "UTM zone for output data" = UTM_zone)
+
   datapoints <- read_sf(datapoints)
 
-    East = NA
-    North = NA
+  East = NA
+  North = NA
 
   } else {
   datapoints <-  NULL
@@ -387,9 +426,13 @@ if (is.null(datapoints)) {
                                         Clusters_sf <- Clusters_sf[!duplicated(Clusters_sf$ClusID), ]
 
 
-
-
                                         #"old new " clusters are marked done, new clusters are makred new. manually adjusted clusters stay the same
+                                        if (oldclusters == TRUE) {
+                                              Clusters_sf$State[Clusters_sf$State == "New"] <- "Done"
+                                        }
+
+
+
                                         Clusters_sf$State[is.na(Clusters_sf$State)] <- "New"
 
 
@@ -402,9 +445,7 @@ if (is.null(datapoints)) {
 
 
 
-                                            if (oldclusters == TRUE) {
-                                              Clusters_sf$State[Clusters_sf$State == "New"] <- "Done"
-                                            }
+
 
                                             } else {
                                               message <- "Column names wrong."
@@ -473,8 +514,8 @@ if (is.null(datapoints)) {
 
                                       #keep the same column order for the cluster_sf
                                       Clusters_sf <- Clusters_sf %>%
-                                        mutate(date_min = as.character(date_min),
-                                               date_max = as.character(date_max),
+                                        mutate(#date_min = #as.character(date_min),
+                                               #date_max = #as.character(date_max),
                                                center_x = round(st_coordinates(center)[,1], 2),
                                                center_y = round(st_coordinates(center)[,2], 2)) %>%
                                         dplyr::select(ID, ClusID, sum, prec_time, inout, ratio, date_min, date_max, State, Event, Done, Worker,Notes, center_x, center_y)
