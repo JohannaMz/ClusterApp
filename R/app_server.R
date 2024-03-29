@@ -347,7 +347,7 @@ observe({
                             list(targets = c(3,4,5,15), visible = FALSE))), #hide multiple columns
         rownames = FALSE,
         extensions = 'Buttons',
-        filter = list(position = "top"),
+        filter = list(position = "top"), #class = 'cell-border stripe',
         selection = "single",
         editable = list(target = "cell", disable = list(columns =c(0:7,13, 13)))) #make columns after number 7 editable. define selectInput!
 
@@ -378,7 +378,7 @@ observe({
                                        list(targets = c(15), visible = FALSE))), #hide the geometry column
                   rownames = FALSE,
                   extensions = 'Buttons',
-                  filter = list(position = "top"),
+                  filter = list(position = "top"), #class = 'cell-border stripe',
                   selection = "single",
                   editable = list(target = "cell", disable = list(columns =c(0:7,13, 13)))) #make columns after number 7 editable. define selectInput!
 
