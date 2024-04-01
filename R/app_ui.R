@@ -144,7 +144,7 @@ app_ui <- function(request) {
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
-                                                   title = "The size of the buffer corresponds to the radius of the buffer that is put around each GPS location. Combining buffers are the basis for clusters to emerge. Setting the size of the buffer depends on your question, the larger you set the radius, the more clusters will develop and possibly combine to large areas."
+                                                   title = "The size of the buffer corresponds to the radius of the buffer that is put around each GPS location. Combining buffers are the basis for GPS location clusters to emerge. Setting the size of the buffer depends on your question, the larger you set the radius, the more GPS location clusters will develop and possibly combine to large areas."
                                                  )), value = NA),
 
                           numericInput("count",
@@ -152,7 +152,7 @@ app_ui <- function(request) {
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
-                                                   title = "The number of locations within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of GPS locations within a polygon, the less clusters will develop."
+                                                   title = "The number of locations within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of GPS locations within a polygon, the less GPS location clusters will develop."
                                                  )), value = NA),
 
                           shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the study period:",
@@ -165,7 +165,7 @@ app_ui <- function(request) {
                                                                           tags$i(
                                                                             class = "glyphicon glyphicon-info-sign",
                                                                             style = "color:#b20019;",
-                                                                            title = "For some analysis you might want to add a time frame around the study periods of a number of days. Points within this time frame are still taken into account for clusters, if at least one point within was also during the study period."
+                                                                            title = "For some analysis you might want to add a time frame around the study periods of a number of days. Points within this time frame are still taken into account for GPS location clusters, if at least one point within was also during the study period."
                                                                           )), value = 0)
                    ),
                    column(4, offset = 1,
@@ -182,14 +182,14 @@ app_ui <- function(request) {
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#b20019;",
-                                                   title = "In the output above, you see the summary of time differences in your data. It makes sense to set your time difference at the approximate mean of your data, to use as many locations possible for the analysis without inflating clusters by GPS data that were taken shortly after one another."
+                                                   title = "In the output above, you see the summary of time differences in your data. It makes sense to set your time difference at the approximate mean of your data, to use as many locations possible for the analysis without inflating GPS location clusters by GPS data that were taken shortly after one another."
                                                  )),
                                        value = NA),
                           br(), br(),
                           h6("Should the columns related to the time spent and the number of points within/outside of the cluster be displayed in the cluster table?"),
                           checkboxInput("extraColumns", label = "", value = FALSE),
                           br(),
-                          h6("Should only clusters with consecutive GPS locations be developed?"),
+                          h6("Should only GPS location clusters with consecutive GPS locations be developed?"),
                           checkboxInput("onlyClusters", label = "", value = FALSE)),
 
                    column(4, offset = 1,
@@ -215,7 +215,7 @@ app_ui <- function(request) {
                           br(),
                           br(),
 
-                          h6("Should old clusters automatically be marked as done?"),
+                          h6("Should old GPS location clusters automatically be marked as done?"),
                           checkboxInput("oldclusters", label = "", value = FALSE)))
         ),
 
@@ -242,11 +242,11 @@ app_ui <- function(request) {
                  br(),
 
                  tabsetPanel(
-                   tabPanel(tags$span("GPS location clusters table",
+                   tabPanel(tags$span("GPS location clusters (GLC)",
                                       tags$i(
                                         class = "glyphicon glyphicon-info-sign",
                                         style = "color:#b20019;",
-                                        title = "The clusters table shows all clusters that were formed by the number of GPS locations that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done and Fieldworker can be edited. These edits will be saved when downloaded."
+                                        title = "The GLC table shows all GLC that were formed by the number of GPS locations that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done, Fieldworker and Notes can be edited. These edits will be saved when downloaded."
                                       )),
                             fluidRow(
 
@@ -276,7 +276,7 @@ app_ui <- function(request) {
                                                                   tags$i(
                                                                     class = "glyphicon glyphicon-info-sign",
                                                                     style = "color:#b20019;",
-                                                                    title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS locations and the track for the individuals. The points increase in size the more recent the GPS locations have been made."
+                                                                    title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the GPS location clusters and written cluster IDs, as well as GPS locations and the track for the individuals. The points increase in size the more recent the GPS locations have been made."
                                                                   )), class = "btn-success", width = '100%'),
                               leafletOutput('clusterMap'),
                               actionButton("downloadMap", label = "Download interactive map as html."))),
@@ -286,7 +286,7 @@ app_ui <- function(request) {
                                       tags$i(
                                         class = "glyphicon glyphicon-info-sign",
                                         style = "color:#b20019;",
-                                        title = "The GPS datatable shows all GPS locations, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the cluster it belongs to or SP for single point, the month, day and hour of the GPS location."
+                                        title = "The GPS datatable shows all GPS locations, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the GLC it belongs to or SP for single point, the month, day and hour of the GPS location."
                                       )),
                             fluidRow(
                               DT::dataTableOutput("pointsTable"),
