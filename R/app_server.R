@@ -734,7 +734,7 @@ observeEvent(input$downloadClusters, {
                  text = "If filtering options were applied in the table, only the filtered data frame will be downloaded as the .xlsx file.",
                  type = "warning")
 
-      Points_csv <- Join_sf_table$data[input[["clustersTable_rows_all"]],]
+      Points_csv <- Join_sf_table$data[input[["pointsTable_rows_all"]],]
 
       geometry <- st_as_text(Points_csv$geometry)
 

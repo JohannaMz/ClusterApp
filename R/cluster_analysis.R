@@ -184,7 +184,7 @@ if (is.null(datapoints)) {
                 cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
               }
-      else if (sum(is.na(strptime(datapoints$LMT_Date, format = dateFormat))) > 1) {
+      else if (sum(is.na(as.POSIXct(datapoints$LMT_Date, format = dateFormat))) > 1) {
 
                 status <- "Some or all dates failed to parse: The given date format does not match the format of your data or you have to delete/fix the problematic rows."
                 cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
@@ -195,33 +195,33 @@ if (is.null(datapoints)) {
                 datapoints <- datapoints %>%
                   dplyr::mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat),
                          "LMT_Date" = date(ts),
-                         "LMT_Time" = as.factor(hms::as_hms(ymd_hms(ts))),
+                         "LMT_Time" = as.factor(hms::as_hms(ts)),
                          "ID" = as.factor(ID))
 
 
-
-                if (!is.na(minute_diff)) {
-
-        datapoints <- datapoints %>%
-          arrange(ID, ts) %>%
-          group_by(ID) %>%
-          mutate(
-            diff_min = round(as.numeric(difftime(ts, min(ts), units = "min")), 0),
-            time_group_minu = cutree(hclust(dist(diff_min)), h = minute_diff-1)) %>%
-          group_by(ID, time_group_minu) %>%
-          slice(1) %>%
-          ungroup() %>%
-          dplyr::select(-c(diff_min, time_group_minu))
-
-      } else {
-        minute_diff_data <- datapoints %>%
-          arrange(ID, ts) %>%
-          group_by(ID) %>%
-          mutate(diff_min = as.numeric(difftime(LMT_Date, lag(LMT_Date), units = "min")))
-
-        minute_diff = round(mean(minute_diff_data$diff_min, na.rm = TRUE), 0)
-
-      }
+#maybe this step should only come after the selection of the dataframe?
+      # if (!is.na(minute_diff)) {
+      #
+      #   datapoints <- datapoints %>%
+      #     arrange(ID, ts) %>%
+      #     group_by(ID) %>%
+      #     mutate(
+      #       diff_min = round(as.numeric(difftime(ts, min(ts), units = "min")), 0),
+      #       time_group_minu = cutree(hclust(dist(diff_min)), h = minute_diff-1)) %>%
+      #     group_by(ID, time_group_minu) %>%
+      #     slice(1) %>%
+      #     ungroup() %>%
+      #     dplyr::select(-c(diff_min, time_group_minu))
+      #
+      # } else {
+      #   minute_diff_data <- datapoints %>%
+      #     arrange(ID, ts) %>%
+      #     group_by(ID) %>%
+      #     mutate(diff_min = as.numeric(difftime(LMT_Date, lag(LMT_Date), units = "min")))
+      #
+      #   minute_diff = round(mean(minute_diff_data$diff_min, na.rm = TRUE), 0)
+      #
+      # }
 
 
                 datapoints$Status <- NA
@@ -239,6 +239,31 @@ if (is.null(datapoints)) {
                 cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
                     } else {
+
+
+                      if (!is.na(minute_diff)) {
+
+                        datapoints <- datapoints %>%
+                          arrange(ID, ts) %>%
+                          group_by(ID) %>%
+                          mutate(
+                            diff_min = round(as.numeric(difftime(ts, min(ts), units = "min")), 0),
+                            time_group_minu = cutree(hclust(dist(diff_min)), h = minute_diff-1)) %>%
+                          group_by(ID, time_group_minu) %>%
+                          slice(1) %>%
+                          ungroup() %>%
+                          dplyr::select(-c(diff_min, time_group_minu))
+
+                      } else {
+                        minute_diff_data <- datapoints %>%
+                          arrange(ID, ts) %>%
+                          group_by(ID) %>%
+                          mutate(diff_min = as.numeric(difftime(LMT_Date, lag(LMT_Date), units = "min")))
+
+                        minute_diff = round(mean(minute_diff_data$diff_min, na.rm = TRUE), 0)
+
+                      }
+
 
                       #make the data spatial
                       data_sf <- sf::st_as_sf(datapoints, coords = c("North", "East"), crs = st_crs(EPSGcode))
