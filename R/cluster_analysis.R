@@ -394,7 +394,7 @@ if (is.null(datapoints)) {
 
 
 
-                                        Clusters_sf <- st_join(Clusters_sf, Clusters_sf_before)#, largest = TRUE
+                                        Clusters_sf <- st_join(Clusters_sf, Clusters_sf_before)
 
 
                                         #adjust ClusID again: this is the file that will be used later again, so it has to be safed to your working directory: Clusters_"date"
@@ -517,9 +517,7 @@ if (is.null(datapoints)) {
                                         Clusters_sf_before$State[Clusters_sf_before$State == "New"] <- "Done"
                                       }
 
-                                      Clusters_sf <- Clusters_sf[(nrow(Clusters_sf_before)+1):(nrow(Clusters_sf)),] %>%
-                                        mutate(date_min = as.character(date_min),
-                                               date_max = as.character(date_max))
+                                      Clusters_sf <- Clusters_sf[(nrow(Clusters_sf_before)+1):(nrow(Clusters_sf)),]
 
                                       Clusters_sf <- rbind(Clusters_sf_before, Clusters_sf)
 
@@ -545,8 +543,8 @@ if (is.null(datapoints)) {
 
                                       #keep the same column order for the cluster_sf
                                       Clusters_sf <- Clusters_sf %>%
-                                        mutate(#date_min = #as.character(date_min),
-                                               #date_max = #as.character(date_max),
+                                        mutate(#date_min = as.character(date_min),
+                                               #date_max = as.character(date_max),
                                                center_x = round(st_coordinates(center)[,1], 2),
                                                center_y = round(st_coordinates(center)[,2], 2)) %>%
                                         dplyr::select(ID, ClusID, sum, prec_time, inout, ratio, date_min, date_max, State, Event, Done, Worker,Notes, center_x, center_y)
