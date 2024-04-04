@@ -12,8 +12,8 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 <!-- ![pkgcheck](https://github.com/JohannaMz/ClusterApp/workflows/pkgcheck/badge.svg)](https://github.com/JohannaMz/ClusterApp/actions?query=workflow%3Apkgcheck) -->
 <!-- badges: end -->
 
-The goal of ClusterApp is a Shiny application to guide and streamline
-cluster studies based on GPS data.
+The ClusterApp is a Shiny application to guide and streamline cluster
+studies based on GPS data.
 
 ## Installation
 
