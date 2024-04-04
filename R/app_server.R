@@ -549,9 +549,9 @@ observeEvent(input$downloadClusters, {
 
       if (length(latestfile_path()>0)) {
         init <- tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, lwd = 8, palette = c("Done" = "green",
+          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
                                                                                   "New" = "red",
-                                                                                  "GPS locations added" = "blue",
+                                                                                  "Points added" = "blue",
                                                                                   "Not done" = "orange"),
                   popup.vars = c("Cluster ID" = "ClusID",
                                  "Individual ID" = "ID",
@@ -561,7 +561,7 @@ observeEvent(input$downloadClusters, {
                                  "State" = "State")) +
 
           tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "Events for clusters", col = "Event", lwd = 1, lty = "dashed", colorNA = NULL)  +
+          tm_fill(group = "Events for clusters", col = "Event", colorNA = NULL) +
 
           tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
 
@@ -590,7 +590,7 @@ observeEvent(input$downloadClusters, {
 
 
         init <- tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, lwd = 8, palette = c("Done" = "green",
+          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
                                                                                   "New" = "red",
                                                                                   "Points added" = "blue",
                                                                                   "Not done" = "orange"),
@@ -602,7 +602,7 @@ observeEvent(input$downloadClusters, {
                                  "State" = "State")) +
 
           tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "Events for clusters", col = "Event", lwd = 1, lty = "dashed", colorNA = NULL, palette = "Dark2")  +
+          tm_fill(group = "Events for clusters", col = "Event", colorNA = NULL)  +
 
           tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
 

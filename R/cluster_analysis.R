@@ -6,7 +6,7 @@
 #' @importFrom lubridate date is.Date is.POSIXct ymd_hms
 #' @importFrom stats aggregate cutree dist hclust
 #' @importFrom hms as_hms
-#' @importFrom sf st_as_sf st_buffer st_cast st_centroid st_coordinates st_crs st_drop_geometry st_geometry st_join st_read st_transform st_union st_is_empty
+#' @importFrom sf st_as_sf st_buffer st_cast st_centroid st_coordinates st_crs st_drop_geometry st_geometry st_join st_read st_transform st_union st_is_empty st_intersects
 #' @importFrom sftrack as_sftraj
 #' @importFrom tidyr separate unite
 #' @importFrom readxl read_excel
@@ -199,30 +199,6 @@ if (is.null(datapoints)) {
                          "ID" = as.factor(ID))
 
 
-#maybe this step should only come after the selection of the dataframe?
-      # if (!is.na(minute_diff)) {
-      #
-      #   datapoints <- datapoints %>%
-      #     arrange(ID, ts) %>%
-      #     group_by(ID) %>%
-      #     mutate(
-      #       diff_min = round(as.numeric(difftime(ts, min(ts), units = "min")), 0),
-      #       time_group_minu = cutree(hclust(dist(diff_min)), h = minute_diff-1)) %>%
-      #     group_by(ID, time_group_minu) %>%
-      #     slice(1) %>%
-      #     ungroup() %>%
-      #     dplyr::select(-c(diff_min, time_group_minu))
-      #
-      # } else {
-      #   minute_diff_data <- datapoints %>%
-      #     arrange(ID, ts) %>%
-      #     group_by(ID) %>%
-      #     mutate(diff_min = as.numeric(difftime(LMT_Date, lag(LMT_Date), units = "min")))
-      #
-      #   minute_diff = round(mean(minute_diff_data$diff_min, na.rm = TRUE), 0)
-      #
-      # }
-
 
                 datapoints$Status <- NA
 
@@ -335,7 +311,9 @@ if (is.null(datapoints)) {
                                   arrange(date_min)
 
 
-                                  # combine the points to own polygons
+
+
+                                # combine the points to own polygons
                                 Clusters_sf <- Clusters_sf %>%
                                   st_buffer(buffer) %>%
                                   st_union(by_feature = TRUE) %>%
@@ -389,7 +367,7 @@ if (is.null(datapoints)) {
 
                                     #identify already exsiting clusters from the analysis before: upload data
 
-                                    Clusters_sf_before <- if(sum(strsplit(basename(lastClustersFile), split="\\.")[[1]][-1] == "xlsx") == TRUE){
+                                  Clusters_sf_before <- if(sum(strsplit(basename(lastClustersFile), split="\\.")[[1]][-1] == "xlsx") == TRUE){
 
                                     #read_excel(lastClustersFile)
                                     st_as_sf(read_excel(lastClustersFile), wkt = "geometry", crs = UTM_coord)
@@ -416,7 +394,7 @@ if (is.null(datapoints)) {
 
 
 
-                                        Clusters_sf <- st_join(Clusters_sf, Clusters_sf_before)
+                                        Clusters_sf <- st_join(Clusters_sf, Clusters_sf_before)#, largest = TRUE
 
 
                                         #adjust ClusID again: this is the file that will be used later again, so it has to be safed to your working directory: Clusters_"date"
@@ -435,20 +413,48 @@ if (is.null(datapoints)) {
                                                  "State" = "State.y",
                                                  "Notes" = "Notes.y")
 
+                                        #if clusters have points added in their state, this statement should be deleted again for the next analysis
+                                        Clusters_sf$State[Clusters_sf$State == "Points added"] <- "New"
+
 
                                         Clusters_sf <- Clusters_sf[order(Clusters_sf$date_min), ]
                                         #Clusters_sf$ClusID <- as.numeric(Clusters_sf$ClusID)
 
                                         #fill up the new clusters with IDs
-                                        Clusters_sf$ClusID[is.na(Clusters_sf$ClusID)] <- paste(i, (nrow(Clusters_sf_before) + 1):nrow(Clusters_sf), sep = "_")
+                                        #Clusters_sf$ClusID[is.na(Clusters_sf$ClusID)] <- paste(i, (nrow(Clusters_sf_before) + 1):nrow(Clusters_sf), sep = "_")
 
-                                        #combine numbers if clusters grew together
 
-                                        grewTogether <- aggregate(Clusters_sf[1], Clusters_sf[-1],
-                                                                  FUN = function(X) paste(unique(X), collapse="/"))
-                                        grewTogether <- st_drop_geometry(grewTogether)
-                                        Clusters_sf$ClusID <- grewTogether$ClusID
-                                        Clusters_sf <- Clusters_sf[!duplicated(Clusters_sf$ClusID), ]
+                                        #extract the maximum number that has been given as a ClusterID
+                                        ClusID_numbers <- c()
+                                        for (y in 1:length(Clusters_sf_before$ClusID)) {
+                                          split_vector <- strsplit(Clusters_sf_before$ClusID[y], "_")[[1]]
+                                          number <- as.numeric(split_vector[length(split_vector)])
+                                          ClusID_numbers[y] <- number
+                                        }
+
+                                        #fill up the new clusters from the maximum Cluster ID until the end
+                                        Clusters_sf$ClusID[is.na(Clusters_sf$ClusID)] <- paste(i, (max(ClusID_numbers)+1):(max(ClusID_numbers)+sum(is.na(Clusters_sf$ClusID))), sep = "_")
+
+                                        #because the st_join now only takes the CLusID of the largest overlapping polygon, some Clusters might have "disaapepeared" as they grew together
+                                        #to keep track of those we add them into the notes column
+                                        Clusters_within <- st_intersects(Clusters_sf, Clusters_sf_before)
+
+                                        for (x in 1:length(Clusters_within)) {
+                                          if (length(Clusters_within[[x]]) >1) {
+                                            Cluster_index <- as.character(Clusters_sf_before$ClusID[Clusters_within[[x]]])
+                                            Clusters_sf$Notes[x] <- paste("Note! These clusters from the latest cluster analysis grew together: ", paste(Cluster_index, collapse = ", "), ".")
+                                          }
+                                        }
+
+
+
+                                        # #combine numbers if clusters grew together
+                                        #
+                                        # grewTogether <- aggregate(Clusters_sf[1], Clusters_sf[-1],
+                                        #                           FUN = function(X) paste(unique(X), collapse="/"))
+                                        # grewTogether <- st_drop_geometry(grewTogether)
+                                        # Clusters_sf$ClusID <- grewTogether$ClusID
+                                        # Clusters_sf <- Clusters_sf[!duplicated(Clusters_sf$ClusID), ]
 
 
                                         #"old new " clusters are marked done, new clusters are makred new. manually adjusted clusters stay the same
