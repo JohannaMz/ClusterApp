@@ -24,7 +24,7 @@ test_that("Cluster analysis function works as expected", {
     Longitude = c(62.08441, 62.08587, 62.08587, 62.08583)
   )
 
-  sep = "/t"
+  sep = "\t"
   ID = "Object_ID"
   LMT_Date = "LMT_date"
   East = "Latitude"

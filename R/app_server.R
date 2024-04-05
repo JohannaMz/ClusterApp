@@ -754,19 +754,41 @@ observeEvent(input$downloadClusters, {
       shinyalert(title = "Warning!",
                  text = "If filtering options were applied in the table, only the filtered data frame will be downloaded as the .gpx file.",
                  type = "warning")
-
-      ident <- NULL
-
       fileName_points <- paste(dirname(file_path()), "/GPXPoints_", input$indID, "_", thedate, ".gpx", sep = "")
 
-      Join_gpx <- Join_sf_table$data[input[["pointsTable_rows_all"]],] %>%
+      # ident <- NULL
+      #
+      #
+      # Join_gpx <- Join_sf_table$data[input[["pointsTable_rows_all"]],] %>%
+      #   st_transform(4326) %>%
+      #   dplyr::select(ident) #%>%
+      #   rename(name = ident)
+      #
+      # st_write(Join_gpx, fileName_points,  dataset_options = "GPX_USE_EXTENSIONS=YES",layer="waypoints", driver = "GPX", append = FALSE)
+
+####################################
+#set up a whole new dataframe in order to work based on this help: https://github.com/r-spatial/sf/issues/2202
+
+      Join_gpx_df_4326 <- Join_sf_table$data[input[["pointsTable_rows_all"]],] %>%
         st_transform(4326) %>%
-        dplyr::select(ident) %>%
-        rename(name = ident)
-
-      st_write(Join_gpx, fileName_points, dataset_options = "GPX_USE_EXTENSIONS=YES", layer="waypoints", driver = "GPX", append = FALSE)
+        mutate(x = st_coordinates(.)[,1],
+               y = st_coordinates(.)[,2])
 
 
+      Join_gpx_df <- data.frame(x = Join_gpx_df_4326$x, y = Join_gpx_df_4326$y)
+      Join_gpx_df <- st_as_sf(Join_gpx_df, coords = c("x", "y"), crs = "EPSG:4326")
+
+      Join_gpx_df$year <- Join_gpx_df_4326$year
+      Join_gpx_df$ts <- Join_gpx_df_4326$ts
+      Join_gpx_df$month <-  Join_gpx_df_4326$month
+      Join_gpx_df$day <-  Join_gpx_df_4326$day
+      Join_gpx_df$ident <- Join_gpx_df_4326$ident
+
+
+      st_write(Join_gpx_df, fileName_points, driver = "GPX", dataset_options = "GPX_USE_EXTENSIONS=YES", append = FALSE)
+
+
+#############################
       # Join_gpx <- cluster_list$Join_sf %>%
       #   st_transform(4326) %>%
       #   mutate(latitude = st_coordinates(.)[,1],
