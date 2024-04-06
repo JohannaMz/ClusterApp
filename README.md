@@ -27,6 +27,9 @@ can install the development version of ClusterApp from
 devtools::install_github("JohannaMz/ClusterApp", build_vignettes = TRUE)
 ```
 
+Re-installations of new versions can be done by repeating the
+‘install_github’ step.
+
 The app can then be started by the command:
 
 ``` r
