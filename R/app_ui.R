@@ -303,7 +303,7 @@ app_ui <- function(request) {
 
       tags$div(
         style = "text-align: center; margin-top: 20px;",
-        HTML("This app is developed by <a href='mailto:johanna@maertz.eu'>Johanna Maertz</a>. Any questions, feedback, or ideas to improve it, please feel free to reach out.")
+        HTML("This app is developed by <a href='mailto:johanna@maertz.eu'>Johanna Maertz</a>. Any questions, feedback, or ideas to improve it, please feel free to reach out (last updated 06.04.2024).")
       )
     )
   )

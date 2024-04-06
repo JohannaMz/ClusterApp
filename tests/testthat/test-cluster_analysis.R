@@ -15,14 +15,14 @@ test_that("Cluster analysis function works as expected", {
 
   intensive.start = as.Date("2010-08-01")
   intensive.end = as.Date("2024-04-03")
-   datapoints =  #"C:/Users/johan/Documents/ClusterApp Data/new wolf/2024-04-03_8h5m30s_GPS_Main_valid_positions_WRAM-Export.csv" #"C:/Users/johan/Documents/ClusterApp Data/caro files/Position-2024-Apr-02_18-26-52.csv"
-  data.frame(
-    Object_ID = c("A", "A", "A", "A"),
-    LMT_date = as.POSIXct(c("2023-08-01 10:00:00", "2023-08-01 11:00:00",
-                 "2023-08-01 12:00:00", "2023-08-01 13:00:00")),
-    Latitude = c(15.63312, 15.6402, 15.64022, 15.64026),
-    Longitude = c(62.08441, 62.08587, 62.08587, 62.08583)
-  )
+   datapoints =  "C:/Users/johan/Documents/ClusterApp Data/new wolf/2024-04-03_8h5m30s_GPS_Main_valid_positions_WRAM-Export.csv" #"C:/Users/johan/Documents/ClusterApp Data/caro files/Position-2024-Apr-02_18-26-52.csv"
+  # data.frame(
+  #   Object_ID = c("A", "A", "A", "A"),
+  #   LMT_date = as.POSIXct(c("2023-08-01 10:00:00", "2023-08-01 11:00:00",
+  #                "2023-08-01 12:00:00", "2023-08-01 13:00:00")),
+  #   Latitude = c(15.63312, 15.6402, 15.64022, 15.64026),
+  #   Longitude = c(62.08441, 62.08587, 62.08587, 62.08583)
+  # )
 
   sep = "\t"
   ID = "Object_ID"

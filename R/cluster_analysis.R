@@ -414,7 +414,7 @@ if (is.null(datapoints)) {
                                                  "Notes" = "Notes.y")
 
                                         #if clusters have points added in their state, this statement should be deleted again for the next analysis
-                                        Clusters_sf$State[Clusters_sf$State == "Points added"] <- "New"
+                                        #Clusters_sf$State[Clusters_sf$State == "Points added"] <- "New"
 
 
                                         Clusters_sf <- Clusters_sf[order(Clusters_sf$date_min), ]
