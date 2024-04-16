@@ -19,25 +19,37 @@
 #' @noRd
 
 
-cluster_analysis <- function(intensive.start ,
-                             intensive.end ,
-                             datapoints,
-                             sep,
-                             ID ,
-                             LMT_Date ,
-                             East ,
-                             North,
-                             dateFormat,
-                             prepostPeriod,
-                             EPSGcode,
-                             buffer,
-                             count,
-                             indID, #label
-                             lastClustersFile,
-                             minute_diff,
-                             onlyClusters,
-                             oldclusters,
-                             UTM_zone){
+###### If this file should be used independently of the 'ClusterApp' package, these packages have to installed, i.e. loaded #####
+# library(dplyr)
+# library(sf)
+# library(lubridate)
+# library(sftrack)
+# library(tidyr)
+# library(readr)
+# library(openxlsx)
+# library(readxl)
+######
+
+cluster_analysis <- function(intensive.start , #entered start date within as.Date("%Y-%m-%d)
+                             intensive.end , #entered start date within as.Date("%Y-%m-%d)
+                             datapoints, #path to the datapoints file in .csv or .shp format
+                             sep, #chosen separator if a csv file is entered as datapoints
+                             ID , #column name for 'animal ID' column
+                             LMT_Date , #column name for 'timestamp' column
+                             East , #column name for 'easting/latitude' column
+                             North, #column name for 'northing/longitude' column
+                             dateFormat, #date format of the column chosen for LMT_Date
+                             prepostPeriod, #number of days chosen as pre and post study period frame
+                             EPSGcode = 4326, #EPSG code of loaded datapoints, default at WGS84
+                             buffer, #distance in meters chosen around each GPS points
+                             count, #number of GPS points necessary for a cluster to be created
+                             indID, #chosen label for this study
+                             lastClustersFile = "No latest cluster file.", #path to a potentially last cluster file, if no latest cluster file exists keep default
+                             minute_diff = NA, #set time difference between GPS fixes, if all GPS locations should be used keep default
+                             onlyClusters = FALSE, #TRUE = clusters are created with only consecutive GPS locations; FALSE = clusters are created irrespective of time stamp
+                             oldclusters = FALSE, #TRUE = state column for clusters from latest cluster files are set to 'Old'; FALSE = no changes to state column for latest cluster file
+                             UTM_zone #UTM zone the data lies in
+                             ){
 
   #binding the variables locally to the function for the R-CMD-Check
   ClusID <- crs <- ts <- ts_num <- ident <- diff_min <- time_group_minu <- x <- prev_ClusID <- new_cluster <- Status <- date_max <- date_min <- prec_time <- inout <- ratio <- State <- Event <- Done <- Worker <- center_x <- center_y <- geometry <- ClusID.y <- ID.x <- sum.x <- sum.y <- prec_time.x <- inout.x <- ratio.x <- date_min.x <- date_max.x <- Event.y <- Done.y <- Worker.y <- State.y <- sum.y <- center <- LMT_Time <- month <- day <- hour <- NULL
@@ -184,7 +196,7 @@ if (is.null(datapoints)) {
                 cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
 
               }
-      else if (sum(is.na(as.POSIXct(datapoints$LMT_Date, format = dateFormat))) > 1) {
+      else if (sum(is.na(as.POSIXct(datapoints$LMT_Date, format = dateFormat, tz = "UTC"))) > 1) {
 
                 status <- "Some or all dates failed to parse: The given date format does not match the format of your data or you have to delete/fix the problematic rows."
                 cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA, status = status, settings = settings)
@@ -193,7 +205,7 @@ if (is.null(datapoints)) {
 
       else {
                 datapoints <- datapoints %>%
-                  dplyr::mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat),
+                  dplyr::mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat, tz = "UTC"),
                          "LMT_Date" = date(ts),
                          "LMT_Time" = as.factor(hms::as_hms(ts)),
                          "ID" = as.factor(ID))
@@ -201,6 +213,7 @@ if (is.null(datapoints)) {
 
 
                 datapoints$Status <- NA
+
 
                 #status for the points: NA = not within the period for the cluster analysis, thus deleted. O = input$prepostPeriod days before or after the intensive period. 1 = intensive period
                 datapoints$Status[datapoints$LMT_Date >= intensive.start - prepostPeriod & datapoints$LMT_Date < intensive.start] <- "0"

@@ -297,6 +297,10 @@ observe({
   #extract the clusters_sf out of the list
   Clusters_sf <- reactive({
     if (input$doit) {
+      shinyalert(title = "Remember!",
+                 text = "If this clusters file should be used as a latest cluster file, it has to be downloaded as a shape file!",
+                 type = "info")
+
       cluster_list <- cluster_list()
       cluster_list$Clusters_sf
     } else if (length(latestfile_path()>0)) {
