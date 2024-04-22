@@ -51,7 +51,7 @@ app_ui <- function(request) {
                                                       label = tags$span("Upload the original GPS file (.csv or .shp) here:",
                                                                         tags$i(
                                                                           class = "glyphicon glyphicon-info-sign",
-                                                                          style = "color:#b20019;",
+                                                                          style = "color:#0072b2;",
                                                                             title = "Find the file that includes your newest GPS data for the individual(s) you are monitoring. It makes sense to have a seperate folder for each study and always copy the GPS files here. This way, you will have a folder per monitored individual(s) that will contain all important files for the cluster analysis that was performed."
                                                                         )),
                                                       title = "Find the original GPS data for the individual(s).",
@@ -61,7 +61,7 @@ app_ui <- function(request) {
                               column(6,br(), br(), br(),textInput("indID", tags$span("Give the individual or group of individuals a label:",
                                                                      tags$i(
                                                                        class = "glyphicon glyphicon-info-sign",
-                                                                       style = "color:#b20019;",
+                                                                       style = "color:#0072b2;",
                                                                        title = "Here you should enter a unique label for this analysis, which will be an identifier for this cluster analysis of the individual(s) that are being studied. It makes sense to use the same label as the folder name your data is located in."
                                                                      )), value = "label"))),
 
@@ -99,7 +99,7 @@ app_ui <- function(request) {
                                                tags$span("Additionally enter the EPSG code of the coordinate system, your data is in:",
                                                          tags$i(
                                                            class = "glyphicon glyphicon-info-sign",
-                                                           style = "color:#b20019;",
+                                                           style = "color:#0072b2;",
                                                            title = "Data can be in different coordinate systems. The most common coordinate system from WRAM Export is WGS84 (EPSG: 4326). Coordinate columns are usually named Longitude (Northing) and Latitude (Easting). The EPSG code is a unique code for each coordinate system."
                                                          ),
                                                          tags$a(href="https://epsg.io/", "Find the codes here (connection to browser necessary).", target="_blank")),
@@ -108,7 +108,7 @@ app_ui <- function(request) {
                                                tags$span("The output will be in the UTM format. Please enter the right zone:",
                                                          tags$i(
                                                            class = "glyphicon glyphicon-info-sign",
-                                                           style = "color:#b20019;",
+                                                           style = "color:#0072b2;",
                                                            title = "UTM coordinate system is separated into zones over the world. Please find the appropriate zone in which your data lies. Be aware that this should be the same zone as a previous cluster shape, that might have been downloaded before."
                                                          ),
                                                          tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here (connection to browser necessary).", target="_blank")),
@@ -134,7 +134,7 @@ app_ui <- function(request) {
                           # textInput("indID", tags$span("Give the individual or group of individuals a label:",
                           #                              tags$i(
                           #                                class = "glyphicon glyphicon-info-sign",
-                          #                                style = "color:#b20019;",
+                          #                                style = "color:#0072b2;",
                           #                                title = "Here you should enter a unique label for this analysis, which will be an identifier for this cluster analysis of the individual(s) that are being studied. It makes sense to use the same label as the folder name your data is located in."
                           #                              )), value = "label"),
 
@@ -143,7 +143,7 @@ app_ui <- function(request) {
                                        tags$span("Set the buffer size in meters:",
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
-                                                   style = "color:#b20019;",
+                                                   style = "color:#0072b2;",
                                                    title = "The size of the buffer corresponds to the radius of the buffer that is put around each GPS location. Combining buffers are the basis for GPS location clusters to emerge. Setting the size of the buffer depends on your question, the larger you set the radius, the more GPS location clusters will develop and possibly combine to large areas."
                                                  )), value = NA),
 
@@ -151,20 +151,20 @@ app_ui <- function(request) {
                                        tags$span("Set the number of GPS locations it needs to be a buffer:",
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
-                                                   style = "color:#b20019;",
+                                                   style = "color:#0072b2;",
                                                    title = "The number of locations within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of GPS locations within a polygon, the less GPS location clusters will develop."
                                                  )), value = NA),
 
                           shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the study period:",
                                                                               tags$i(
                                                                                 class = "glyphicon glyphicon-info-sign",
-                                                                                style = "color:#b20019;",
+                                                                                style = "color:#0072b2;",
                                                                                 title = "Define the time frame that you are interested in.  Usually there is a time frame where the GPS sent positions more intensivly (e.g. every hour in comparison to usually only send every three hours) or the individual is monitored over a set number of weeks."
                                                                               ))), #tick if you need a time frame around the intensive period
                           numericInput("prepostPeriod", label = tags$span("Enter the number of days that will be added before and after the study period:",
                                                                           tags$i(
                                                                             class = "glyphicon glyphicon-info-sign",
-                                                                            style = "color:#b20019;",
+                                                                            style = "color:#0072b2;",
                                                                             title = "For some analysis you might want to add a time frame around the study periods of a number of days. Points within this time frame are still taken into account for GPS location clusters, if at least one point within was also during the study period."
                                                                           )), value = 0)
                    ),
@@ -172,7 +172,7 @@ app_ui <- function(request) {
                           h5(tags$span("Summary for optional time stamp filtering:",
                                        tags$i(
                                          class = "glyphicon glyphicon-info-sign",
-                                         style = "color:#b20019;",
+                                         style = "color:#0072b2;",
                                          title = "Here it is optional to set the time difference it needs between GPS locations in minutes. If nothing is filled in all data will be used for the cluster analysis and the mean time frame is taken as a difference value for the calculations of 'Percent of time spent at the location.'"
                                        ))),
                           br(),
@@ -181,7 +181,7 @@ app_ui <- function(request) {
                                        tags$span("Set the time difference needed between GPS locations in minutes:",
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
-                                                   style = "color:#b20019;",
+                                                   style = "color:#0072b2;",
                                                    title = "In the output above, you see the summary of time differences in your data. It makes sense to set your time difference at the approximate mean of your data, to use as many locations possible for the analysis without inflating GPS location clusters by GPS data that were taken shortly after one another."
                                                  )),
                                        value = NA),
@@ -193,10 +193,10 @@ app_ui <- function(request) {
                           checkboxInput("onlyClusters", label = "", value = FALSE)),
 
                    column(4, offset = 1,
-                          h5(tags$span("Some additional info, if you already have done an analysis before:",
+                          h5(tags$span("Some additional info, if you already have done an analysis before (subsequent analysis):",
                                        tags$i(
                                          class = "glyphicon glyphicon-info-sign",
-                                         style = "color:#b20019;",
+                                         style = "color:#0072b2;",
                                          title = "Here the path to the latest cluster shapefile (.shp) appears automatically, if this one is saved in the same folder as your input GPS file and has the same label."
                                        ))),
                           br(),
@@ -207,8 +207,8 @@ app_ui <- function(request) {
                                            label = tags$span("Optionally load a latest file manually",
                                                              tags$i(
                                                                class = "glyphicon glyphicon-info-sign",
-                                                               style = "color:#b20019;",
-                                                               title = "Manually find a latest cluster file to be used in the analysis (allowed formats are .shp or .xlsx). This file has to have the columns: ID, ClusID, sum, prec_time, date_min, date_max,  State , Event,  Done, Worker, center_x, center_y, geometry. Manual changes to the file within the columns State , Event,  Done and Worker will be used.")),
+                                                               style = "color:#0072b2;",
+                                                               title = "Manually find a latest cluster file to be used in the subsequent analysis (allowed formats are .shp or .xlsx). This file has to have the columns: ID, ClusID, sum, prec_time, date_min, date_max,  State , Event,  Done, Worker, center_x, center_y, geometry. Manual changes to the file within the columns State , Event,  Done and Worker will be used.")),
                                            title = "Manually find a latest cluster file to be used.",
                                            multiple = FALSE),
 
@@ -220,7 +220,7 @@ app_ui <- function(request) {
         ),
 
 
-        tabPanel("Clusters Analysis Output",
+        tabPanel("Cluster Analysis Output",
                  tags$style(type="text/css",
                             ".shiny-output-error { visibility: hidden; }",
                             ".shiny-output-error:before { visibility: hidden; }"),
@@ -233,7 +233,7 @@ app_ui <- function(request) {
                                   label = tags$span("Alternativly upload a latest cluster file (.shp or .dbf) here:",
                                                     tags$i(
                                                       class = "glyphicon glyphicon-info-sign",
-                                                      style = "color:#b20019;",
+                                                      style = "color:#0072b2;",
                                                       title = "If you only want to look and adjust a latest cluster file, witout having new data you can load it directly via this button. To save changes for later analysis, download the shapefile when you are done."
                                                     )),
                                   title = "Find a latest cluster file.",
@@ -245,7 +245,7 @@ app_ui <- function(request) {
                    tabPanel(tags$span("GPS location clusters (GLC)",
                                       tags$i(
                                         class = "glyphicon glyphicon-info-sign",
-                                        style = "color:#b20019;",
+                                        style = "color:#0072b2;",
                                         title = "The GLC table shows all GLC that were formed by the number of GPS locations that were buffered and grew together. The data can be filtered in the top row and only this data is downloaded when choosing the formats .csv and .gpx. The columns State, Event, Date done, Fieldworker and Notes can be edited. These edits will be saved when downloaded."
                                       )),
                             fluidRow(
@@ -256,7 +256,7 @@ app_ui <- function(request) {
                               column(4, br(), actionButton("downloadClusters", label =  tags$span("Download cluster table.",
                                                                                                   tags$i(
                                                                                                     class = "glyphicon glyphicon-info-sign",
-                                                                                                    style = "color:#b20019;",
+                                                                                                    style = "color:#0072b2;",
                                                                                                     title = "You have to download the shapefile of this cluster analysis, if this should be used in the following anaylsis as a latest cluster analysis file. This file will be downloaded in the coordinate system UTM and the specified zone. Downloading .xlsx or.gpx files are optional. GPX will be in WGS84."
                                                                                                   )))),
                               #h5("Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the clusters and written cluster IDs, as well as GPS points and the track for the individuals. The points increase in size the more recent the points have been made."),
@@ -264,7 +264,7 @@ app_ui <- function(request) {
                               #                                     label = tags$span("tiff file :",
                               #                                                       tags$i(
                               #                                                         class = "glyphicon glyphicon-info-sign",
-                              #                                                         style = "color:#b20019;",
+                              #                                                         style = "color:#0072b2;",
                               #                                                         title = "Optional raster background."
                               #                                                       )),
                               #                                     title = "Optional raster background.",
@@ -275,7 +275,7 @@ app_ui <- function(request) {
                               actionButton("go",label = tags$span("Plot data",
                                                                   tags$i(
                                                                     class = "glyphicon glyphicon-info-sign",
-                                                                    style = "color:#b20019;",
+                                                                    style = "color:#0072b2;",
                                                                     title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the GPS location clusters and written cluster IDs, as well as GPS locations and the track for the individuals. The points increase in size the more recent the GPS locations have been made."
                                                                   )), class = "btn-success", width = '100%'),
                               leafletOutput('clusterMap'),
@@ -285,7 +285,7 @@ app_ui <- function(request) {
                    tabPanel(tags$span("GPS data",
                                       tags$i(
                                         class = "glyphicon glyphicon-info-sign",
-                                        style = "color:#b20019;",
+                                        style = "color:#0072b2;",
                                         title = "The GPS datatable shows all GPS locations, that were used for the cluster analysis. The point ID is a combination for easier identification in the field and is a combination of the individual ID, the GLC it belongs to or SP for single point, the month, day and hour of the GPS location."
                                       )),
                             fluidRow(
@@ -294,7 +294,7 @@ app_ui <- function(request) {
                               column(4, br(), actionButton("downloadPoints", label =  tags$span("Download GPS datatable.",
                                                                                                 tags$i(
                                                                                                   class = "glyphicon glyphicon-info-sign",
-                                                                                                  style = "color:#b20019;",
+                                                                                                  style = "color:#0072b2;",
                                                                                                   title = "Downloading this file is useful for uploading it on your GPS, it is not necessary for any further analysis. The shapefile and excel file will be downloaded in the coordinate system UTM and the specified zone, while the GPX file is downloaded in WGS84."
                                                                                                 ))))))
                  )

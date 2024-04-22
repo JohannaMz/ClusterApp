@@ -1,6 +1,7 @@
 #' GPS location data of three bears
 #'
 #' Historic data for 3 bears(Läfmamäck = adult male; Ruta = adult female; Järpa = subadult female) from 2014 . The study period went from 01-05-2014 until 31-05-2014.
+#' It additionally includes data for one bear (Håkan = adult male) between 30-05-2023 until 13-06-2023 that had a proximity event included.
 #'
 #' @format A data frame with 8 rows and 2204 column
 #' \describe{

@@ -72,7 +72,7 @@ golem::add_js_handler("handlers")
 ## If you have data in your package
 usethis::use_data_raw(name = "bears", open = FALSE)
 
-bears <- read_delim("C:/Users/johan/Documents/ClusterApp Data/bear/bears.csv", delim = ",", escape_double = FALSE, trim_ws = TRUE)
+bears <- read_delim("C:/Users/johan/Documents/ClusterApp Data/bear/bears_2.csv", delim = ",", escape_double = FALSE, trim_ws = TRUE)
 
 usethis::use_data(bears, overwrite = TRUE)
 usethis::use_r(name = "bears", open = T)

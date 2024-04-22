@@ -339,7 +339,7 @@ observe({
                      "Last date visited" = "date_max",
                      "State" = "State",
                      "Date done" = "Done",
-                     "Fieldworker" = "Worker",
+                     "technician" = "Worker",
                      "Notes" = "Notes",
                      "Centerpoint East" = "center_x",
                      "Centerpoint North" = "center_y"),
@@ -370,7 +370,7 @@ observe({
                                "Last date visited" = "date_max",
                                "State" = "State",
                                "Date done" = "Done",
-                               "Fieldworker" = "Worker",
+                               "Field technician" = "Worker",
                                "Notes" = "Notes",
                                "Centerpoint East" = "center_x",
                                "Centerpoint North" = "center_y"),
@@ -611,13 +611,13 @@ observeEvent(input$downloadClusters, {
           tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
 
           tm_shape(cluster_list$Join_sf) +
-          tm_dots(group = "GPS Locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
+          tm_dots(group = "GPS locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
                                                                                                                        "Time stamp" = "ts",
                                                                                                                        "ID" = "ID",
                                                                                                                        "Cluster ID" = "ClusID"),
                   palette = "Dark2",
                   legend.show = FALSE)+
-          tm_shape(last_position, name = "Last Position") +
+          tm_shape(last_position, name = "Last position") +
           tm_markers( popup.vars = c("Point ID" = "ident",
                                                              "Time stamp" = "ts",
                                                              "ID" = "ID")) +
@@ -665,7 +665,7 @@ observeEvent(input$downloadClusters, {
         hideGroup(c("Events for clusters", "Cluster IDs"))
     } else {
       tmap_leaflet(map()) %>%
-        hideGroup(c("Events for clusters", "Cluster IDs", "GPS Locations", "Track"))
+        hideGroup(c("Events for clusters", "Cluster IDs", "GPS locations", "Track"))
     }
 
 
