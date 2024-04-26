@@ -22,6 +22,29 @@
 #'
 app_server <- function(input, output, session) {
 
+
+  #takes very loong to close the app
+  # # Reactive value to control the app status
+  # appStatus <- reactiveVal(TRUE)
+  #
+  # # Observer to stop the app when the reactive value changes to FALSE
+  # observe({
+  #   if (!appStatus()) {
+  #
+  #     stopApp()
+  #   }
+  # })
+  #
+  # # Event to stop the app when the stop application button is clicked
+  # observeEvent(input$quit, {
+  #  shinyalert(title = "Remember!",
+  #                  text = "If this clusters file should be used as a latest cluster file, it has to be downloaded as a shape file!",
+  #                  type = "info")
+  #   print("Application closed")
+  #   appStatus(FALSE)
+  # })
+
+
   #globalVariables(c("ClusID", "crs", "ident", "ts_num"))
 
   ## Dateipfad
@@ -403,6 +426,28 @@ observe({
 
 
   })
+
+
+
+  # # Update the reactive values when the DT is edited and stor in a new table
+  # #create reactive values to store the edited data
+  #
+  # Clusters_sf_edited <- reactiveValues(data = NULL)
+  #
+  # #fill the reactive value with the data
+  # observe({
+  #   Clusters_sf_edited$data <- Clusters_sf()
+  # })
+  #
+  # observeEvent(input$clustersTable_cell_edit, {
+  #   info = input$clustersTable_cell_edit
+  #   row = as.numeric(info$row)
+  #   col = as.numeric(info$col)+1
+  #
+  #   Clusters_sf_edited$data[row, col] = info$value
+  #
+  #
+  # })
 
 
 

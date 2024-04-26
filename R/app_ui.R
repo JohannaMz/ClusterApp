@@ -31,7 +31,7 @@ app_ui <- function(request) {
 
      # navbarPage(title = "ClusterApp", windowTitle = tags$img(src = "inst/app/www/favicon.png", width = 30, height = 30)),
 
-      navlistPanel(
+     navlistPanel(
 
         widths = c(3,9),
 
@@ -298,8 +298,12 @@ app_ui <- function(request) {
                                                                                                   title = "Downloading this file is useful for uploading it on your GPS, it is not necessary for any further analysis. The shapefile and excel file will be downloaded in the coordinate system UTM and the specified zone, while the GPX file is downloaded in WGS84."
                                                                                                 ))))))
                  )
-        )
-      ),
+              )
+
+
+        ),
+#tabPanel("Quit Application", value = "stop", icon = icon("circle-o-notch"))
+        #actionButton("quit", "Quit application", class = "btn-success"),
 
       tags$div(
         style = "text-align: center; margin-top: 20px;",

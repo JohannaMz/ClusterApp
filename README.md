@@ -27,8 +27,15 @@ can install the development version of ClusterApp from
 devtools::install_github("JohannaMz/ClusterApp", build_vignettes = TRUE)
 ```
 
-Re-installations of new versions can be done by repeating the
-‘install_github’ step.
+For re-installations of new versions make sure to remove old versions
+and restart the session:
+
+``` r
+remove.package("ClusterApp")#if the package is loaded before
+.rs.restartR() #restart R session to avoid any problms
+
+devtools::install_github("JohannaMz/ClusterApp", build_vignettes = TRUE)
+```
 
 The app can then be started by the command:
 
