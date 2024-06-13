@@ -44,6 +44,9 @@ library(ClusterApp)
 ClusterApp::run_app()
 ```
 
+When the app started, it can take a few seconds unti it recognizes the
+folder structure.
+
 ## Tutorial
 
 A tutorial for the usage of the app can be found by accessing the
@@ -52,6 +55,15 @@ vignette (html file):
 ``` r
 browseVignettes("ClusterApp")
 ```
+
+## Disclaimer
+
+This is an early release and functionalities might change. This package
+is currently pending a peer-review and detailed description will be
+available after it is published. I take no responsibility for the proper
+functioning of this package. If you have any questions, concerns or you
+would simply like to apply it to your data, I encourage to contact me
+directly.
 
 ## Getting help
 

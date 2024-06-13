@@ -30,7 +30,6 @@ Imports:
     magrittr,
     methods,
     openxlsx,
-    raster,
     readr,
     readxl,
     sf (>= 1.0.16),
@@ -38,7 +37,6 @@ Imports:
     shiny (>= 1.7.3),
     shinyalert,
     shinyFiles,
-    shinytest2,
     shinyWidgets,
     stats,
     stringr,
@@ -48,6 +46,7 @@ Imports:
 Suggests: 
     knitr,
     rmarkdown,
+    shinytest2,
     testthat
 VignetteBuilder: 
     knitr

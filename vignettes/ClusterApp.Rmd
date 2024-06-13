@@ -220,16 +220,16 @@ The initial analysis has now been performed and the data downloaded.
 
 GPS cluster studies often require field personnel to visit GPS positions of focal individuals in almost real-time, i.e., personnel must find a balance between not disturbing the animal, but visiting the site before evidence of the individual’s activity disappears. This means that field personnel routinely download GPS data and run cluster analyses at regular, commonly short (e.g., every day or few days) intervals. Therefore, it is standard practice that cluster analyses are run several times within one study period.
 
-After the shapefile of the clusters is downloaded in the initial analysis, the next analysis that is done will be a ‘subsequent analysis’. Several steps are necessary to ensure the data are consistent throughout the study period: 1) New GPS data should always be saved within the same folder, replacing the old GPS data (data ‘wolf.csv’ in Figure 5), 2) the *uploaded GPS data must have the same starting date throughout the study*, i.e., users must upload all GPS data associated with the study each time, 3) *the study period must be defined from the same starting date each time*, 4) *the label has to be consistent for the study* (i.e. **‘wolf_demo’** in our case) and 5) *the cluster tables must be downloaded after every time users run a successful cluster analysis*.
+After the shapefile of the clusters is downloaded in the initial analysis, the next analysis that is done will be a ‘subsequent analysis’. Several steps are necessary to ensure the data are consistent throughout the study period: 1) New GPS data should always be saved within the same folder, replacing the old GPS data (data ‘wolf.csv’ in Figure 5), 2) the **uploaded GPS data must have the same starting date throughout the study**, i.e., users must upload all GPS data associated with the study each time, 3) **the study period must be defined from the same starting date each time**, 4) **the label has to be consistent for the study** (i.e. *‘wolf_demo’* in our case) and 5) **the cluster tables must be downloaded after every time users run a successful cluster analysis**.
 
 Built-in methods help to keep the procedure simple: it starts the same by uploading the newest GPS data from the same folder and entering the unique label for this cluster analysis. When doing this, the application automatically searches for files from previous cluster analysis in the folder of the GPS data with the same label. The base folder should now additionally include a previous cluster shapefile or excel-file (data ‘Clusters_wolf_demo_220422.shp’ or ‘Clusters_wolf_demo_220422.xlsx’ in Figure 5) as well as a settings file.
 If these are found, the saved settings are updated automatically. This ensures that for subsequent analyses on the same dataset, the same settings are used as in previous analyses. Only exception is the end date of the study period, which will always show the current date. This can however be adjusted: *The study period should now range from the 28th of February 2022 to 17th April 2022.*
 
-Differences will appear for the third setting column within ‘Adjust cluster analysis parameters’, which relates to earlier cluster analysis files within the folder of the raw GPS data. With this folder path known, and the unique label entered, the application automatically searches for a shapefile within the same folder with an exact string match (‘Clusters underscore label underscore date.shp’, e.g., **‘Clusters_wolf_demo_220422.shp’**). There can be multiple old shapefiles in the sub-folder as the program will search for the most recent file. So, in order to load old cluster files correctly, *it is important to have an individual or group label which is unique during the entire field study and have all relevant files within the same folder* (see Figure 5). If this match is not found, the message will read ‘No latest cluster file’. With the statement ‘No latest cluster file’ the analysis will be run as if done initially.
+Differences will appear for the third setting column within ‘Adjust cluster analysis parameters’, which relates to earlier cluster analysis files within the folder of the raw GPS data. With this folder path known, and the unique label entered, the application automatically searches for a shapefile within the same folder with an exact string match (‘Clusters underscore label underscore date.shp’, e.g., *‘Clusters_wolf_demo_220422.shp’*). There can be multiple old shapefiles in the sub-folder as the program will search for the most recent file. So, in order to load old cluster files correctly, **it is important to have an individual or group label which is unique during the entire field study and have all relevant files within the same folder** (see Figure 5). If this match is not found, the message will read ‘No latest cluster file’. With the statement ‘No latest cluster file’ the analysis will be run as if done initially.
 
-With the button ‘Optionally load a latest file manually’ in Tab 2 in the same column, the latest cluster file can also be loaded manually in **.shp** or **.xlsx** format from any folder of your choice. This can either be useful if an earlier shapefile should be taken as the previous study or if the field technicians prefers to enter data in excel, rather than directly within the application. However, it is necessary to take care in this form of manual upload: the file must contain all latest clusters (so not only a selection as could be possible with the download of selected clusters in .xlsx format) and also all necessary column names. Only changes to the five adjustable columns: State, Event, Date done, Field technician, and Notes will be accepted in the latest cluster table. *So, no column names should be changed, no additional columns can be added, and no rows should be deleted.*
+With the button ‘Optionally load a latest file manually’ in Tab 2 in the same column, the latest cluster file can also be loaded manually in *.shp* or *.xlsx* format from any folder of your choice. This can either be useful if an earlier shapefile should be taken as the previous study or if the field technicians prefers to enter data in excel, rather than directly within the application. However, it is necessary to take care in this form of manual upload: the file must contain all latest clusters (so not only a selection as could be possible with the download of selected clusters in .xlsx format) and also all necessary column names. Only changes to the five adjustable columns: State, Event, Date done, Field technician, and Notes will be accepted in the latest cluster table. **So, no column names should be changed, no additional columns can be added, and no rows should be deleted.**
 
-When performing a subsequent cluster analysis, it is important to check if the most recent cluster file is loaded (Figure 9), as this file will make sure the earlier established cluster IDs remain constant even with additional GPS locations that might increase, combine, or create new clusters. That is why *it is important to always download the cluster table as a shape file!* You can optionally automatically mark the state of all clusters from the most recent file as ‘Done’.
+When performing a subsequent cluster analysis, it is important to check if the most recent cluster file is loaded (Figure 9), as this file will make sure the earlier established cluster IDs remain constant even with additional GPS locations that might increase, combine, or create new clusters. That is why **it is important to always download the cluster table as a shape file!** You can optionally automatically mark the state of all clusters from the most recent file as ‘Done’.
 
 ```{r Supp_Figure9, echo=FALSE, out.width="80%", fig.cap= "Figure 9: A previous shapefile is loaded automatically into the third column if this is found in the folder of the initial GPS file. The name follows a set structure which must include the original label that was chosen. The application will always choose that shapefile with the most recent download date. "}
 
@@ -324,12 +324,15 @@ Th application is built around one main function, which can also be used indepen
 #'
 #' @description The main cluster analysis function for the app
 #'
-#' @return The function returns a list of 4 files, which are the clusters, the GPS points, a track of each individual and a status message
-#' @importFrom dplyr filter lag select arrange group_by left_join mutate n rename slice summarize ungroup all_of
+#' @return The function returns a list of 4 files, which are the clusters, the GPS points,
+#' a track of each individual and a status message
+#' @importFrom dplyr filter lag select arrange group_by left_join mutate n
+#' rename slice summarize ungroup all_of
 #' @importFrom lubridate date is.Date is.POSIXct ymd_hms
 #' @importFrom stats aggregate cutree dist hclust
 #' @importFrom hms as_hms
-#' @importFrom sf st_as_sf st_buffer st_cast st_centroid st_coordinates st_crs st_drop_geometry st_geometry st_join st_read st_transform st_union st_is_empty st_intersects
+#' @importFrom sf st_as_sf st_buffer st_cast st_centroid st_coordinates st_crs
+#' st_drop_geometry st_geometry st_join st_read st_transform st_union st_is_empty st_intersects
 #' @importFrom sftrack as_sftraj
 #' @importFrom tidyr separate unite
 #' @importFrom readxl read_excel
@@ -439,7 +442,8 @@ if (is.data.frame(datapoints)) {
                 "old clusters marked as done" = oldclusters,
                 "UTM zone for output data" = UTM_zone)
 
-  datapoints <-  read_delim(datapoints, delim = sep, escape_double = FALSE, trim_ws = TRUE)
+  datapoints <-  read_delim(datapoints, delim = sep, escape_double = FALSE,
+                            trim_ws = TRUE)
 
   } else if (sum(strsplit(basename(datapoints), split="\\.")[[1]][-1] == "shp") == TRUE){
 
@@ -531,20 +535,24 @@ if (is.null(datapoints)) {
                        is.Date(datapoints$LMT_Date) == FALSE &
                        is.POSIXct(datapoints$LMT_Date) == FALSE){
 
-                status <- "LMT_Date is not a character, Date or POSIXct value. Adjust this please."
+                status <- "LMT_Date is not a character, Date or POSIXct value.
+                            Adjust this please."
                 cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA,
                                      status = status, settings = settings)
 
               }
-      else if ((is.numeric(datapoints$East) == FALSE| is.numeric(datapoints$North) == FALSE) &
+      else if ((is.numeric(datapoints$East) == FALSE|
+                is.numeric(datapoints$North) == FALSE) &
                !is.na(East)){
 
-                status <- "East and/or North coordinates are not numeric. Find the right columns."
+                status <- "East and/or North coordinates are not numeric.
+                            Find the right columns."
                 cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA,
                                      status = status, settings = settings)
 
               }
-      else if (sum(is.na(as.POSIXct(datapoints$LMT_Date, format = dateFormat, tz = "UTC"))) > 1) {
+      else if (sum(is.na(as.POSIXct(datapoints$LMT_Date,
+                                    format = dateFormat, tz = "UTC"))) > 1) {
 
                 status <- "Some or all dates failed to parse: The given date format does not
                 match the format of your data or you have to delete/fix the problematic rows."
@@ -555,7 +563,8 @@ if (is.null(datapoints)) {
 
       else {
                 datapoints <- datapoints %>%
-                  dplyr::mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat, tz = "UTC"),
+                  dplyr::mutate("ts" = as.POSIXct(LMT_Date, format = dateFormat,
+                                                  tz = "UTC"),
                          "LMT_Date" = date(ts),
                          "LMT_Time" = as.factor(hms::as_hms(ts)),
                          "ID" = as.factor(ID))
@@ -565,11 +574,14 @@ if (is.null(datapoints)) {
                 datapoints$Status <- NA
 
 
-                #status for the points: NA = not within the period for the cluster analysis, thus deleted. O = input$prepostPeriod days before or after the intensive period. 1 = intensive period
+                #status for the points: NA = not within the period for the cluster analysis,
+                #thus deleted. O = input$prepostPeriod days before or after the intensive period.
+                #1 = intensive period
                 datapoints$Status[datapoints$LMT_Date >= intensive.start - prepostPeriod &
                                     datapoints$LMT_Date < intensive.start] <- "0"
                 datapoints$Status[datapoints$LMT_Date > intensive.end &
-                                    datapoints$LMT_Date <= intensive.end + prepostPeriod] <- "0"
+                                    datapoints$LMT_Date <= intensive.end +
+                                    prepostPeriod] <- "0"
                 datapoints$Status[datapoints$LMT_Date >= intensive.start &
                                     datapoints$LMT_Date <= intensive.end] <- "1"
                 datapoints$Status <- as.numeric(datapoints$Status)
@@ -578,7 +590,8 @@ if (is.null(datapoints)) {
                 if (nrow(datapoints) == 0) {
 
                 status <- "No data within this study period. Try another time frame."
-                cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA,
+                cluster_list <- list(Clusters_sf = NA, Join_sf = NA,
+                                     data_sf_traj = NA,
                                      status = status, settings = settings)
 
                     } else {
@@ -590,8 +603,10 @@ if (is.null(datapoints)) {
                           arrange(ID, ts) %>%
                           group_by(ID) %>%
                           mutate(
-                            diff_min = round(as.numeric(difftime(ts, min(ts), units = "min")), 0),
-                            time_group_minu = cutree(hclust(dist(diff_min)), h = minute_diff-1)) %>%
+                            diff_min = round(as.numeric(difftime(ts, min(ts),
+                                                                 units = "min")), 0),
+                            time_group_minu = cutree(hclust(dist(diff_min)),
+                                                     h = minute_diff-1)) %>%
                           group_by(ID, time_group_minu) %>%
                           slice(1) %>%
                           ungroup() %>%
@@ -601,26 +616,32 @@ if (is.null(datapoints)) {
                         minute_diff_data <- datapoints %>%
                           arrange(ID, ts) %>%
                           group_by(ID) %>%
-                          mutate(diff_min = as.numeric(difftime(LMT_Date, lag(LMT_Date), units = "min")))
+                          mutate(diff_min = as.numeric(difftime(LMT_Date,
+                                                                lag(LMT_Date),
+                                                                units = "min")))
 
-                        minute_diff = round(mean(minute_diff_data$diff_min, na.rm = TRUE), 0)
+                        minute_diff = round(mean(minute_diff_data$diff_min,
+                                                 na.rm = TRUE), 0)
 
                       }
 
 
                       #make the data spatial
-                      data_sf <- sf::st_as_sf(datapoints, coords = c("North", "East"),
+                      data_sf <- sf::st_as_sf(datapoints,
+                                              coords = c("North", "East"),
                                               crs = st_crs(EPSGcode))
                       UTM_coord <- as.numeric(paste0("258", UTM_zone))
 
-                      data_sf <- sf::st_transform(data_sf, crs = st_crs(UTM_coord))
+                      data_sf <- sf::st_transform(data_sf,
+                                                  crs = st_crs(UTM_coord))
                       #change WGS84 to UTM to have meters
 
                       if (sum(st_is_empty(data_sf)) > 0) {
 
                         status <- "Something is wrong with your coordinates.
                         Transformation leaves the geometry column empty."
-                        cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA,
+                        cluster_list <- list(Clusters_sf = NA, Join_sf = NA,
+                                             data_sf_traj = NA,
                                              status = status, settings = settings)
 
 
@@ -630,7 +651,8 @@ if (is.null(datapoints)) {
                               data_sf_traj <- sf::st_as_sf(as_sftraj(data_sf,
                                                                      group = c(id = "ID"),
                                                                      time = "ts"))
-                              data_sf_traj <- sf::st_as_sf(data_sf_traj[, c(1:5, 7), drop = TRUE])
+                              data_sf_traj <- sf::st_as_sf(data_sf_traj[, c(1:5, 7),
+                                                                        drop = TRUE])
 
                               Clusters_sf_combined <- data.frame()
                               Join_sf_combined <- data.frame()
@@ -642,7 +664,6 @@ if (is.null(datapoints)) {
 
                                 #apply buffer around each point, disaggregate and
                                 #make the data spatial again
-                                #(maybe there is an easier way that the data is not converted to a list??)
 
                                 Buffer_sf <- st_buffer(data_sf_ID, buffer)
                                 Multi <- st_union(Buffer_sf)
@@ -651,8 +672,7 @@ if (is.null(datapoints)) {
                                   sf::st_as_sf() %>%
                                   rename(geometry = x)
 
-                                #preliminary cluster ID to cluster points together:
-                                #get this to work when there are no clusters! ifelse....
+                                #preliminary cluster ID to cluster points together
                                 Multi_sf$ClusID <- seq(1:nrow(Multi_sf))
                                 #seq(stats::rnorm(nrow(Multi_sf)))
 
@@ -666,8 +686,10 @@ if (is.null(datapoints)) {
                                 Join_sf <- Join_sf %>%
                                   arrange(ts) %>%
                                   mutate(prev_ClusID = lag(ClusID),
-                                         new_cluster = ifelse(ClusID != prev_ClusID, TRUE, FALSE),
-                                         new_cluster = ifelse(is.na(prev_ClusID), TRUE, new_cluster),
+                                         new_cluster = ifelse(ClusID != prev_ClusID,
+                                                              TRUE, FALSE),
+                                         new_cluster = ifelse(is.na(prev_ClusID),
+                                                              TRUE, new_cluster),
                                          ClusID = cumsum(new_cluster)) %>%
                                   select(-prev_ClusID, -new_cluster)
 
@@ -678,13 +700,18 @@ if (is.null(datapoints)) {
                                   group_by(ClusID) %>%
                                   #delete clusters with only one point within
                                   filter(n()>=count) %>%
-                                  #delete clusters with only points outside of the intensive period:
+                                  #delete clusters with only points
+                                  #outside of the intensive period:
                                   #sum = 0 and identify the first event in the cluster
-                                  summarize(sum = sum(Status), date_min = min(ts), date_max = max(ts)) %>%
+                                  summarize(sum = sum(Status),
+                                            date_min = min(ts),
+                                            date_max = max(ts)) %>%
                                   filter(sum >= 1) %>%
                                   mutate(ID = i,
                                     prec_time = round(sum/(round(as.numeric(
-                                    difftime(date_max, date_min, units = "mins"))/minute_diff, 0)+1), 2)) %>%
+                                    difftime(date_max, date_min,
+                                             units = "mins"))/minute_diff, 0)+1),
+                                             2)) %>%
                                   #arrange the data according to date
                                   arrange(date_min)
 
@@ -702,13 +729,14 @@ if (is.null(datapoints)) {
                                   #identify points inside to outside cluster
                                   for (j in 1:nrow(Clusters_sf)) {
 
-                                  Join_sf_filter <- filter(Join_sf, ts >= Clusters_sf$date_min[j] &
-                                                             ts <= Clusters_sf$date_max[j])
+                                  Join_sf_filter <- filter(Join_sf,
+                                                    ts >= Clusters_sf$date_min[j] &
+                                                    ts <= Clusters_sf$date_max[j])
 
                                   inside <- nrow(filter(Join_sf_filter,
-                                                        ClusID == Clusters_sf$ClusID[j]))
+                                              ClusID == Clusters_sf$ClusID[j]))
                                   outside <- nrow(filter(Join_sf_filter,
-                                                         ClusID != Clusters_sf$ClusID[j]))
+                                              ClusID != Clusters_sf$ClusID[j]))
 
 
                                   Clusters_sf$inout[j] <- paste0(inside, "/", outside)
@@ -719,27 +747,36 @@ if (is.null(datapoints)) {
                                   } else if(inside > outside){
                                     "More GPS locations inside of cluster."
                                   } else if(inside == outside){
-                                    "Even number of GPS locations inside and outside of cluster."
+                                    "Even number of GPS locations inside and
+                                    outside of cluster."
                                   }
 
                                 }
 
 
-                                  #so that now the new cluster ID can be assigned with 1 being the oldest
+                                  #so that now the new cluster ID can be
+                                #assigned with 1 being the oldest
                                   if(nrow(Clusters_sf) != 0){
-                                    Clusters_sf$ClusID <- paste(i, seq(1:nrow(Clusters_sf)), sep = "_")
+                                    Clusters_sf$ClusID <- paste(i,
+                                                                seq(1:nrow(Clusters_sf)),
+                                                                sep = "_")
                                   }
 
-                                  # #so that now the new cluster ID can be assigned with 1 being the oldest
-                                  # Clusters_sf$ClusID <- paste(i, seq(1:nrow(Clusters_sf)), sep = "_") #seq(stats::rnorm(nrow(Clusters_sf)))
+                                  # #so that now the new cluster ID can
+                                #be assigned with 1 being the oldest
+                                  # Clusters_sf$ClusID <- paste(i,
+                                  #                     seq(1:nrow(Clusters_sf)),
+                                  #                     sep = "_")
+                                  #seq(stats::rnorm(nrow(Clusters_sf)))
 
                                   #convert into sf data
                                   Clusters_sf <- st_as_sf(Clusters_sf)
 
                                   Clusters_sf$State <-  factor(NA,
-                                                               levels = c("New", "Done",
-                                                                          "Points added",
-                                                                          "Not done"))
+                                                        levels = c("New",
+                                                                    "Done",
+                                                                    "Points added",
+                                                                    "Not done"))
                                   Clusters_sf$State <- "New"
 
                                   Clusters_sf$Event <- as.character(NA)
@@ -750,19 +787,23 @@ if (is.null(datapoints)) {
                                   if (lastClustersFile != "No latest cluster file." &
                                       onlyClusters == FALSE) {
 
-                                    #identify already exsiting clusters from the analysis before:
+                                    #identify already exsiting clusters from the
+                                    #analysis before:
                                     #upload data
 
                                   Clusters_sf_before <-
                                     if(sum(strsplit(basename(lastClustersFile),
-                                                    split="\\.")[[1]][-1] == "xlsx") == TRUE){
+                                                    split="\\.")[[1]][-1]
+                                           == "xlsx") == TRUE){
 
                                     #read_excel(lastClustersFile)
                                     st_as_sf(read_excel(lastClustersFile),
-                                             wkt = "geometry", crs = UTM_coord)
+                                             wkt = "geometry",
+                                             crs = UTM_coord)
 
                                     } else if (sum(strsplit(basename(lastClustersFile),
-                                                            split="\\.")[[1]][-1] == "shp") == TRUE){
+                                                            split="\\.")[[1]][-1]
+                                                   == "shp") == TRUE){
 
                                     read_sf(lastClustersFile)
 
@@ -772,33 +813,44 @@ if (is.null(datapoints)) {
                                     }
 
 
-                                    if((sum(c("ID", "ClusID", "sum", "prec_time","inout" , "ratio",
-                                              "date_min",  "date_max",  "State" ,    "Event",     "Done"  ,
-                                              "Worker", "Notes" ,"center_x","center_y","geometry") %in%
+                                    if((sum(c("ID", "ClusID", "sum", "prec_time",
+                                              "inout", "ratio", "date_min",
+                                              "date_max", "State" , "Event",
+                                              "Done", "Worker", "Notes",
+                                              "center_x", "center_y",
+                                              "geometry") %in%
                                             names(Clusters_sf_before)) ==  16) &
-                                       (st_crs(Clusters_sf) == st_crs(Clusters_sf_before))){
+                                       (st_crs(Clusters_sf) ==
+                                        st_crs(Clusters_sf_before))){
 
 
-                                        Clusters_sf_before <- dplyr::select(Clusters_sf_before, ID, ClusID,
-                                                                            sum, prec_time, inout , ratio,
-                                                                            date_min,  date_max, State,
-                                                                            Event, Done, Worker, Notes,
-                                                                            center_x, center_y, geometry)
+                                        Clusters_sf_before <-
+                                          dplyr::select(Clusters_sf_before, ID, ClusID,
+                                                         sum, prec_time, inout , ratio,
+                                                         date_min,  date_max, State,
+                                                         Event, Done, Worker, Notes,
+                                                         center_x, center_y, geometry)
 
 
-                                        Clusters_sf_before <- filter(Clusters_sf_before, ID == i)
+                                        Clusters_sf_before <- filter(Clusters_sf_before,
+                                                                     ID == i)
 
 
 
-                                        Clusters_sf <- st_join(Clusters_sf, Clusters_sf_before)
+                                        Clusters_sf <- st_join(Clusters_sf,
+                                                               Clusters_sf_before)
 
 
-                                        #adjust ClusID again: this is the file that will be used later again,
-                                        #so it has to be safed to your working directory: Clusters_"date"
+                                        #adjust ClusID again:
+                                        #this is the file that will be used later again,
+                                        #so it has to be safed to your working directory:
+                                        #Clusters_"date"
                                         Clusters_sf <- Clusters_sf %>%
-                                          dplyr::select(ClusID.y, ID.x, geometry, sum.x, sum.y,
-                                                        prec_time.x, inout.x, ratio.x, date_min.x,
-                                                        date_max.x, Event.y, Done.y, Worker.y,
+                                          dplyr::select(ClusID.y, ID.x, geometry,
+                                                        sum.x, sum.y, prec_time.x,
+                                                        inout.x, ratio.x, date_min.x,
+                                                        date_max.x, Event.y,
+                                                        Done.y, Worker.y,
                                                         Notes.y, State.y) %>%
                                           rename("ClusID" = "ClusID.y",
                                                  "ID" = "ID.x",
@@ -814,43 +866,61 @@ if (is.null(datapoints)) {
                                                  "Notes" = "Notes.y")
 
                                         #if clusters have points added in their state,
-                                        #this statement should be deleted again for the next analysis
-                                        #Clusters_sf$State[Clusters_sf$State == "Points added"] <- "New"
+                                        #this statement should be deleted again
+                                        #for the next analysis
+                                        #Clusters_sf$State[Clusters_sf$State ==
+                                        #"Points added"] <- "New"
 
 
-                                        Clusters_sf <- Clusters_sf[order(Clusters_sf$date_min), ]
+                                        Clusters_sf <-
+                                          Clusters_sf[order(Clusters_sf$date_min), ]
                                         #Clusters_sf$ClusID <- as.numeric(Clusters_sf$ClusID)
 
                                         #fill up the new clusters with IDs
                                         #Clusters_sf$ClusID[is.na(Clusters_sf$ClusID)] <-
-                                        #paste(i, (nrow(Clusters_sf_before) + 1):nrow(Clusters_sf), sep = "_")
+                                        #paste(i, (nrow(Clusters_sf_before) + 1):
+                                        #nrow(Clusters_sf),
+                                        #sep = "_")
 
 
                                         #extract the maximum number that has been given as a ClusterID
                                         ClusID_numbers <- c()
                                         for (y in 1:length(Clusters_sf_before$ClusID)) {
-                                          split_vector <- strsplit(Clusters_sf_before$ClusID[y], "_")[[1]]
-                                          number <- as.numeric(split_vector[length(split_vector)])
+                                          split_vector <-
+                                            strsplit(Clusters_sf_before$ClusID[y], "_")[[1]]
+                                          number <-
+                                            as.numeric(split_vector[length(split_vector)])
                                           ClusID_numbers[y] <- number
                                         }
 
-                                        #fill up the new clusters from the maximum Cluster ID until the end
+                                        #fill up the new clusters from the maximum
+                                        #Cluster ID until the end
                                         Clusters_sf$ClusID[is.na(Clusters_sf$ClusID)] <-
-                                          paste(i, (max(ClusID_numbers)+1):(max(ClusID_numbers)+
-                                                                              sum(is.na(Clusters_sf$ClusID))),
+                                          paste(i, (max(ClusID_numbers)+1):
+                                                  (max(ClusID_numbers)+
+                                                     sum(is.na(Clusters_sf$ClusID))),
                                                 sep = "_")
 
-                                        #because the st_join now only takes the CLusID of the largest overlapping polygon, some Clusters might have "disaapepeared" as they grew together
-                                        #to keep track of those we add them into the notes column
-                                        Clusters_within <- st_intersects(Clusters_sf, Clusters_sf_before)
+                                        #because the st_join now only takes the
+                                        #CLusID of the largest
+                                        #overlapping polygon, some Clusters
+                                        #might have "disaapepeared"
+                                        #as they grew together
+                                        #to keep track of those we add them
+                                        #into the notes column
+                                        Clusters_within <- st_intersects(Clusters_sf,
+                                                                         Clusters_sf_before)
 
                                         for (x in 1:length(Clusters_within)) {
                                           if (length(Clusters_within[[x]]) >1) {
-                                            Cluster_index <- as.character(Clusters_sf_before$ClusID[Clusters_within[[x]]])
+                                            Cluster_index <-
+                                          as.character(Clusters_sf_before$ClusID[Clusters_within[[x]]])
                                             Clusters_sf$Notes[x] <-
-                                              paste("Note! These clusters from the latest cluster
-                                                    analysis grew together: ", paste(Cluster_index,
-                                                                                     collapse = ", "), ".")
+                                              paste("Note! These clusters from the
+                                                    latest cluster analysis grew together: ",
+                                                    paste(Cluster_index,
+                                                          collapse = ", "),
+                                                    ".")
                                           }
                                         }
 
@@ -858,29 +928,39 @@ if (is.null(datapoints)) {
 
                                         # #combine numbers if clusters grew together
                                         #
-                                        # grewTogether <- aggregate(Clusters_sf[1], Clusters_sf[-1],
-                                        #                           FUN = function(X) paste(unique(X), collapse="/"))
+                                        # grewTogether <- aggregate(Clusters_sf[1],
+                                        #                           Clusters_sf[-1],
+                                        #         FUN = function(X) paste(unique(X),
+                                        #collapse="/"))
                                         # grewTogether <- st_drop_geometry(grewTogether)
                                         # Clusters_sf$ClusID <- grewTogether$ClusID
-                                        # Clusters_sf <- Clusters_sf[!duplicated(Clusters_sf$ClusID), ]
+                                        # Clusters_sf <-
+                                        # Clusters_sf[!duplicated(Clusters_sf$ClusID), ]
 
 
-                                        #"old new " clusters are marked done, new clusters are marked new.
+                                        #"old new " clusters are marked done, new
+                                        #clusters are marked new.
                                         #manually adjusted clusters stay the same
                                         if (oldclusters == TRUE) {
-                                              Clusters_sf$State[Clusters_sf$State == "New"] <- "Done"
+                                          Clusters_sf$State[Clusters_sf$State == "New"] <-
+                                            "Done"
                                         }
 
 
 
-                                        Clusters_sf$State[is.na(Clusters_sf$State)] <- "New"
+                                        Clusters_sf$State[is.na(Clusters_sf$State)] <-
+                                          "New"
 
 
-                                        #clusters that have grown since the last analysis. using geometry
-                                        #and not ClusID for the case, that the cluster ID changed
-                                        #after growing together with another cluster. Still havent
-                                        #checkd that case with real data, but might be possible.
-                                        Clusters_sf$State[Clusters_sf$sum.x != Clusters_sf$sum.y] <- "Points added"
+                                        #clusters that have grown since the last analysis.
+                                        #using geometry and not ClusID for the case,
+                                        #that the cluster ID changed
+                                        #after growing together with another
+                                        #cluster. Still havent checkd that
+                                        #case with real data, but might be possible.
+                                        Clusters_sf$State[Clusters_sf$sum.x !=
+                                                            Clusters_sf$sum.y] <-
+                                          "Points added"
 
                                         Clusters_sf <- Clusters_sf %>%
                                           dplyr::select(-c(sum.y)) %>%
@@ -897,18 +977,25 @@ if (is.null(datapoints)) {
                                       }
 
 
-                                  if (lastClustersFile != "No latest cluster file." & onlyClusters == TRUE) {
+                                  if (lastClustersFile != "No latest cluster file." &
+                                      onlyClusters == TRUE) {
 
-                                    #identify already exsiting clusters from the analysis before: upload data
+                                    #identify already exsiting clusters from the analysis before: 
+                                    #upload data
 
-                                    Clusters_sf_before <- if(sum(strsplit(basename(lastClustersFile),
-                                                                          split="\\.")[[1]][-1] == "xlsx") == TRUE){
+                                    Clusters_sf_before <-
+                                      if(sum(strsplit(basename(lastClustersFile),
+                                          split="\\.")[[1]][-1] == "xlsx") == TRUE){
+
 
                                       #read_excel(lastClustersFile)
-                                      st_as_sf(read_excel(lastClustersFile), wkt = "geometry", crs = UTM_coord)
+                                      st_as_sf(read_excel(lastClustersFile),
+                                               wkt = "geometry",
+                                               crs = UTM_coord)
 
-                                    } else if (sum(strsplit(basename(lastClustersFile),
-                                                            split="\\.")[[1]][-1] == "shp") == TRUE){
+                                    } else if (sum(strsplit(
+                                      basename(lastClustersFile),
+                                      split="\\.")[[1]][-1] == "shp") == TRUE){
 
                                       read_sf(lastClustersFile)
 
@@ -918,29 +1005,39 @@ if (is.null(datapoints)) {
                                     }
 
 
-                                    if((sum(c("ID", "ClusID", "sum", "prec_time","inout" ,
-                                              "ratio", "date_min",  "date_max",  "State" ,
-                                              "Event", "Done", "Worker", "Notes" ,"center_x",
-                                              "center_y","geometry") %in% names(Clusters_sf_before)) ==  16) &
-                                       (st_crs(Clusters_sf) == st_crs(Clusters_sf_before))){
+                                    if((sum(c("ID", "ClusID", "sum", "prec_time",
+                                              "inout", "ratio", "date_min",
+                                              "date_max",  "State" , "Event",
+                                              "Done", "Worker", "Notes" ,
+                                              "center_x", "center_y",
+                                              "geometry") %in%
+                                            names(Clusters_sf_before)) ==  16) &
+                                       (st_crs(Clusters_sf) ==
+                                        st_crs(Clusters_sf_before))){
 
 
-                                      Clusters_sf_before <- dplyr::select(Clusters_sf_before,
-                                                                          ClusID, sum, date_min,
-                                                                          date_max,  ID,prec_time,
-                                                                          geometry, inout , ratio,
-                                                                          State ,    Event,     Done  ,
-                                                                          Worker, Notes )
+                                      Clusters_sf_before <-
+                                        dplyr::select(Clusters_sf_before,
+                                                      ClusID, sum, date_min,
+                                                      date_max, ID, prec_time,
+                                                      geometry, inout, ratio,
+                                                      State, Event, Done,
+                                                      Worker, Notes)
 
-                                      Clusters_sf_before <- filter(Clusters_sf_before, ID == i)
+                                      Clusters_sf_before <- filter(Clusters_sf_before,
+                                                                   ID == i)
 
                                       if (oldclusters == TRUE) {
-                                        Clusters_sf_before$State[Clusters_sf_before$State == "New"] <- "Done"
+                                        Clusters_sf_before$State[Clusters_sf_before$State == "New"] <-
+                                          "Done"
                                       }
 
-                                      Clusters_sf <- Clusters_sf[(nrow(Clusters_sf_before)+1):(nrow(Clusters_sf)),]
+                                      Clusters_sf <-
+                                        Clusters_sf[(nrow(Clusters_sf_before)+1):
+                                                    (nrow(Clusters_sf)),]
 
-                                      Clusters_sf <- rbind(Clusters_sf_before, Clusters_sf)
+                                      Clusters_sf <- rbind(Clusters_sf_before,
+                                                           Clusters_sf)
 
 
                                     } else {
@@ -953,12 +1050,17 @@ if (is.null(datapoints)) {
 
                                   if(message == "Column names wrong."){
 
-                                      status = "The latest cluster file could not be loaded,
-                                      doesn't have the same coordinate system or does not
-                                      have the right column names. Did you change any column names?
-                                      Is the previous file definitely from the same data? Check again."
-                                      cluster_list <- list(Clusters_sf = NA, Join_sf = NA, data_sf_traj = NA,
-                                                           status = status, settings = settings)
+                                  status = "The latest cluster file could not be loaded,
+                                  doesn't have the same coordinate system or does not
+                                  have the right column names. Did you change any
+                                  column names?
+                                  Is the previous file definitely from the same data?
+                                  Check again."
+                                  cluster_list <- list(Clusters_sf = NA,
+                                                       Join_sf = NA,
+                                                       data_sf_traj = NA,
+                                                       status = status,
+                                                       settings = settings)
 
                                   } else {
 
@@ -970,42 +1072,58 @@ if (is.null(datapoints)) {
                                       Clusters_sf <- Clusters_sf %>%
                                         mutate(#date_min = as.character(date_min),
                                                #date_max = as.character(date_max),
-                                               center_x = round(st_coordinates(center)[,1], 2),
-                                               center_y = round(st_coordinates(center)[,2], 2)) %>%
-                                        dplyr::select(ID, ClusID, sum, prec_time, inout, ratio, date_min,
-                                                      date_max, State, Event, Done, Worker,
+                                               center_x =
+                                                 round(st_coordinates(center)[,1], 2),
+                                               center_y =
+                                                 round(st_coordinates(center)[,2], 2)) %>%
+                                        dplyr::select(ID, ClusID, sum, prec_time,
+                                                      inout, ratio, date_min,
+                                                      date_max, State, Event,
+                                                      Done, Worker,
                                                       Notes, center_x, center_y)
 
-                                      Clusters_sf_combined <- rbind(Clusters_sf_combined, Clusters_sf)
+                                      Clusters_sf_combined <-
+                                        rbind(Clusters_sf_combined, Clusters_sf)
 
 
 
                                       # identify the new ClusIDs and write point file for GPS
                                       Join_sf <- st_join(data_sf_ID,
-                                                         dplyr::select(Clusters_sf, ClusID))
+                                                         dplyr::select(Clusters_sf,
+                                                                       ClusID))
 
 
                                       #all points that do not fall within a cluster are Single Points
-                                      Join_sf$ClusID[is.na(Join_sf$ClusID)] <- paste(i, "SP", sep = "_")
+                                      Join_sf$ClusID[is.na(Join_sf$ClusID)] <-
+                                        paste(i, "SP", sep = "_")
 
 
-                                      #write a unique point name that will make it easier in the field
+                                      #write a unique point name that will make
+                                      #it easier in the field
                                       #to understand the pattern
                                       Join_sf <- Join_sf %>%
-                                        separate(LMT_Date, sep = "-", into = c("year", "month", "day")) %>%
-                                        separate(LMT_Time, sep = ":", into = c("hour", "minute", "second")) %>%
-                                        unite(ident, ClusID, month, day, hour, remove = FALSE,  sep = "_") %>%
+                                        separate(LMT_Date, sep = "-",
+                                                 into = c("year", "month",
+                                                          "day")) %>%
+                                        separate(LMT_Time, sep = ":",
+                                                 into = c("hour", "minute",
+                                                          "second")) %>%
+                                        unite(ident, ClusID, month, day, hour,
+                                              remove = FALSE,  sep = "_") %>%
                                         mutate(x = round(st_coordinates(Join_sf)[,1], 2),
                                                y = round(st_coordinates(Join_sf)[,2], 2))
 
-                                      Join_sf_combined <- rbind(Join_sf_combined, Join_sf)
+                                      Join_sf_combined <- rbind(Join_sf_combined,
+                                                                Join_sf)
 
 
 
                                     status <- "Done!"
                                     cluster_list <- list(Clusters_sf = Clusters_sf_combined,
-                                                         Join_sf = Join_sf_combined, data_sf_traj = data_sf_traj,
-                                                         status = status, settings = settings)
+                                                         Join_sf = Join_sf_combined,
+                                                         data_sf_traj = data_sf_traj,
+                                                         status = status,
+                                                         settings = settings)
 
               }
             }
