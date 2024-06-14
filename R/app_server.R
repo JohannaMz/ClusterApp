@@ -600,7 +600,7 @@ observeEvent(input$downloadClusters, {
         init <- tm_shape(Clusters_sf_table$data[filter,]) +
           tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
                                                                                   "New" = "red",
-                                                                                  "Points added" = "blue",
+                                                                                  "GPS locations added" = "blue",
                                                                                   "Not done" = "orange"),
                   popup.vars = c("Cluster ID" = "ClusID",
                                  "Individual ID" = "ID",
@@ -641,7 +641,7 @@ observeEvent(input$downloadClusters, {
         init <- tm_shape(Clusters_sf_table$data[filter,]) +
           tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
                                                                                   "New" = "red",
-                                                                                  "Points added" = "blue",
+                                                                                  "GPS locations added" = "blue",
                                                                                   "Not done" = "orange"),
                   popup.vars = c("Cluster ID" = "ClusID",
                                  "Individual ID" = "ID",
@@ -773,7 +773,7 @@ observeEvent(input$downloadClusters, {
 
     if (".shp" %in% input$downloadPoints_buttons) {
 
-      fileName_points <- paste(dirname(file_path()), "/Points_", input$indID, "_", thedate, ".shp", sep = "")
+      fileName_points <- paste(dirname(file_path()), "/GPSlocations_", input$indID, "_", thedate, ".shp", sep = "")
       st_write(Join_sf_table$data, fileName_points, append = FALSE)
 
     }
@@ -792,7 +792,7 @@ observeEvent(input$downloadClusters, {
         cbind(geometry)
 
 
-      fileName_points <- paste(dirname(file_path()), "/Points_", input$indID, "_", thedate, ".xlsx", sep = "")
+      fileName_points <- paste(dirname(file_path()), "/GPSlocations_", input$indID, "_", thedate, ".xlsx", sep = "")
       write.xlsx(Points_csv, fileName_points)
 
     }
@@ -803,7 +803,7 @@ observeEvent(input$downloadClusters, {
       shinyalert(title = "Warning!",
                  text = "If filtering options were applied in the table, only the filtered data frame will be downloaded as the .gpx file.",
                  type = "warning")
-      fileName_points <- paste(dirname(file_path()), "/GPXPoints_", input$indID, "_", thedate, ".gpx", sep = "")
+      fileName_points <- paste(dirname(file_path()), "/GPXlocations_", input$indID, "_", thedate, ".gpx", sep = "")
 
       ident <- NULL
 

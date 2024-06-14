@@ -152,7 +152,8 @@ app_ui <- function(request) {
                                                  tags$i(
                                                    class = "glyphicon glyphicon-info-sign",
                                                    style = "color:#0072b2;",
-                                                   title = "The number of locations within a polygon define when it is called in cluster. Next to the buffer size, this amount depends on your question. The higher the number of GPS locations within a polygon, the less GPS location clusters will develop."
+                                                   title = "The number of locations within a polygon define when it is called in cluster.
+                                                   Next to the buffer size, this amount depends on your question. The higher the number of GPS locations within a polygon, the less GPS location clusters will develop."
                                                  )), value = NA),
 
                           shiny::dateRangeInput("intensivePeriod", label = tags$span("Define the study period:",
@@ -165,7 +166,7 @@ app_ui <- function(request) {
                                                                           tags$i(
                                                                             class = "glyphicon glyphicon-info-sign",
                                                                             style = "color:#0072b2;",
-                                                                            title = "For some analysis you might want to add a time frame around the study periods of a number of days. Points within this time frame are still taken into account for GPS location clusters, if at least one point within was also during the study period."
+                                                                            title = "For some analysis you might want to add a time frame around the study periods of a number of days. GPS locations within this time frame are still taken into account for GPS location clusters, if at least one point within was also during the study period."
                                                                           )), value = 0)
                    ),
                    column(4, offset = 1,
@@ -186,7 +187,7 @@ app_ui <- function(request) {
                                                  )),
                                        value = NA),
                           br(), br(),
-                          h6("Should the columns related to the time spent and the number of points within/outside of the cluster be displayed in the cluster table?"),
+                          h6("Should the columns related to the time spent and the number of GPS locations within/outside of the cluster be displayed in the cluster table?"),
                           checkboxInput("extraColumns", label = "", value = FALSE),
                           br(),
                           h6("Should only GPS location clusters with consecutive GPS locations be developed?"),
@@ -276,7 +277,7 @@ app_ui <- function(request) {
                                                                   tags$i(
                                                                     class = "glyphicon glyphicon-info-sign",
                                                                     style = "color:#0072b2;",
-                                                                    title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the GPS location clusters and written cluster IDs, as well as GPS locations and the track for the individuals. The points increase in size the more recent the GPS locations have been made."
+                                                                    title = "Plotting the data, a marker shows the last position of the animal(s). You have the option to additionally select layers to display the events of the GPS location clusters and written cluster IDs, as well as GPS locations and the track for the individuals. The GPS locations increase in size the more recent the GPS locations have been made."
                                                                   )), class = "btn-success", width = '100%'),
                               leafletOutput('clusterMap'),
                               actionButton("downloadMap", label = "Download interactive map as html."))),

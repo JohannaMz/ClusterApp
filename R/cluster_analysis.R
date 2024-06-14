@@ -439,7 +439,7 @@ cluster_analysis <- function(
                       Clusters_sf$State <-  factor(NA,
                                               levels = c("New",
                                                          "Done",
-                                                         "Points added",
+                                                         "GPS locations added",
                                                          "Not done"))
                       Clusters_sf$State <- "New"
                       Clusters_sf$Event <- as.character(NA)
@@ -573,7 +573,8 @@ cluster_analysis <- function(
                                                     latest cluster analysis grew together: ",
                                                      paste(Cluster_index,
                                                            collapse = ", "),
-                                                     ".")) == FALSE){
+                                                     ".")) == FALSE|
+                                             is.na(Clusters_sf$Notes[x])){
                                                Clusters_sf$Notes[x] <-
                                               paste("Note! These clusters from the
                                                     latest cluster analysis grew together: ",
@@ -606,14 +607,14 @@ cluster_analysis <- function(
 
                                         Clusters_sf$points[Clusters_sf$sum.x !=
                                                             Clusters_sf$sum.y] <-
-                                          "Points added!"
+                                          "GPS locations added!"
 
 
 
                                         for (j in 1:nrow(Clusters_sf)) {
 
                                           if(stringr::str_detect(Clusters_sf$Notes[j],
-                                                                   "Points added!") != TRUE|
+                                                                   "GPS locations added!") != TRUE|
                                             is.na(Clusters_sf$Notes[j])){
                                             Clusters_sf[j,] <- tidyr::unite(Clusters_sf[j,],
                                                                               "Notes",
