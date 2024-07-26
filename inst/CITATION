@@ -1,0 +1,11 @@
+bibentry(
+  bibtype  = "Article",
+  title    = "ClusterApp": A Shiny R application to guide cluster studies based on GPS data,
+  author   = "Johanna Märtz and Aimee Tallian and Camilla Wikenros and Rick Heeres",
+  journal  = "Ecology and Evolution",
+  year     = 2024,
+  volume   = 14,
+  number   = e11695,
+  doi      = "https://doi.org/10.1002/ece3.11695",
+  textVersion = "Märtz, J., Tallian, A., Wikenros, C., &Heeres, R. W. (2024). “ClusterApp”: A Shiny R application toguide cluster studies based on GPS data. Ecology andEvolution, 14, e11695. https://doi.org/10.1002/ece3.11695"
+)

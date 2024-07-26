@@ -58,12 +58,10 @@ browseVignettes("ClusterApp")
 
 ## Disclaimer
 
-This is an early release and functionalities might change. This package
-is currently pending a peer-review and detailed description will be
-available after it is published. I take no responsibility for the proper
-functioning of this package. If you have any questions, concerns or you
-would simply like to apply it to your data, I encourage to contact me
-directly.
+This is an early release and functionalities might change. I take no
+responsibility for the proper functioning of this package. If you have
+any questions, concerns or you would simply like to apply it to your
+data, I encourage to contact me directly (<johanna@maertz.eu>).
 
 ## Getting help
 
@@ -75,22 +73,22 @@ questions and suggestions, contact Johanna Märtz (<johanna@maertz.eu>).
 
 ``` r
 citation("ClusterApp")
-#> Warning in citation("ClusterApp"): could not determine year for 'ClusterApp'
-#> from package DESCRIPTION file
 #> To cite package 'ClusterApp' in publications use:
 #> 
-#>   Märtz J, Tallian A, Wikenros C, Heeres R (????). _ClusterApp: A Shiny
-#>   R application to guide and streamline cluster studies based on GPS
-#>   data_. R package version 0.0.0.9000,
-#>   <https://github.com/JohannaMz/ClusterApp>.
+#>   Märtz, J., Tallian, A., Wikenros, C., &Heeres, R. W. (2024).
+#>   “ClusterApp”: A Shiny R application toguide cluster studies based on
+#>   GPS data. Ecology andEvolution, 14, e11695.
+#>   https://doi.org/10.1002/ece3.11695
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
-#>   @Manual{,
-#>     title = {ClusterApp: A Shiny R application to guide and streamline cluster studies based
-#> on GPS data},
+#>   @Article{,
+#>     title = {'ClusterApp': A Shiny R application to guide cluster studies based on GPS data},
 #>     author = {Johanna Märtz and Aimee Tallian and Camilla Wikenros and Rick Heeres},
-#>     note = {R package version 0.0.0.9000},
-#>     url = {https://github.com/JohannaMz/ClusterApp},
+#>     journal = {Ecology and Evolution},
+#>     year = {2024},
+#>     volume = {14},
+#>     number = {e11695},
+#>     doi = {https://doi.org/10.1002/ece3.11695},
 #>   }
 ```
