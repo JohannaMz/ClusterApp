@@ -44,7 +44,6 @@ remove.package("ClusterApp")#if the package is loaded before
 devtools::install_github("JohannaMz/ClusterApp", build_vignettes = TRUE)
 ```
 
-
 The app can then be started by the command:
 
 ``` r

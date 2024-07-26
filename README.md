@@ -75,9 +75,9 @@ questions and suggestions, contact Johanna Märtz (<johanna@maertz.eu>).
 citation("ClusterApp")
 #> To cite package 'ClusterApp' in publications use:
 #> 
-#>   Märtz, J., Tallian, A., Wikenros, C., &Heeres, R. W. (2024).
-#>   “ClusterApp”: A Shiny R application toguide cluster studies based on
-#>   GPS data. Ecology andEvolution, 14, e11695.
+#>   Märtz, J., Tallian, A., Wikenros, C., & Heeres, R. W. (2024).
+#>   “ClusterApp”: A Shiny R application to guide cluster studies based on
+#>   GPS data. Ecology and Evolution, 14, e11695.
 #>   https://doi.org/10.1002/ece3.11695
 #> 
 #> A BibTeX entry for LaTeX users is
