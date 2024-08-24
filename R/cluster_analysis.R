@@ -197,8 +197,9 @@ cluster_analysis <- function(
            colnames(datapoints) <- c("ID", "LMT_Date", "East", "North")
 
 
-           datapoints <- filter(datapoints, !is.na(East) &
-                                  !is.na(North) & East != 0 & North != 0)
+           datapoints <- datapoints %>%
+             dplyr::filter(!is.na(East) &
+                    !is.na(North) & East != 0 & North != 0)
 
         }
 
@@ -306,16 +307,29 @@ cluster_analysis <- function(
             data_sf <- sf::st_as_sf(datapoints,
                                   coords = c("North", "East"),
                                   crs = st_crs(EPSGcode))
-            UTM_coord <- as.numeric(paste0("258", UTM_zone))
 
-            data_sf <- sf::st_transform(data_sf,
-                                crs = st_crs(UTM_coord))
+            numbers <- gregexpr("[0-9]+", UTM_zone)
+            result <- regmatches(UTM_zone, numbers)
+            numeric_result <- as.numeric(unlist(result))
+
             #change WGS84 to UTM to have meters
+            if (grepl("N", UTM_zone)){
+              UTM_coord <- as.numeric(paste0("326", numeric_result))
+              data_sf <- sf::st_transform(data_sf,
+                                          crs = st_crs(UTM_coord))
+            } else if (grepl("S", UTM_zone)){
+              UTM_coord <- as.numeric(paste0("327", numeric_result))
+              data_sf <- sf::st_transform(data_sf,
+                                          crs = st_crs(UTM_coord))
+            } else {
+              data_sf <- NULL
+            }
 
-              if (sum(st_is_empty(data_sf)) > 0) {
+            if (sum(st_is_empty(data_sf)) > 0|is.null(data_sf)) {
 
                   status <- "Something is wrong with your coordinates.
-                  Transformation leaves the geometry column empty."
+                  Transformation leaves the geometry column empty. Check your coordinates and
+                  check whether you added a UTM Zone and hemisphere (N or S)"
                   cluster_list <- list(Clusters_sf = NA, Join_sf = NA,
                                        data_sf_traj = NA,
                                        status = status, settings = settings)
@@ -398,7 +412,8 @@ cluster_analysis <- function(
 
 
                       #identify points inside to outside cluster
-                      for (j in 1:nrow(Clusters_sf)) {
+                      if (nrow(Clusters_sf) != 0) {
+                        for (j in 1:nrow(Clusters_sf)) {
 
                           Join_sf_filter <- filter(Join_sf,
                                         ts >= Clusters_sf$date_min[j] &
@@ -425,17 +440,15 @@ cluster_analysis <- function(
 
                         }
 
-
                         #so that now the new cluster ID can be
                         #assigned with 1 being the oldest
-                      if(nrow(Clusters_sf) != 0){
-                              Clusters_sf$ClusID <- paste(i,
+
+                        Clusters_sf$ClusID <- paste(i,
                                                   seq(1:nrow(Clusters_sf)),
                                                   sep = "_")
+                                            Clusters_sf <- st_as_sf(Clusters_sf)
                       }
 
-
-                      Clusters_sf <- st_as_sf(Clusters_sf)
                       Clusters_sf$State <-  factor(NA,
                                               levels = c("New",
                                                          "Done",
@@ -446,6 +459,8 @@ cluster_analysis <- function(
                       Clusters_sf$Done <- as.character(NA)
                       Clusters_sf$Worker <- as.character(NA)
                       Clusters_sf$Notes <- as.character(NA)
+
+
 
                       if (lastClustersFile != "No latest cluster file." &
                                       onlyClusters == FALSE) {

@@ -117,7 +117,7 @@ observe({
 
   dateFormat <- reactive({input$dateFormat})
   EPSGcode <- reactive({as.numeric(input$EPSG)})
-  UTM_zone <- reactive({as.numeric(input$UTM_zone)})
+  UTM_zone <- reactive({input$UTM_zone})
 
 
   minute_diff_summary <- reactive({
@@ -617,13 +617,23 @@ observeEvent(input$downloadClusters, {
           tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
 
         if (length(s)>0) {
-          UTM_zone <-  as.numeric(paste0("258", UTM_zone()))
-          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs = UTM_zone)
+          numbers <- gregexpr("[0-9]+", UTM_zone())
+          result <- regmatches(UTM_zone(), numbers)
+          numeric_result <- as.numeric(unlist(result))
+
+          if (grepl("N", UTM_zone())){
+            UTM_coord <- as.numeric(paste0("326", numeric_result))
+          } else if (grepl("S", UTM_zone())){
+            UTM_coord <- as.numeric(paste0("327", numeric_result))
+          }
+
+          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs = UTM_coord)
           init + tm_shape(selection) + tm_dots(size = 4, alpha = 0.5, col = "yellow")
+
         } else init
 
 
-      } else{
+      } else {
 
         ts_num <- NULL
 
@@ -637,54 +647,80 @@ observeEvent(input$downloadClusters, {
           arrange(desc(ts)) %>%
           slice(1)
 
+        if (nrow(Clusters_sf_table$data) == 0) {
+          init <- tm_shape(cluster_list$Join_sf) +
+            tm_dots(group = "GPS locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
+                                                                                                                            "Time stamp" = "ts",
+                                                                                                                            "ID" = "ID",
+                                                                                                                            "Cluster ID" = "ClusID"),
+                    palette = "Dark2",
+                    legend.show = FALSE)+
+            tm_shape(last_position, name = "Last position") +
+            tm_markers( popup.vars = c("Point ID" = "ident",
+                                       "Time stamp" = "ts",
+                                       "ID" = "ID")) +
 
-        init <- tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
-                                                                                  "New" = "red",
-                                                                                  "GPS locations added" = "blue",
-                                                                                  "Not done" = "orange"),
-                  popup.vars = c("Cluster ID" = "ClusID",
-                                 "Individual ID" = "ID",
-                                 "Number of GPS locations" = "sum",
-                                 "First date visited" = "date_min",
-                                 "Last date visited" = "date_max",
-                                 "State" = "State")) +
+            tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Dark2") +
 
-          tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "Events for clusters", col = "Event", colorNA = NULL)  +
-
-          tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
-
-          tm_shape(cluster_list$Join_sf) +
-          tm_dots(group = "GPS locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
-                                                                                                                       "Time stamp" = "ts",
-                                                                                                                       "ID" = "ID",
-                                                                                                                       "Cluster ID" = "ClusID"),
-                  palette = "Dark2",
-                  legend.show = FALSE)+
-          tm_shape(last_position, name = "Last position") +
-          tm_markers( popup.vars = c("Point ID" = "ident",
-                                                             "Time stamp" = "ts",
-                                                             "ID" = "ID")) +
-
-          tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Dark2") +
-
-          tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
+            tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
 
 
-        if (length(s)>0) {
-          UTM_zone <-  as.numeric(paste0("258", UTM_zone()))
-          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs =  UTM_zone)
-          init + tm_shape(selection) + tm_dots(size = 4, alpha = 0.5, col = "yellow")
-        } else init
+        } else {
+          init <- tm_shape(Clusters_sf_table$data[filter,]) +
+            tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
+                                                                                    "New" = "red",
+                                                                                    "GPS locations added" = "blue",
+                                                                                    "Not done" = "orange"),
+                    popup.vars = c("Cluster ID" = "ClusID",
+                                   "Individual ID" = "ID",
+                                   "Number of GPS locations" = "sum",
+                                   "First date visited" = "date_min",
+                                   "Last date visited" = "date_max",
+                                   "State" = "State")) +
 
+            tm_shape(Clusters_sf_table$data[filter,]) +
+            tm_fill(group = "Events for clusters", col = "Event", colorNA = NULL)  +
+
+            tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
+
+            tm_shape(cluster_list$Join_sf) +
+            tm_dots(group = "GPS locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
+                                                                                                                         "Time stamp" = "ts",
+                                                                                                                         "ID" = "ID",
+                                                                                                                         "Cluster ID" = "ClusID"),
+                    palette = "Dark2",
+                    legend.show = FALSE)+
+            tm_shape(last_position, name = "Last position") +
+            tm_markers( popup.vars = c("Point ID" = "ident",
+                                                               "Time stamp" = "ts",
+                                                               "ID" = "ID")) +
+
+            tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Dark2") +
+
+            tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
+
+
+          if (length(s)>0) {
+            numbers <- gregexpr("[0-9]+", UTM_zone())
+            result <- regmatches(UTM_zone(), numbers)
+            numeric_result <- as.numeric(unlist(result))
+
+            if (grepl("N", UTM_zone())){
+              UTM_coord <- as.numeric(paste0("326", numeric_result))
+            } else if (grepl("S", UTM_zone())){
+              UTM_coord <- as.numeric(paste0("327", numeric_result))
+            }
+
+            selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs = UTM_coord)
+            init + tm_shape(selection) + tm_dots(size = 4, alpha = 0.5, col = "yellow")
+          } else init
+
+        }
       }
-
-
-
-
-
     })
+
+
+
 
   observeEvent(input$downloadMap, {
 

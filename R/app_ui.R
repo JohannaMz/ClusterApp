@@ -112,7 +112,7 @@ app_ui <- function(request) {
                                                            title = "UTM coordinate system is separated into zones over the world. Please find the appropriate zone in which your data lies. Be aware that this should be the same zone as a previous cluster shape, that might have been downloaded before."
                                                          ),
                                                          tags$a(href="https://www.xmswiki.com/wiki/UTM_Coordinate_System", "Find the zones here (connection to browser necessary).", target="_blank")),
-                                               choices = 1:60)
+                                               choices = c(paste0(1:60, "N"), paste0(1:60, "S")))
                                      )
                               ),
                    ),
@@ -308,7 +308,7 @@ app_ui <- function(request) {
 
       tags$div(
         style = "text-align: center; margin-top: 20px;",
-        HTML("This app is developed by <a href='mailto:johanna@maertz.eu'>Johanna Maertz</a>. Any questions, feedback, or ideas to improve it, please feel free to reach out (last updated 12.06.2024).")
+        HTML("This app is developed by <a href='mailto:johanna@maertz.eu'>Johanna Maertz</a>. Any questions, feedback, or ideas to improve it, please feel free to reach out (last updated 24.08.2024).")
       )
     )
   )
