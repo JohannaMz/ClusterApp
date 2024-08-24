@@ -1,0 +1,25 @@
+---
+title: "CHANGELOG"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ClusterApp}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Version 1.1
+
+## Added
+- The hemisphere has to be added within the zone input
+
+## Fixed
+Issue #3: 
+- All UTM zones can be added as output coordinate system 
+- output can be without any clusters
