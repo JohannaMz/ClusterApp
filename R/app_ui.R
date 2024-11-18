@@ -11,6 +11,11 @@
 #'
 #'
 #'
+#
+
+# Disable Bootstrap 5 and revert to Bootstrap 3
+shiny::shinyOptions(bootstraplib = FALSE)
+
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
