@@ -31,7 +31,7 @@ For re-installations of new versions make sure to remove old versions
 and restart the session:
 
 ``` r
-remove.package("ClusterApp")#if the package is loaded before
+remove.packages("ClusterApp")#if the package is loaded before
 .rs.restartR() #restart R session to avoid any problms
 
 devtools::install_github("JohannaMz/ClusterApp", build_vignettes = TRUE)
