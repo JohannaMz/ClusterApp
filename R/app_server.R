@@ -7,13 +7,13 @@
 #' @import shinyFiles
 #' @import shinyWidgets
 #' @importFrom shinyalert shinyalert
-#' @importFrom dplyr filter mutate group_by arrange desc select slice rename lag
+#' @importFrom dplyr filter mutate group_by arrange desc select slice rename lag case_when
 #' @importFrom DT datatable renderDataTable
-#' @importFrom leaflet hideGroup renderLeaflet
+#' @importFrom leaflet hideGroup renderLeaflet leaflet addProviderTiles addPolygons addLabelOnlyMarkers addLayersControl layersControlOptions labelOptions addLegend colorFactor addPolylines addMarkers addCircleMarkers
 #' @importFrom foreign read.dbf
 #' @importFrom readr parse_number read_delim
-#' @importFrom sf read_sf st_as_sf st_cast st_crs st_drop_geometry st_transform st_write st_coordinates st_as_text st_simplify
-#' @importFrom tmap tm_dots tm_fill tm_lines tm_markers tm_shape tm_text tmap_leaflet tmap_options tmap_save
+#' @importFrom sf read_sf st_as_sf st_cast st_crs st_drop_geometry st_geometry_type st_transform st_write st_coordinates st_as_text st_simplify
+#' @importFrom htmlwidgets saveWidget
 #' @importFrom utils str write.csv
 #' @importFrom readxl read_excel
 #' @importFrom openxlsx write.xlsx
@@ -587,34 +587,300 @@ observeEvent(input$downloadClusters, {
 
 
   #plot the clusters table
+map <- eventReactive(
+  input$go, {
+    isolate(Clusters_sf_table$data)
 
-  map <- eventReactive(
-    input$go, {
-      isolate(Clusters_sf_table$data)
+    s <- input$clustersTable_rows_selected
+    filter <- input$clustersTable_rows_all
 
-      s <- input$clustersTable_rows_selected
-      filter <- input$clustersTable_rows_all
+    Clusters_sf_table_data <- Clusters_sf_table$data[filter,] %>%
+      st_transform(4326)
+    # Clusters_sf_table_data <- cluster_list$Clusters_sf %>%
+    #   st_transform(4326)
+
+    state_pal <- colorFactor(palette = c("green", "red", "blue", "orange"),
+                             domain = c("Done", "New", "GPS locations added", "Not done"))
+
+    event_pal <- colorFactor(palette = RColorBrewer::brewer.pal(n = max(3, length(unique(na.omit(Clusters_sf_table_data$Event)))), "Set3"),
+                             domain = unique(Clusters_sf_table_data$Event),  na.color = "transparent")
+
+    if (length(latestfile_path()>0)) {
+      init <- leaflet(Clusters_sf_table_data) %>%
+        addProviderTiles(leaflet::providers$Esri.WorldTopoMap, group = "TopoMap") %>%
+        addProviderTiles(leaflet::providers$Esri.WorldImagery, group = "Satellite") %>%
+
+        # Add polygons colored by "State"
+        addPolygons(fillColor = ~state_pal(State),
+                    color = ~state_pal(State),
+                    fillOpacity = 0.6,
+                    opacity = 1,
+                    weight = 6,
+                    group = "State of clusters",
+                    popup = ~paste0("<b>Cluster ID:</b> ", ClusID, "<br>",
+                                    "<b>Individual ID:</b> ", ID, "<br>",
+                                    "<b>Number of GPS locations:</b> ", sum, "<br>",
+                                    "<b>First date visited:</b> ", date_min, "<br>",
+                                    "<b>Last date visited:</b> ", date_max, "<br>",
+                                    "<b>State:</b> ", State)
+        ) %>%
+
+        addLegend(
+          position = "topleft",
+          pal = state_pal,
+          values = c("Done", "New", "GPS locations added", "Not done"),
+          title = "State of Clusters",
+          opacity = 1,
+          group = "State of clusters"
+        ) %>%
+
+        # Add polygons colored by "Event"
+        addPolygons(data = Clusters_sf_table_data,
+                    fillColor = ~event_pal(Event),
+                    fillOpacity = 1,
+                    color = "black",
+                    weight = 1,
+                    group = "Events for clusters") %>%
+
+        #Add cluster ID labels
+        addLabelOnlyMarkers(data = Clusters_sf_table_data %>%
+                              st_centroid(),
+                            label = ~ClusID,
+                            labelOptions = labelOptions(noHide = TRUE, direction = "center", textOnly = TRUE),
+                            group = "Cluster IDs") %>%
 
 
-      if (length(latestfile_path()>0)) {
-        init <- tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
-                                                                                  "New" = "red",
-                                                                                  "GPS locations added" = "blue",
-                                                                                  "Not done" = "orange"),
-                  popup.vars = c("Cluster ID" = "ClusID",
-                                 "Individual ID" = "ID",
-                                 "Number of GPS locations" = "sum",
-                                 "First date visited" = "date_min",
-                                 "Last date visited" = "date_max",
-                                 "State" = "State")) +
 
-          tm_shape(Clusters_sf_table$data[filter,]) +
-          tm_fill(group = "Events for clusters", col = "Event", colorNA = NULL) +
+        addLegend(
+          position = "topleft",
+          pal = event_pal,
+          values = Clusters_sf_table_data$Event,
+          title = "Event for Clusters",
+          opacity = 1,
+          group = "Events for clusters"
+        ) %>%
 
-          tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
+        # Layer control
+        addLayersControl(
+          baseGroups = c("TopoMap", "Satellite"),
+          overlayGroups = c("State of clusters", "Events for clusters", "Cluster IDs"),
+          options = layersControlOptions(collapsed = FALSE)
+        )
 
-          tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
+      if (length(s)>0) {
+        numbers <- gregexpr("[0-9]+", UTM_zone())
+        result <- regmatches(UTM_zone(), numbers)
+        numeric_result <- as.numeric(unlist(result))
+
+        if (grepl("N", UTM_zone())){
+          UTM_coord <- as.numeric(paste0("326", numeric_result))
+        } else if (grepl("S", UTM_zone())){
+          UTM_coord <- as.numeric(paste0("327", numeric_result))
+        }
+
+        selection <- Clusters_sf_table$data[s,] %>%
+          st_as_sf(coords = c("center_x", "center_y"), crs = UTM_coord) %>%
+          st_transform(4326)
+
+        init %>%
+          addPolygons(
+            data = selection,
+            fillColor = "yellow",
+            color = "yellow",
+            weight = 50,
+            opacity = 1,
+            group = "Highlighter"
+          ) %>%
+          addLayersControl(
+            baseGroups = c("TopoMap", "Satellite"),
+            overlayGroups = c("State of clusters", "Events for clusters", "Cluster IDs", "Highlighter"),
+            options = layersControlOptions(collapsed = FALSE))
+
+
+
+      } else init
+
+
+    } else {
+      ts_num <- NULL
+
+      cluster_list <- cluster_list()
+
+      Join_sf_table_data <- cluster_list$Join_sf %>%
+        group_by(ID) %>%
+        mutate(ts_num = as.numeric(difftime(as.POSIXct(ts), min(cluster_list$Join_sf$ts), units = "days")),
+               num = ts_num/max(ts_num)) %>%
+        st_transform(4326)
+
+      traj_sf_data <- cluster_list$data_sf_traj %>%
+        st_transform(4326) %>%
+        filter(st_geometry_type(cluster_list$data_sf_traj) == "LINESTRING")
+
+      id_pal <- colorFactor(palette = RColorBrewer::brewer.pal(n = max(3,
+                                                                       length(unique(na.omit(Join_sf_table_data$ID)))), "Paired"),
+                               domain = unique(Join_sf_table_data$ID))
+
+
+      last_position <- cluster_list$Join_sf %>%
+        group_by(ID) %>%
+        arrange(desc(ts)) %>%
+        slice(1) %>%
+        st_transform(4326)
+
+      if (nrow(Clusters_sf_table$data) == 0) {
+        init <- leaflet(Join_sf_table_data) %>%
+          addProviderTiles(leaflet::providers$Esri.WorldTopoMap, group = "TopoMap") %>%
+          addProviderTiles(leaflet::providers$Esri.WorldImagery, group = "Satellite") %>%
+
+          addCircleMarkers(
+            data = Join_sf_table_data,
+            radius = ~num*5,
+            color = ~id_pal(ID),
+            stroke = FALSE,
+            fillOpacity = 0.7,
+            popup = ~paste("<b>Point ID:</b>", ident,
+                           "<br><b>Time stamp:</b>", ts,
+                           "<br><b>ID:</b>", ID,
+                           "<br><b>Cluster ID:</b>", ClusID),
+            group = "GPS locations"
+          ) %>%
+
+          addLegend(
+            position = "topleft",
+            pal = id_pal,
+            values = Join_sf_table_data$ID,
+            title = "Individual IDs",
+            opacity = 1
+          ) %>%
+
+          addMarkers(
+            data = last_position,
+            popup = ~paste("<b>Point ID:</b>", ident,
+                           "<br><b>Time stamp:</b>", ts,
+                           "<br><b>ID:</b>", ID),
+            group = "Last position"
+          ) %>%
+          addPolylines(
+            data = traj_sf_data,
+            color = ~id_pal(ID),  # Color by 'ID'
+            weight = 2,
+            opacity = 0.7,
+            group = "Track"
+          ) %>%
+
+          # Layer control
+          addLayersControl(
+            baseGroups = c("TopoMap", "Satellite"),
+            overlayGroups = c("GPS locations", "Last position", "Track"),
+            options = layersControlOptions(collapsed = FALSE)
+          )
+
+      } else {
+
+        init <- leaflet(Clusters_sf_table_data) %>%
+          addProviderTiles(leaflet::providers$Esri.WorldTopoMap, group = "TopoMap") %>%
+          addProviderTiles(leaflet::providers$Esri.WorldImagery, group = "Satellite") %>%
+
+          addCircleMarkers(
+            data = Join_sf_table_data,
+            radius = ~num*5,
+            color = ~id_pal(ID),
+            stroke = FALSE,
+            fillOpacity = 1,
+            popup = ~paste("<b>Point ID:</b>", ident,
+                           "<br><b>Time stamp:</b>", ts,
+                           "<br><b>ID:</b>", ID,
+                           "<br><b>Cluster ID:</b>", ClusID),
+            group = "GPS locations"
+          ) %>%
+
+          addLegend(
+            position = "topleft",
+            pal = id_pal,
+            values = Join_sf_table_data$ID,
+            title = "Individual IDs",
+            opacity = 1
+          ) %>%
+
+          addMarkers(
+            data = last_position,
+            popup = ~paste("<b>Point ID:</b>", ident,
+                           "<br><b>Time stamp:</b>", ts,
+                           "<br><b>ID:</b>", ID),
+            group = "Last position"
+          ) %>%
+
+          addPolylines(
+            data = traj_sf_data,
+            color = ~id_pal(ID),  # Color by 'ID'
+            weight = 2,
+            opacity = 0.7,
+            group = "Track"
+          ) %>%
+
+          # Add polygons colored by "State"
+          addPolygons(fillColor = ~state_pal(State),
+                      color = ~state_pal(State),
+                      fillOpacity = 0.6,
+                      opacity = 1,
+                      weight = 6,
+                      group = "State of clusters",
+                      popup = ~paste0("<b>Cluster ID:</b> ", ClusID, "<br>",
+                                      "<b>Individual ID:</b> ", ID, "<br>",
+                                      "<b>Number of GPS locations:</b> ", sum, "<br>",
+                                      "<b>First date visited:</b> ", date_min, "<br>",
+                                      "<b>Last date visited:</b> ", date_max, "<br>",
+                                      "<b>State:</b> ", State)
+          ) %>%
+
+          addLegend(
+            position = "topleft",
+            pal = state_pal,
+            values = c("Done", "New", "GPS locations added", "Not done"),
+            title = "State of Clusters",
+            opacity = 1,
+            group = "State of clusters"
+          ) %>%
+
+          # Add polygons colored by "Event"
+          addPolygons(data = Clusters_sf_table_data,
+                      fillColor = ~event_pal(Event),
+                      fillOpacity = 1,
+                      color = "black",
+                      weight = 1,
+                      group = "Events for clusters") %>%
+
+          #Add cluster ID labels
+          addLabelOnlyMarkers(data = Clusters_sf_table_data %>%
+                                st_centroid(),
+                              label = ~ClusID,
+                              labelOptions = labelOptions(noHide = TRUE,
+                                                          direction = "center",
+                                                          textOnly = TRUE,
+                                                          style = list(
+                                                            "font-size" = "18px",
+                                                            "color" = "black",      # Change text color
+                                                            "padding" = "5px"       # Add some padding
+                                                          )),
+                              group = "Cluster IDs") %>%
+
+
+
+          addLegend(
+            position = "topleft",
+            pal = event_pal,
+            values = Clusters_sf_table_data$Event,
+            title = "Event for Clusters",
+            opacity = 1,
+            group = "Events for clusters"
+          ) %>%
+
+          # Layer control
+          addLayersControl(
+            baseGroups = c("TopoMap", "Satellite"),
+            overlayGroups = c("State of clusters", "Events for clusters", "Cluster IDs","GPS locations", "Last position", "Track"),
+            options = layersControlOptions(collapsed = FALSE)
+          )
 
         if (length(s)>0) {
           numbers <- gregexpr("[0-9]+", UTM_zone())
@@ -627,97 +893,36 @@ observeEvent(input$downloadClusters, {
             UTM_coord <- as.numeric(paste0("327", numeric_result))
           }
 
-          selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs = UTM_coord)
-          init + tm_shape(selection) + tm_dots(size = 4, alpha = 0.5, col = "yellow")
+          selection <- Clusters_sf_table$data[s,] %>%
+            st_as_sf(coords = c("center_x", "center_y"), crs = UTM_coord) %>%
+            st_transform(4326)
+
+          init %>%
+            addPolygons(
+              data = selection,
+              fillColor = "yellow",
+              color = "yellow",
+              weight = 50,
+              opacity = 1,
+              group = "Highlighter"
+            ) %>%
+
+            addLayersControl(
+              baseGroups = c("TopoMap", "Satellite"),
+              overlayGroups = c("State of clusters", "Events for clusters", "Cluster IDs", "Highlighter"),
+              options = layersControlOptions(collapsed = FALSE))
+
+
 
         } else init
 
 
-      } else {
-
-        ts_num <- NULL
-
-        cluster_list <- cluster_list()
-        cluster_list$Join_sf <- cluster_list$Join_sf %>%
-          mutate(ts_num = as.numeric(difftime(as.POSIXct(ts), min(cluster_list$Join_sf$ts), units = "days")),
-                 num = ts_num/max(ts_num))
-
-        last_position <- cluster_list$Join_sf %>%
-          group_by(ID) %>%
-          arrange(desc(ts)) %>%
-          slice(1)
-
-        if (nrow(Clusters_sf_table$data) == 0) {
-          init <- tm_shape(cluster_list$Join_sf) +
-            tm_dots(group = "GPS locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
-                                                                                                                            "Time stamp" = "ts",
-                                                                                                                            "ID" = "ID",
-                                                                                                                            "Cluster ID" = "ClusID"),
-                    palette = "Dark2",
-                    legend.show = FALSE)+
-            tm_shape(last_position, name = "Last position") +
-            tm_markers( popup.vars = c("Point ID" = "ident",
-                                       "Time stamp" = "ts",
-                                       "ID" = "ID")) +
-
-            tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Dark2") +
-
-            tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
-
-
-        } else {
-          init <- tm_shape(Clusters_sf_table$data[filter,]) +
-            tm_fill(group = "State of clusters",col = "State", alpha = 0.6, palette = c("Done" = "green",
-                                                                                    "New" = "red",
-                                                                                    "GPS locations added" = "blue",
-                                                                                    "Not done" = "orange"),
-                    popup.vars = c("Cluster ID" = "ClusID",
-                                   "Individual ID" = "ID",
-                                   "Number of GPS locations" = "sum",
-                                   "First date visited" = "date_min",
-                                   "Last date visited" = "date_max",
-                                   "State" = "State")) +
-
-            tm_shape(Clusters_sf_table$data[filter,]) +
-            tm_fill(group = "Events for clusters", col = "Event", colorNA = NULL)  +
-
-            tm_text(group = "Cluster IDs", "ClusID", size = 1.5, col = "black") +
-
-            tm_shape(cluster_list$Join_sf) +
-            tm_dots(group = "GPS locations", size = "num", scale = 0.5, col = as.factor("ID"), id = "ident", popup.vars = c("Point ID" = "ident",
-                                                                                                                         "Time stamp" = "ts",
-                                                                                                                         "ID" = "ID",
-                                                                                                                         "Cluster ID" = "ClusID"),
-                    palette = "Dark2",
-                    legend.show = FALSE)+
-            tm_shape(last_position, name = "Last position") +
-            tm_markers( popup.vars = c("Point ID" = "ident",
-                                                               "Time stamp" = "ts",
-                                                               "ID" = "ID")) +
-
-            tm_shape(cluster_list$data_sf_traj) + tm_lines(group = "Track", col = as.factor("ID"), palette = "Dark2") +
-
-            tmap_options(basemaps = c("Esri.WorldTopoMap", "Esri.WorldImagery"))
-
-
-          if (length(s)>0) {
-            numbers <- gregexpr("[0-9]+", UTM_zone())
-            result <- regmatches(UTM_zone(), numbers)
-            numeric_result <- as.numeric(unlist(result))
-
-            if (grepl("N", UTM_zone())){
-              UTM_coord <- as.numeric(paste0("326", numeric_result))
-            } else if (grepl("S", UTM_zone())){
-              UTM_coord <- as.numeric(paste0("327", numeric_result))
-            }
-
-            selection <- st_as_sf(Clusters_sf_table$data[s,], coords = c("center_x", "center_y"), crs = UTM_coord)
-            init + tm_shape(selection) + tm_dots(size = 4, alpha = 0.5, col = "yellow")
-          } else init
-
-        }
       }
-    })
+
+    }
+
+  })
+
 
 
 
@@ -728,11 +933,11 @@ observeEvent(input$downloadClusters, {
 
     if(length(latestfile_path()>0)){
       fileName_map <- paste(dirname(latestfile_path()), "/Map_", input$indID, "_", thedate, ".html", sep = "")
-      tmap_save(map(), fileName_map)
+      saveWidget(map(), fileName_map)
 
     } else {
       fileName_map <- paste(dirname(file_path()), "/Map_", input$indID, "_", thedate, ".html", sep = "")
-      tmap_save(map(), fileName_map)
+      saveWidget(map(), fileName_map)
     }
 
   })
@@ -742,11 +947,11 @@ observeEvent(input$downloadClusters, {
   output$clusterMap <- renderLeaflet({
 
     if (length(latestfile_path()>0)) {
-      tmap_leaflet(map()) %>%
+      map() %>%
         hideGroup(c("Events for clusters", "Cluster IDs"))
     } else {
-      tmap_leaflet(map()) %>%
-        hideGroup(c("Events for clusters", "Cluster IDs", "GPS locations", "Track"))
+      map() %>%
+        hideGroup(c("Events for clusters", "Cluster IDs"))
     }
 
 

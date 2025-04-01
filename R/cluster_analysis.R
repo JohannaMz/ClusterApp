@@ -350,6 +350,7 @@ cluster_analysis <- function(
                    for (i in unique(datapoints$ID)) {
 
                       data_sf_ID <- filter(data_sf, ID == i)
+
                       #apply buffer around each point, disaggregate and
                       #make the data spatial again
                       Buffer_sf <- st_buffer(data_sf_ID, buffer)
@@ -797,6 +798,7 @@ cluster_analysis <- function(
                                       mutate(x = round(st_coordinates(Join_sf)[,1], 2),
                                              y = round(st_coordinates(Join_sf)[,2], 2)) %>%
                                       unite(ClusID, ClusID:State, na.rm = TRUE, sep = " - ")
+
 
                           Join_sf_combined <- rbind(Join_sf_combined,
                                                     Join_sf)

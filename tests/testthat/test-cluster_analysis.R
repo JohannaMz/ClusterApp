@@ -7,22 +7,22 @@
 # library(readr)
 # library(openxlsx)
 # library(readxl)
-
+#
 
 test_that("Cluster analysis function works as expected", {
 
   skip_if_not(interactive())
 
-  intensive.start = as.Date("2023-08-01")
+  intensive.start = as.Date("2022-02-28")#as.Date("2023-08-01")
   intensive.end = as.Date("2024-08-02")
-   datapoints =
-  data.frame(
-    Collar_ID = c("A", "A", "A", "A"),
-    LMT_date = as.POSIXct(c("2023-08-01 10:00:00", "2023-08-01 11:00:00",
-                 "2023-08-01 12:00:00", "2023-08-01 13:00:00")),
-    Latitude = c(15.63312, 15.6402, 15.64022, 15.64026), #c(490120.246686, 491130.389923, 491500.412843, 491700.413110),
-    Longitude = c(62.08441, 62.08587, 62.08587, 62.08583) #62.08441, 62.08587, 62.08587, 62.08583) #2899890.312071, 2899889.999744, 2899890.888014, 2899891.287740
-  )
+   datapoints = ClusterApp::wolf
+  # data.frame(
+  #   Collar_ID = c("A", "A", "A", "A"),
+  #   LMT_date = as.POSIXct(c("2023-08-01 10:00:00", "2023-08-01 11:00:00",
+  #                "2023-08-01 12:00:00", "2023-08-01 13:00:00")),
+  #   Latitude = c(6829932.625704, 6829923.127947, 6829932.717680, 6829962.626289), #c(15.63312, 15.6402, 15.64022, 15.64026),
+  #   Longitude = c(520843.647204, 520862.865030, 520872.939292, 520880.748639) #c(62.08441, 62.08587, 62.08587, 62.08583)
+  # )
   sep = ","
   ID = "Collar_ID"
   LMT_Date = "LMT_date"

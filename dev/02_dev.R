@@ -43,6 +43,7 @@ usethis::use_package("golem")
 usethis::use_package("shinytest2")
 usethis::use_package("methods")
 usethis::use_package("stringr")
+usethis::use_package("htmlwidgets")
 #usethis::use_package("rlang")
 usethis::use_pipe()
 
