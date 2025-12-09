@@ -67,24 +67,25 @@ data, I encourage to contact me directly (<johanna@maertz.eu>).
 
 If you encounter a bug, please [submit an
 issue](https://github.com/JohannaMz/ClusterApp/issues). For more general
-questions and suggestions, contact Johanna Märtz (<johanna@maertz.eu>).
+questions and suggestions, contact Johanna (Märtz) Heeres
+(<johanna@maertz.eu>).
 
 ## Citation
 
 ``` r
 citation("ClusterApp")
-#> To cite package 'ClusterApp' in publications use:
+#> Um Paket 'ClusterApp' in Publikationen zu zitieren, nutzen Sie bitte:
 #> 
-#>   Märtz, J., Tallian, A., Wikenros, C., & Heeres, R. W. (2024).
+#>   Heeres, J., Tallian, A., Wikenros, C., & Heeres, R. W. (2024).
 #>   “ClusterApp”: A Shiny R application to guide cluster studies based on
 #>   GPS data. Ecology and Evolution, 14, e11695.
 #>   https://doi.org/10.1002/ece3.11695
 #> 
-#> A BibTeX entry for LaTeX users is
+#> Ein BibTeX-Eintrag für LaTeX-Benutzer ist
 #> 
 #>   @Article{,
 #>     title = {'ClusterApp': A Shiny R application to guide cluster studies based on GPS data},
-#>     author = {Johanna Märtz and Aimee Tallian and Camilla Wikenros and Rick Heeres},
+#>     author = {Johanna Heeres and Aimee Tallian and Camilla Wikenros and Rick Heeres},
 #>     journal = {Ecology and Evolution},
 #>     year = {2024},
 #>     volume = {14},

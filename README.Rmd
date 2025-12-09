@@ -67,7 +67,7 @@ This is an early release and functionalities might change. I take no responsibil
 
 ## Getting help
 
-If you encounter a bug, please [submit an issue](https://github.com/JohannaMz/ClusterApp/issues). For more general questions and suggestions, contact Johanna Märtz (johanna@maertz.eu).
+If you encounter a bug, please [submit an issue](https://github.com/JohannaMz/ClusterApp/issues). For more general questions and suggestions, contact Johanna (Märtz) Heeres (johanna@maertz.eu).
 
 ## Citation
 

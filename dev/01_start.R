@@ -23,7 +23,7 @@
 #   pkg_title = "Cluster Analysis for analyzing GPS data", # The Title of the package containing the App
 #   pkg_description = "The Cluster Analysis App is a Shiny App developed for the easy and straightforward analysis of GPS collared individuals to identify clusters of visits.", # The Description of the package containing the App
 #   author_first_name = "Johanna", # Your First Name
-#   author_last_name = "Märtz", # Your Last Name
+#   author_last_name = "Heeres", # Your Last Name
 #   author_email = "johanna@maertz.eu", # Your Email
 #   author_orcid = "0000-0001-9981-0430",
 #   repo_url = "https://github.com/JohannaMz/ClusterApp", # The URL of the GitHub Repo (optional),
